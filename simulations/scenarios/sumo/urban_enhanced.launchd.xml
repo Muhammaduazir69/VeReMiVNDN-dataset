@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+    VeReMiVNDN - Enhanced Urban Scenario Launch Configuration
+-->
+<launch>
+    <basedir path="/home/uzair/Desktop/omnet++/omnetpp-6.0.3/VNDN/VeReMiVNDN/simulations/scenarios/sumo/"/>
+    <copy file="aljubail_saudi.net.xml"/>
+    <copy file="urban_enhanced.rou.xml"/>
+    <copy file="vTypes.add.xml"/>
+    <copy file="aljubail_zones.poly.xml"/>
+    <copy file="urban_enhanced.sumo.cfg" type="config"/>
+    <commands>
+        <sumo-gui>sumo-gui --start --quit-on-end</sumo-gui>
+        <sumo>sumo</sumo>
+    </commands>
+    <seed value="0"/>
+</launch>

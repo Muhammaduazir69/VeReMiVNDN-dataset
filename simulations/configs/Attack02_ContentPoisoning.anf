@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<analysis version="2">
+    <inputs>
+        <input pattern="/VeReMiVNDN/simulations/configs/results/Attack02_ContentPoisoning-*.vec"/>
+        <input pattern="/VeReMiVNDN/simulations/configs/results/Attack02_ContentPoisoning-*.sca"/>
+    </inputs>
+    <charts/>
+</analysis>

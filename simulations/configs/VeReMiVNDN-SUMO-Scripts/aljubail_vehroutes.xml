@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2025-11-12 23:22:56 by Eclipse SUMO sumo Version 1.18.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="aljubail_saudi.net.xml"/>
+        <route-files value="vTypes.add.xml,aljubail_saudi.rou.xml"/>
+        <additional-files value="aljubail_zones.poly.xml"/>
+    </input>
+
+    <output>
+        <summary-output value="aljubail_summary.xml"/>
+        <tripinfo-output value="aljubail_tripinfo.xml"/>
+        <tripinfo-output.write-unfinished value="true"/>
+        <vehroute-output value="aljubail_vehroutes.xml"/>
+        <vehroute-output.write-unfinished value="true"/>
+        <statistic-output value="aljubail_statistics.xml"/>
+    </output>
+
+    <time>
+        <begin value="0"/>
+        <end value="10"/>
+        <step-length value="0.1"/>
+    </time>
+
+    <processing>
+        <lateral-resolution value="0.8"/>
+        <ignore-route-errors value="false"/>
+        <collision.action value="warn"/>
+        <collision.check-junctions value="true"/>
+        <collision.mingap-factor value="1.0"/>
+        <time-to-teleport value="-1"/>
+        <time-to-teleport.highways value="-1"/>
+        <max-depart-delay value="300"/>
+        <pedestrian.model value="striping"/>
+        <pedestrian.striping.stripe-width value="0.65"/>
+        <pedestrian.striping.dawdling value="0.2"/>
+    </processing>
+
+    <routing>
+        <routing-algorithm value="dijkstra"/>
+        <device.rerouting.probability value="0.7"/>
+        <device.rerouting.pre-period value="60"/>
+        <device.rerouting.adaptation-steps value="180"/>
+        <device.rerouting.adaptation-interval value="10"/>
+        <device.rerouting.with-taz value="false"/>
+    </routing>
+
+    <report>
+        <verbose value="true"/>
+        <no-warnings value="false"/>
+        <error-log value="sumo_errors.log"/>
+        <duration-log.disable value="true"/>
+        <duration-log.statistics value="true"/>
+        <no-step-log value="true"/>
+    </report>
+
+    <emissions>
+        <device.emissions.probability value="1.0"/>
+    </emissions>
+
+    <random_number>
+        <random value="false"/>
+        <seed value="42"/>
+    </random_number>
+
+    <gui_only>
+        <gui-settings-file value="aljubail_saudi_advanced.gui.xml"/>
+        <quit-on-end value="false"/>
+        <start value="true"/>
+        <delay value="40"/>
+        <window-size value="1920,1080"/>
+        <window-pos value="50,50"/>
+    </gui_only>
+
+</configuration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <vehicle id="0" type="passenger" depart="0.00" departLane="0" departSpeed="13.1719" speedFactor="0.9483">
+        <route edges="165300985#1 165300985#2 165300985#3 165300988#5 165303756#0 165303756#1 165303756#2 164929309#7 164929309#8 164929309#9 164929309#10 164929309#11 164929309#12 229248578#10 171774367#1 171774367#2 171774367#3 171774367#5 171774367#6 171774367#7 171774367#8 171774367#9 171774367#10 171774367#11 132976494#20 132976494#21 132971049#4 132971049#4-AddedOffRampEdge 132971049#5 132970988#15 132970988#16-AddedOnRampEdge 132970988#16 665671743#5 665671751#0 665671751#0-AddedOffRampEdge 665671751#1 665671765 123243892#0 123243892#1 123243892#2-AddedOnRampEdge 123243892#2 123243892#4 123243892#4-AddedOffRampEdge 123243892#5 257413447#0 257413447#1 -225030421#6 -225030421#5 -225030421#4 -225030421#3 -225030421#2 1108473995#0 1108473995#1 1108473995#2 1108473995#3 1108473995#4 -1332820042#6 -1332820042#5 -1332820042#4"/>
+    </vehicle>
+
+    <vehicle id="1" type="passenger" depart="2.00" departLane="0" departSpeed="14.8915" speedFactor="1.0721">
+        <route edges="-225030260 257413506#0 257413491 225030248#5-AddedOnRampEdge 225030248#5 225030248#7 225030248#9 225030248#11 225030248#11-AddedOffRampEdge 257413467 1136880674-AddedOnRampEdge 1136880674 225030378#0 225030378#1 225030378#2 225030378#5 225030378#6-AddedOnRampEdge 225030378#6 164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11 171196237#7 171196237#8 171196237#9 170232125#0 170232125#1 -170232119 -170232129#0 -170232120#0"/>
+    </vehicle>
+
+    <vehicle id="2" type="passenger" depart="4.00" departLane="0" departSpeed="32.2748" speedFactor="1.1618">
+        <route edges="171196237#14 338516783#0 338516783#1 338516783#2 -171241930#1 168293175#5 168293175#6 168293175#7 168293175#8 168293175#9 168293175#10 168293175#11 168456074"/>
+    </vehicle>
+
+    <vehicle id="3" type="passenger" depart="6.00" departLane="0" departSpeed="24.4797" speedFactor="0.8812">
+        <route edges="266653534#1 266653534#2-AddedOnRampEdge 266653534#2 266653534#3 266653534#4 266653534#5 266653534#6 266653534#7 266653534#8 266653534#9 266653534#10 266653534#11 266653534#12 266653534#13 266653534#14 266653534#15 266653534#16 266653534#17 266653534#18 266653534#19 266653534#20 266653534#20-AddedOffRampEdge 266653534#21 266653533#0 266653533#1-AddedOnRampEdge 266653533#1 266653533#1-AddedOffRampEdge 266653533#2 266653533#4 266653533#5-AddedOnRampEdge 266653533#5 266653533#6 316009896#4 164929309#0 164929309#2 164929309#3 164929309#4 164929309#5 164929309#7 164929309#8 164929309#9 164930789#0 164930789#1 164930789#2 -164930829#2 -164930829#1"/>
+    </vehicle>
+
+    <vehicle id="4" type="passenger" depart="8.00" departLane="0" departSpeed="25.8687" speedFactor="0.9312">
+        <route edges="129213890#1 171779548#0 -171779549#3 -171779530#1 -171779530#0 229247629#4 132970988#13 132970988#14 132970988#15 132970988#16-AddedOnRampEdge 132970988#16 665671743#5 665671751#0 665671751#0-AddedOffRampEdge 665671751#1 665671765 123243892#0 123243892#1 123243892#2-AddedOnRampEdge 123243892#2 123243892#4 123243892#4-AddedOffRampEdge 123243892#5 257413447#0 257413447#1 -225030421#6 -225030421#5 -225030421#4 -1332820049#1"/>
+    </vehicle>
+
+</routes>

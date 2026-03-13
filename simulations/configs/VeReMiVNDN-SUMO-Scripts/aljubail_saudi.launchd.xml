@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <basedir path="/home/uzair/Desktop/omnet++/omnetpp-6.0.3/VNDN/VeReMiVNDN/simulations/scenarios/sumo/"/>
+    <copy file="aljubail_saudi.net.xml"/>
+    <copy file="aljubail_saudi.rou.xml"/>
+    <copy file="aljubail_saudi.poly.xml"/>
+    <copy file="aljubail_saudi.gui.xml"/>
+    <copy file="aljubail_saudi.sumo.cfg" type="config"/>
+    <commands>
+        <sumo-gui>sumo-gui --start</sumo-gui>
+        <sumo>sumo</sumo>
+    </commands>
+</launch>

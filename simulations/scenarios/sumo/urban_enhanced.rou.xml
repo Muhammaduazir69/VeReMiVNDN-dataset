@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    VeReMiVNDN - Enhanced Urban Routes
+
+    This file generates realistic urban traffic with:
+    - Mixed vehicle types using distributions
+    - Pedestrians and cyclists
+    - Delivery vehicles
+    - Emergency vehicles
+    - Varied departure times for realistic flow
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+
+    <!-- Import vehicle type distributions from vTypes.add.xml -->
+
+    <!-- =============================================== -->
+    <!-- VEHICLE TYPE DISTRIBUTIONS -->
+    <!-- =============================================== -->
+
+    <!-- Mixed urban traffic distribution -->
+    <vTypeDistribution id="mixed_urban" vTypes="passenger_sedan passenger_suv passenger_sport truck_delivery" probabilities="0.50 0.25 0.10 0.15"/>
+
+    <!-- =============================================== -->
+    <!-- ROUTES (using actual aljubail_saudi.net.xml edges) -->
+    <!-- =============================================== -->
+
+    <!-- Urban route 0: Residential streets -->
+    <route id="route0" edges="171196237#14 338516783#0 338516783#1 338516783#2 -171241930#1 168293175#5 168293175#6 168293175#7 168293175#8 168293175#9 168293175#10 168293175#11 168456074"/>
+
+    <!-- Urban route 1: Main arterial roads -->
+    <route id="route1" edges="-225030260 257413506#0 257413491 225030248#5-AddedOnRampEdge 225030248#5 225030248#7 225030248#9 225030248#11 225030248#11-AddedOffRampEdge 257413467"/>
+
+    <!-- Urban route 2: Mixed traffic route -->
+    <route id="route2" edges="171196237#7 171196237#8 171196237#9 171196237#10 1136913755 168293175#1 168293175#2 168293175#5 -168577655#4 -168577655#3 -168577655#2 -168577655#1"/>
+
+    <!-- Urban route 3: Delivery and service route -->
+    <route id="route3" edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11"/>
+
+    <!-- Urban route 4: Bus route (longer path) -->
+    <route id="route4" edges="165300985#1 165300985#2 165300985#3 165300988#5 165303756#0 165303756#1 165303756#2 164929309#7 164929309#8 164929309#9 164929309#10 164929309#11 164929309#12"/>
+
+    <!-- =============================================== -->
+    <!-- VEHICLE FLOWS -->
+    <!-- =============================================== -->
+
+    <!-- Main traffic flow (mixed urban) -->
+    <flow id="flow_urban_mixed" type="mixed_urban" begin="0" end="600" period="2.5" departLane="best" departSpeed="max">
+        <routeDistribution>
+            <route edges="171196237#14 338516783#0 338516783#1 338516783#2 -171241930#1 168293175#5 168293175#6 168293175#7 168293175#8 168293175#9 168293175#10 168293175#11 168456074" probability="0.3"/>
+            <route edges="-225030260 257413506#0 257413491 225030248#5-AddedOnRampEdge 225030248#5 225030248#7 225030248#9 225030248#11 225030248#11-AddedOffRampEdge 257413467" probability="0.3"/>
+            <route edges="171196237#7 171196237#8 171196237#9 171196237#10 1136913755 168293175#1 168293175#2 168293175#5 -168577655#4 -168577655#3 -168577655#2 -168577655#1" probability="0.2"/>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11" probability="0.2"/>
+        </routeDistribution>
+    </flow>
+
+    <!-- Bus route (following schedule) -->
+    <flow id="bus_line_1" type="bus_city" route="route4" begin="0" end="600" period="60.0"
+          color="0.0,0.7,0.3" departLane="best" departSpeed="max">
+        <param key="line" value="Line 1"/>
+    </flow>
+
+    <flow id="bus_line_2" type="bus_city" route="route3" begin="30" end="600" period="60.0"
+          color="0.0,0.5,0.7" departLane="best" departSpeed="max">
+        <param key="line" value="Line 2"/>
+    </flow>
+
+    <!-- Emergency vehicles (sporadic) -->
+    <flow id="emergency_ambulance" type="emergency" begin="60" end="600" period="120.0"
+          color="1.0,0.0,0.0" departLane="best" departSpeed="max">
+        <routeDistribution>
+            <route edges="171196237#14 338516783#0 338516783#1 338516783#2 -171241930#1 168293175#5 168293175#6 168293175#7 168293175#8 168293175#9 168293175#10 168293175#11 168456074" probability="0.5"/>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11" probability="0.5"/>
+        </routeDistribution>
+        <param key="has.bluelight.device" value="true"/>
+    </flow>
+
+    <!-- Taxi flow -->
+    <flow id="taxi_flow" type="passenger_taxi" begin="0" end="600" period="15.0"
+          color="1.0,1.0,0.0" departLane="best" departSpeed="max">
+        <routeDistribution>
+            <route edges="171196237#14 338516783#0 338516783#1 338516783#2 -171241930#1 168293175#5 168293175#6 168293175#7 168293175#8 168293175#9 168293175#10 168293175#11 168456074" probability="0.25"/>
+            <route edges="-225030260 257413506#0 257413491 225030248#5-AddedOnRampEdge 225030248#5 225030248#7 225030248#9 225030248#11 225030248#11-AddedOffRampEdge 257413467" probability="0.25"/>
+            <route edges="171196237#7 171196237#8 171196237#9 171196237#10 1136913755 168293175#1 168293175#2 168293175#5 -168577655#4 -168577655#3 -168577655#2 -168577655#1" probability="0.25"/>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11" probability="0.25"/>
+        </routeDistribution>
+    </flow>
+
+    <!-- Delivery trucks (peak morning hours) -->
+    <flow id="delivery_morning" type="truck_delivery" begin="0" end="180" period="8.0"
+          color="0.8,0.5,0.2" departLane="best" departSpeed="max">
+        <routeDistribution>
+            <route edges="-225030260 257413506#0 257413491 225030248#5-AddedOnRampEdge 225030248#5 225030248#7 225030248#9 225030248#11 225030248#11-AddedOffRampEdge 257413467" probability="0.4"/>
+            <route edges="171196237#7 171196237#8 171196237#9 171196237#10 1136913755 168293175#1 168293175#2 168293175#5 -168577655#4 -168577655#3 -168577655#2 -168577655#1" probability="0.6"/>
+        </routeDistribution>
+    </flow>
+
+    <!-- Bicycles -->
+    <flow id="bicycle_flow" type="bicycle" route="route0" begin="0" end="600" period="30.0"
+          color="0.0,1.0,0.0" departLane="best" departSpeed="max"/>
+
+    <!-- Motorcycles -->
+    <flow id="motorcycle_flow" type="motorcycle" begin="0" end="600" period="20.0"
+          color="0.0,0.0,0.0" departLane="best" departSpeed="max">
+        <routeDistribution>
+            <route edges="171196237#14 338516783#0 338516783#1 338516783#2 -171241930#1 168293175#5 168293175#6 168293175#7 168293175#8 168293175#9 168293175#10 168293175#11 168456074" probability="0.3"/>
+            <route edges="-225030260 257413506#0 257413491 225030248#5-AddedOnRampEdge 225030248#5 225030248#7 225030248#9 225030248#11 225030248#11-AddedOffRampEdge 257413467" probability="0.3"/>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11" probability="0.4"/>
+        </routeDistribution>
+    </flow>
+
+    <!-- =============================================== -->
+    <!-- INDIVIDUAL VEHICLES (Special Cases) -->
+    <!-- =============================================== -->
+
+    <!-- Police patrol -->
+    <vehicle id="police_patrol_1" type="emergency" route="route3" depart="10" color="0.0,0.0,1.0" departLane="best" departSpeed="max">
+        <param key="has.bluelight.device" value="false"/>
+    </vehicle>
+
+    <!-- School bus -->
+    <vehicle id="school_bus_morning" type="bus_school" route="route2" depart="15" color="1.0,0.8,0.0" departLane="best" departSpeed="max"/>
+
+    <!-- =============================================== -->
+    <!-- PEDESTRIANS (if supported by network) -->
+    <!-- =============================================== -->
+
+    <!-- Note: Pedestrian routes require sidewalks in the network -->
+    <!-- Uncomment if urban.net.xml has pedestrian infrastructure -->
+
+    <!--
+    <person id="ped_0" depart="5.0" type="pedestrian">
+        <walk edges="E0 E1"/>
+    </person>
+
+    <person id="ped_1" depart="8.0" type="pedestrian">
+        <walk edges="E2 E3"/>
+    </person>
+    -->
+
+</routes>

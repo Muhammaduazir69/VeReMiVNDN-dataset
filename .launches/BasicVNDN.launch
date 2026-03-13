@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.omnetpp.ide.OmnetppLaunchConfigurationType">
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="out/gcc-release/VeReMiVNDN"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="VeReMiVNDN"/>
+<booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="false"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="org.omnetpp.cdt.gnu.config.release.1234567890"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/VeReMiVNDN/out/gcc-release/VeReMiVNDN}"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-u Qtenv -c BasicVNDN -f simulations/configs/omnetpp.ini -n src:simulations:../inet4.5/src:../veins/src/veins --image-path=../inet4.5/images:../veins/images"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/VeReMiVNDN}"/>
+<stringAttribute key="org.omnetpp.ide.OmnetppLaunchConfigurationType.OPP_BUILD_CONFIG" value="release"/>
+<stringAttribute key="org.omnetpp.ide.OmnetppLaunchConfigurationType.OPP_CONFIG_NAME" value="BasicVNDN"/>
+<stringAttribute key="org.omnetpp.ide.OmnetppLaunchConfigurationType.OPP_EXECUTABLE" value="out/gcc-release/VeReMiVNDN"/>
+<stringAttribute key="org.omnetpp.ide.OmnetppLaunchConfigurationType.OPP_INI_FILES" value="simulations/configs/omnetpp.ini"/>
+<stringAttribute key="org.omnetpp.ide.OmnetppLaunchConfigurationType.OPP_NED_PATH" value="src:simulations:../inet4.5/src:../veins/src/veins"/>
+<stringAttribute key="org.omnetpp.ide.OmnetppLaunchConfigurationType.OPP_IMAGE_PATH" value="../inet4.5/images:../veins/images"/>
+<stringAttribute key="org.omnetpp.ide.OmnetppLaunchConfigurationType.OPP_USER_INTERFACE" value="Qtenv"/>
+<stringAttribute key="org.omnetpp.ide.OmnetppLaunchConfigurationType.OPP_WORKING_DIRECTORY" value="${workspace_loc:/VeReMiVNDN}"/>
+</launchConfiguration>

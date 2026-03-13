@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+    VeReMiVNDN - Enhanced Launch Configuration for Aljubail
+
+    This launch file loads the enhanced SUMO configuration with:
+    - Multiple vehicle types
+    - Advanced GUI visualization
+    - Colored zones
+-->
+<launch>
+    <basedir path="/home/uzair/Desktop/omnet++/omnetpp-6.0.3/VNDN/VeReMiVNDN/simulations/scenarios/sumo/"/>
+
+    <!-- Network file -->
+    <copy file="aljubail_saudi.net.xml"/>
+
+    <!-- Route file -->
+    <copy file="aljubail_saudi.rou.xml"/>
+
+    <!-- Additional files -->
+    <copy file="aljubail_saudi.poly.xml"/>
+    <copy file="aljubail_zones.poly.xml"/>
+    <copy file="vTypes.add.xml"/>
+
+    <!-- GUI configuration -->
+    <copy file="aljubail_saudi_advanced.gui.xml"/>
+
+    <!-- Main configuration file -->
+    <copy file="aljubail_saudi_enhanced.sumo.cfg" type="config"/>
+
+    <commands>
+        <sumo-gui>sumo-gui --start --quit-on-end</sumo-gui>
+        <sumo>sumo</sumo>
+    </commands>
+    <seed value="0"/>
+</launch>

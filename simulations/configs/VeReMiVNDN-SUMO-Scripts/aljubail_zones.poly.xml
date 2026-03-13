@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    VeReMiVNDN - Enhanced Polygon Definitions for Aljubail Map
+
+    This file adds colored zones and sections to visualize different areas:
+    - Industrial zones
+    - Commercial districts
+    - Residential areas
+    - Port areas
+    - Parks and green spaces
+    - Military zones
+    - Special interest points
+
+    Map bounds: 13.4km x 14.8km (13444 x 14760 meters)
+-->
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+
+    <!-- Location metadata -->
+    <location netOffset="-954636.68,-2987114.01" convBoundary="-0.00,-0.00,13444.49,14760.11" origBoundary="49.580697,26.927341,49.711666,27.063180" projParameter="+proj=utm +zone=38 +datum=WGS84"/>
+
+    <!-- =============================================== -->
+    <!-- INDUSTRIAL ZONES (Gray/Brown) -->
+    <!-- =============================================== -->
+
+    <!-- Northern Industrial Complex -->
+    <poly id="industrial_north" type="industrial" color="150,120,100" fill="1" layer="-1.0"
+          shape="500.00,12000.00 3000.00,12000.00 3000.00,14500.00 500.00,14500.00 500.00,12000.00"/>
+
+    <!-- Southern Petrochemical Zone -->
+    <poly id="industrial_petrochem" type="industrial" color="130,100,80" fill="1" layer="-1.0"
+          shape="8000.00,500.00 12000.00,500.00 12000.00,3500.00 8000.00,3500.00 8000.00,500.00"/>
+
+    <!-- Central Manufacturing District -->
+    <poly id="industrial_central" type="industrial" color="140,110,90" fill="1" layer="-1.0"
+          shape="5500.00,6000.00 8000.00,6000.00 8000.00,8500.00 5500.00,8500.00 5500.00,6000.00"/>
+
+    <!-- =============================================== -->
+    <!-- COMMERCIAL DISTRICTS (Orange/Yellow) -->
+    <!-- =============================================== -->
+
+    <!-- Downtown Commercial Hub -->
+    <poly id="commercial_downtown" type="commercial" color="255,200,100" fill="1" layer="-1.0"
+          shape="3500.00,6500.00 5000.00,6500.00 5000.00,8500.00 3500.00,8500.00 3500.00,6500.00"/>
+
+    <!-- Shopping District East -->
+    <poly id="commercial_shopping_east" type="commercial" color="255,210,120" fill="1" layer="-1.0"
+          shape="9000.00,7000.00 11000.00,7000.00 11000.00,9000.00 9000.00,9000.00 9000.00,7000.00"/>
+
+    <!-- Market Area West -->
+    <poly id="commercial_market_west" type="commercial" color="255,190,90" fill="1" layer="-1.0"
+          shape="1000.00,7500.00 2500.00,7500.00 2500.00,9000.00 1000.00,9000.00 1000.00,7500.00"/>
+
+    <!-- =============================================== -->
+    <!-- RESIDENTIAL AREAS (Beige/Tan) -->
+    <!-- =============================================== -->
+
+    <!-- North Residential District -->
+    <poly id="residential_north" type="residential" color="220,200,170" fill="1" layer="-1.0"
+          shape="4000.00,9500.00 7000.00,9500.00 7000.00,12000.00 4000.00,12000.00 4000.00,9500.00"/>
+
+    <!-- South Residential Zone -->
+    <poly id="residential_south" type="residential" color="210,190,160" fill="1" layer="-1.0"
+          shape="4500.00,2000.00 7500.00,2000.00 7500.00,4500.00 4500.00,4500.00 4500.00,2000.00"/>
+
+    <!-- West Residential Neighborhood -->
+    <poly id="residential_west" type="residential" color="215,195,165" fill="1" layer="-1.0"
+          shape="500.00,5000.00 2500.00,5000.00 2500.00,7000.00 500.00,7000.00 500.00,5000.00"/>
+
+    <!-- East Residential Community -->
+    <poly id="residential_east" type="residential" color="218,198,168" fill="1" layer="-1.0"
+          shape="11000.00,4500.00 13000.00,4500.00 13000.00,6500.00 11000.00,6500.00 11000.00,4500.00"/>
+
+    <!-- =============================================== -->
+    <!-- PORT AND WATERFRONT (Blue) -->
+    <!-- =============================================== -->
+
+    <!-- Main Port Area -->
+    <poly id="port_main" type="port" color="70,100,180" fill="1" layer="-1.0"
+          shape="12000.00,10000.00 13400.00,10000.00 13400.00,12500.00 12000.00,12500.00 12000.00,10000.00"/>
+
+    <!-- Waterfront Industrial -->
+    <poly id="port_industrial" type="port" color="80,110,190" fill="1" layer="-1.0"
+          shape="11500.00,12500.00 13400.00,12500.00 13400.00,14700.00 11500.00,14700.00 11500.00,12500.00"/>
+
+    <!-- Marina and Recreation -->
+    <poly id="waterfront_marina" type="water" color="100,150,220" fill="1" layer="-1.0"
+          shape="8500.00,13000.00 11000.00,13000.00 11000.00,14700.00 8500.00,14700.00 8500.00,13000.00"/>
+
+    <!-- =============================================== -->
+    <!-- PARKS AND GREEN SPACES (Green) -->
+    <!-- =============================================== -->
+
+    <!-- Central Park -->
+    <poly id="park_central" type="park" color="80,180,80" fill="1" layer="-1.0"
+          shape="5000.00,7000.00 6500.00,7000.00 6500.00,8500.00 5000.00,8500.00 5000.00,7000.00"/>
+
+    <!-- North Green Belt -->
+    <poly id="park_north_greenbelt" type="park" color="70,170,70" fill="1" layer="-1.0"
+          shape="3500.00,12500.00 7500.00,12500.00 7500.00,13500.00 3500.00,13500.00 3500.00,12500.00"/>
+
+    <!-- Recreation Area South -->
+    <poly id="park_recreation_south" type="park" color="90,190,90" fill="1" layer="-1.0"
+          shape="2500.00,1500.00 4000.00,1500.00 4000.00,3000.00 2500.00,3000.00 2500.00,1500.00"/>
+
+    <!-- Sports Complex -->
+    <poly id="park_sports" type="park" color="75,175,75" fill="1" layer="-1.0"
+          shape="8500.00,4500.00 10000.00,4500.00 10000.00,6000.00 8500.00,6000.00 8500.00,4500.00"/>
+
+    <!-- =============================================== -->
+    <!-- MILITARY ZONES (Dark Red/Brown) -->
+    <!-- =============================================== -->
+
+    <!-- Military Installation (from original POI) -->
+    <poly id="military_base" type="military" color="153,92,92" fill="1" layer="-1.0"
+          shape="4800.00,11200.00 5400.00,11200.00 5400.00,11900.00 4800.00,11900.00 4800.00,11200.00"/>
+
+    <!-- =============================================== -->
+    <!-- SPECIAL ZONES (Custom Colors) -->
+    <!-- =============================================== -->
+
+    <!-- University Campus -->
+    <poly id="education_university" type="education" color="150,180,220" fill="1" layer="-1.0"
+          shape="6500.00,5000.00 8500.00,5000.00 8500.00,6500.00 6500.00,6500.00 6500.00,5000.00"/>
+
+    <!-- Hospital Complex -->
+    <poly id="health_hospital" type="health" color="255,150,150" fill="1" layer="-1.0"
+          shape="3000.00,8500.00 4000.00,8500.00 4000.00,9500.00 3000.00,9500.00 3000.00,8500.00"/>
+
+    <!-- Airport Zone -->
+    <poly id="transport_airport" type="aeroway" color="180,180,200" fill="1" layer="-1.0"
+          shape="500.00,2500.00 2000.00,2500.00 2000.00,4500.00 500.00,4500.00 500.00,2500.00"/>
+
+    <!-- Technology Park -->
+    <poly id="tech_park" type="technology" color="200,150,255" fill="1" layer="-1.0"
+          shape="9000.00,9500.00 11500.00,9500.00 11500.00,11500.00 9000.00,11500.00 9000.00,9500.00"/>
+
+    <!-- =============================================== -->
+    <!-- HIGHWAY CORRIDORS (Highlighted) -->
+    <!-- =============================================== -->
+
+    <!-- Main Highway Corridor (North-South) -->
+    <poly id="highway_ns_corridor" type="highway" color="255,100,100" fill="0" lineWidth="3.0" layer="1.0"
+          shape="6500.00,500.00 6800.00,500.00 6800.00,14500.00 6500.00,14500.00 6500.00,500.00"/>
+
+    <!-- Main Highway Corridor (East-West) -->
+    <poly id="highway_ew_corridor" type="highway" color="255,120,120" fill="0" lineWidth="3.0" layer="1.0"
+          shape="500.00,7200.00 500.00,7500.00 13400.00,7500.00 13400.00,7200.00 500.00,7200.00"/>
+
+    <!-- Ring Road -->
+    <poly id="highway_ring" type="highway" color="255,140,100" fill="0" lineWidth="2.5" layer="1.0"
+          shape="2000.00,3000.00 11000.00,3000.00 11000.00,12000.00 2000.00,12000.00 2000.00,3000.00"/>
+
+    <!-- =============================================== -->
+    <!-- POINTS OF INTEREST (POIs) -->
+    <!-- =============================================== -->
+
+    <!-- City Center -->
+    <poi id="poi_city_center" type="city_center" color="255,215,0" layer="10.0"
+          x="6722.0" y="7380.0" width="50.0" height="50.0"
+          imgFile="icon_star.png"/>
+
+    <!-- Main Hospital -->
+    <poi id="poi_hospital_main" type="hospital" color="255,0,0" layer="10.0"
+          x="3500.0" y="9000.0" width="40.0" height="40.0"/>
+
+    <!-- University -->
+    <poi id="poi_university" type="university" color="0,100,200" layer="10.0"
+          x="7500.0" y="5750.0" width="40.0" height="40.0"/>
+
+    <!-- Port Authority -->
+    <poi id="poi_port" type="port" color="50,100,200" layer="10.0"
+          x="12700.0" y="11250.0" width="40.0" height="40.0"/>
+
+    <!-- Airport -->
+    <poi id="poi_airport" type="airport" color="100,100,150" layer="10.0"
+          x="1250.0" y="3500.0" width="40.0" height="40.0"/>
+
+    <!-- Police Station -->
+    <poi id="poi_police_station" type="police" color="0,0,255" layer="10.0"
+          x="4000.0" y="7500.0" width="35.0" height="35.0"/>
+
+    <!-- Fire Station -->
+    <poi id="poi_fire_station" type="fire_station" color="200,0,0" layer="10.0"
+          x="5500.0" y="7500.0" width="35.0" height="35.0"/>
+
+    <!-- Shopping Mall -->
+    <poi id="poi_mall" type="shopping" color="255,150,50" layer="10.0"
+          x="10000.0" y="8000.0" width="35.0" height="35.0"/>
+
+    <!-- Stadium -->
+    <poi id="poi_stadium" type="stadium" color="0,200,100" layer="10.0"
+          x="9250.0" y="5250.0" width="40.0" height="40.0"/>
+
+    <!-- Military base (original from aljubail_saudi.poly.xml) -->
+    <poi id="1375017268" type="military" color="153,153,92" layer="10.0"
+          x="5099.83" y="11535.10" width="35.0" height="35.0"/>
+
+    <!-- =============================================== -->
+    <!-- ZONE LABELS (Text overlays) -->
+    <!-- =============================================== -->
+
+    <!-- These can be rendered as POI text labels in SUMO GUI -->
+    <poi id="label_industrial_north" type="label" color="255,255,255" layer="15.0"
+          x="1750.0" y="13250.0"/>
+
+    <poi id="label_commercial_downtown" type="label" color="255,255,255" layer="15.0"
+          x="4250.0" y="7500.0"/>
+
+    <poi id="label_port" type="label" color="255,255,255" layer="15.0"
+          x="12700.0" y="11250.0"/>
+
+    <poi id="label_residential_north" type="label" color="255,255,255" layer="15.0"
+          x="5500.0" y="10750.0"/>
+
+</additional>

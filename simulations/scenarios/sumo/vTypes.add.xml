@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    VeReMiVNDN - Advanced Vehicle Type Definitions
+
+    This file defines multiple realistic vehicle types for SUMO simulation:
+    - Passenger cars (regular, sports, emergency)
+    - Buses (city, intercity)
+    - Trucks (delivery, heavy)
+    - Bicycles
+    - Pedestrians
+    - Motorcycles
+
+    Each type has realistic physical and behavioral parameters
+-->
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+
+    <!-- =============================================== -->
+    <!-- PASSENGER CARS -->
+    <!-- =============================================== -->
+
+    <!-- Regular Passenger Car (Sedan) -->
+    <vType id="passenger_sedan"
+           vClass="passenger"
+           accel="2.6"
+           decel="4.5"
+           sigma="0.5"
+           length="4.5"
+           minGap="2.5"
+           maxSpeed="55.56"
+           speedFactor="1.0"
+           speedDev="0.1"
+           color="0.8,0.8,0.8"
+           guiShape="passenger"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="1.8"
+           height="1.5">
+        <param key="has.rerouting.device" value="true"/>
+        <param key="has.bluelight.device" value="false"/>
+    </vType>
+
+    <!-- Sports Car (High Performance) -->
+    <vType id="passenger_sport"
+           vClass="passenger"
+           accel="3.5"
+           decel="6.0"
+           sigma="0.3"
+           length="4.2"
+           minGap="2.0"
+           maxSpeed="69.44"
+           speedFactor="1.2"
+           speedDev="0.15"
+           color="1.0,0.0,0.0"
+           guiShape="passenger/sedan"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="1.9"
+           height="1.3">
+        <param key="has.rerouting.device" value="true"/>
+        <param key="junctionModel.ignoreKeepClearTime" value="5"/>
+    </vType>
+
+    <!-- SUV / Off-road Vehicle -->
+    <vType id="passenger_suv"
+           vClass="passenger"
+           accel="2.2"
+           decel="4.0"
+           sigma="0.5"
+           length="5.0"
+           minGap="2.8"
+           maxSpeed="50.00"
+           speedFactor="0.95"
+           speedDev="0.12"
+           color="0.2,0.2,0.5"
+           guiShape="passenger/van"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.0"
+           height="1.8">
+        <param key="has.rerouting.device" value="true"/>
+    </vType>
+
+    <!-- Taxi -->
+    <vType id="passenger_taxi"
+           vClass="taxi"
+           accel="2.9"
+           decel="5.0"
+           sigma="0.4"
+           length="4.6"
+           minGap="2.3"
+           maxSpeed="58.33"
+           speedFactor="1.05"
+           speedDev="0.1"
+           color="1.0,1.0,0.0"
+           guiShape="taxi"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="1.8"
+           height="1.5">
+        <param key="has.rerouting.device" value="true"/>
+        <param key="has.taxi.device" value="true"/>
+    </vType>
+
+    <!-- Emergency Vehicle (Ambulance/Police) -->
+    <vType id="emergency"
+           vClass="emergency"
+           accel="3.8"
+           decel="7.0"
+           sigma="0.2"
+           length="5.5"
+           minGap="2.0"
+           maxSpeed="69.44"
+           speedFactor="1.3"
+           speedDev="0.05"
+           color="1.0,0.0,0.0"
+           guiShape="emergency"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.2"
+           height="2.0">
+        <param key="has.rerouting.device" value="true"/>
+        <param key="has.bluelight.device" value="true"/>
+        <param key="junctionModel.ignoreKeepClearTime" value="-1"/>
+    </vType>
+
+    <!-- =============================================== -->
+    <!-- BUSES -->
+    <!-- =============================================== -->
+
+    <!-- City Bus -->
+    <vType id="bus_city"
+           vClass="bus"
+           accel="1.2"
+           decel="3.0"
+           sigma="0.5"
+           length="12.0"
+           minGap="3.0"
+           maxSpeed="19.44"
+           speedFactor="0.85"
+           speedDev="0.08"
+           color="0.0,0.7,0.3"
+           guiShape="bus"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.5"
+           height="3.4"
+           personCapacity="85">
+        <param key="has.rerouting.device" value="true"/>
+        <param key="has.btreceiver.device" value="false"/>
+    </vType>
+
+    <!-- Intercity / Coach Bus -->
+    <vType id="bus_coach"
+           vClass="bus"
+           accel="1.5"
+           decel="3.5"
+           sigma="0.4"
+           length="14.0"
+           minGap="3.5"
+           maxSpeed="36.11"
+           speedFactor="0.95"
+           speedDev="0.08"
+           color="0.0,0.4,0.8"
+           guiShape="bus/coach"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.55"
+           height="3.6"
+           personCapacity="50">
+        <param key="has.rerouting.device" value="true"/>
+    </vType>
+
+    <!-- School Bus -->
+    <vType id="bus_school"
+           vClass="bus"
+           accel="1.0"
+           decel="2.8"
+           sigma="0.6"
+           length="11.0"
+           minGap="3.0"
+           maxSpeed="22.22"
+           speedFactor="0.80"
+           speedDev="0.05"
+           color="1.0,0.8,0.0"
+           guiShape="bus"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.4"
+           height="3.2"
+           personCapacity="60">
+        <param key="has.rerouting.device" value="true"/>
+    </vType>
+
+    <!-- =============================================== -->
+    <!-- TRUCKS -->
+    <!-- =============================================== -->
+
+    <!-- Light Delivery Truck / Van -->
+    <vType id="truck_delivery"
+           vClass="delivery"
+           accel="1.8"
+           decel="3.5"
+           sigma="0.5"
+           length="6.5"
+           minGap="2.8"
+           maxSpeed="33.33"
+           speedFactor="0.90"
+           speedDev="0.1"
+           color="0.8,0.5,0.2"
+           guiShape="delivery"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.2"
+           height="2.5">
+        <param key="has.rerouting.device" value="true"/>
+    </vType>
+
+    <!-- Medium Truck -->
+    <vType id="truck_medium"
+           vClass="truck"
+           accel="1.3"
+           decel="3.0"
+           sigma="0.5"
+           length="10.0"
+           minGap="3.2"
+           maxSpeed="27.78"
+           speedFactor="0.85"
+           speedDev="0.08"
+           color="0.6,0.4,0.2"
+           guiShape="truck"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.5"
+           height="3.0">
+        <param key="has.rerouting.device" value="true"/>
+    </vType>
+
+    <!-- Heavy Truck / Semi-trailer -->
+    <vType id="truck_trailer"
+           vClass="trailer"
+           accel="0.8"
+           decel="2.5"
+           sigma="0.5"
+           length="16.5"
+           minGap="4.0"
+           maxSpeed="25.00"
+           speedFactor="0.80"
+           speedDev="0.05"
+           color="0.5,0.3,0.1"
+           guiShape="truck/semitrailer"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.55"
+           height="4.0">
+        <param key="has.rerouting.device" value="true"/>
+    </vType>
+
+    <!-- Container Truck -->
+    <vType id="truck_container"
+           vClass="trailer"
+           accel="0.7"
+           decel="2.3"
+           sigma="0.5"
+           length="18.75"
+           minGap="4.5"
+           maxSpeed="22.22"
+           speedFactor="0.75"
+           speedDev="0.05"
+           color="0.4,0.4,0.4"
+           guiShape="truck/trailer"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.55"
+           height="4.2">
+        <param key="has.rerouting.device" value="true"/>
+    </vType>
+
+    <!-- =============================================== -->
+    <!-- MOTORCYCLES & SCOOTERS -->
+    <!-- =============================================== -->
+
+    <!-- Motorcycle -->
+    <vType id="motorcycle"
+           vClass="motorcycle"
+           accel="4.0"
+           decel="7.0"
+           sigma="0.4"
+           length="2.2"
+           minGap="1.5"
+           maxSpeed="50.00"
+           speedFactor="1.15"
+           speedDev="0.15"
+           color="0.0,0.0,0.0"
+           guiShape="motorcycle"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="0.8"
+           height="1.5">
+        <param key="has.rerouting.device" value="true"/>
+        <param key="junctionModel.ignoreKeepClearTime" value="5"/>
+    </vType>
+
+    <!-- Scooter / Moped -->
+    <vType id="moped"
+           vClass="moped"
+           accel="2.5"
+           decel="5.0"
+           sigma="0.5"
+           length="1.8"
+           minGap="1.2"
+           maxSpeed="16.67"
+           speedFactor="0.95"
+           speedDev="0.12"
+           color="0.5,0.5,0.5"
+           guiShape="moped"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="0.7"
+           height="1.3">
+        <param key="has.rerouting.device" value="true"/>
+    </vType>
+
+    <!-- =============================================== -->
+    <!-- BICYCLES -->
+    <!-- =============================================== -->
+
+    <!-- Bicycle -->
+    <vType id="bicycle"
+           vClass="bicycle"
+           accel="1.2"
+           decel="3.0"
+           sigma="0.5"
+           length="1.8"
+           minGap="0.5"
+           maxSpeed="6.94"
+           speedFactor="1.0"
+           speedDev="0.2"
+           color="0.0,1.0,0.0"
+           guiShape="bicycle"
+           width="0.65"
+           height="1.7">
+        <param key="has.rerouting.device" value="false"/>
+        <param key="junctionModel.ignoreKeepClearTime" value="-1"/>
+    </vType>
+
+    <!-- E-Bike (Electric Bicycle) -->
+    <vType id="ebike"
+           vClass="bicycle"
+           accel="1.8"
+           decel="4.0"
+           sigma="0.4"
+           length="1.8"
+           minGap="0.5"
+           maxSpeed="11.11"
+           speedFactor="1.1"
+           speedDev="0.15"
+           color="0.0,0.8,0.2"
+           guiShape="bicycle"
+           width="0.65"
+           height="1.7">
+        <param key="has.rerouting.device" value="false"/>
+    </vType>
+
+    <!-- =============================================== -->
+    <!-- PEDESTRIANS -->
+    <!-- =============================================== -->
+
+    <!-- Pedestrian (Normal Walking) -->
+    <vType id="pedestrian"
+           vClass="pedestrian"
+           accel="1.5"
+           decel="2.0"
+           sigma="0.5"
+           length="0.25"
+           minGap="0.25"
+           maxSpeed="1.39"
+           speedFactor="1.0"
+           speedDev="0.2"
+           color="1.0,0.8,0.0"
+           guiShape="pedestrian"
+           width="0.478"
+           height="1.719">
+        <param key="has.rerouting.device" value="false"/>
+        <param key="junctionModel.ignoreKeepClearTime" value="-1"/>
+    </vType>
+
+    <!-- Pedestrian (Fast Walking / Jogging) -->
+    <vType id="pedestrian_fast"
+           vClass="pedestrian"
+           accel="2.0"
+           decel="3.0"
+           sigma="0.3"
+           length="0.25"
+           minGap="0.25"
+           maxSpeed="2.78"
+           speedFactor="1.2"
+           speedDev="0.15"
+           color="0.8,0.6,0.0"
+           guiShape="pedestrian"
+           width="0.478"
+           height="1.719">
+        <param key="has.rerouting.device" value="false"/>
+    </vType>
+
+    <!-- =============================================== -->
+    <!-- SPECIAL VEHICLES -->
+    <!-- =============================================== -->
+
+    <!-- Construction Vehicle -->
+    <vType id="construction"
+           vClass="custom1"
+           accel="0.5"
+           decel="2.0"
+           sigma="0.5"
+           length="8.0"
+           minGap="3.5"
+           maxSpeed="11.11"
+           speedFactor="0.70"
+           speedDev="0.05"
+           color="1.0,0.6,0.0"
+           guiShape="truck"
+           emissionClass="HBEFA3/PC_G_EU4"
+           width="2.5"
+           height="3.5">
+        <param key="has.rerouting.device" value="false"/>
+    </vType>
+
+    <!-- Agricultural Vehicle / Tractor -->
+    <vType id="tractor"
+           vClass="custom2"
+           accel="0.4"
+           decel="1.5"
+           sigma="0.5"
+           length="5.5"
+           minGap="3.0"
+           maxSpeed="8.33"
+           speedFactor="0.65"
+           speedDev="0.05"
+           color="0.0,0.6,0.0"
+           guiShape="truck"
+           width="2.3"
+           height="2.8">
+        <param key="has.rerouting.device" value="false"/>
+    </vType>
+
+</additional>

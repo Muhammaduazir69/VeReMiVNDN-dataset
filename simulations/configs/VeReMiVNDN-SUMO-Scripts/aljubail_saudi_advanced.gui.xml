@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    VeReMiVNDN - Advanced SUMO GUI Settings for Aljubail Map
+
+    This configuration provides next-level visualization with:
+    - Custom color schemes for roads, vehicles, and buildings
+    - 3D visualization settings
+    - Detailed vehicle rendering
+    - Network performance visualization
+    - Traffic light visualization
+    - Route highlighting
+    - Real-time statistics display
+-->
+<viewsettings>
+    <!-- =============================================== -->
+    <!-- MAIN VIEW CONFIGURATION -->
+    <!-- =============================================== -->
+
+    <!-- Viewport settings for optimal view of Al-Jubail (13.4km x 14.8km) -->
+    <viewport
+        x="6722.0"
+        y="7380.0"
+        zoom="350.0"
+        angle="0.0"
+        centerX="6722.0"
+        centerY="7380.0"/>
+
+    <!-- Animation and rendering settings -->
+    <delay value="40"/>
+    <fps value="25.0"/>
+
+    <!-- =============================================== -->
+    <!-- ADVANCED COLOR SCHEME -->
+    <!-- =============================================== -->
+
+    <scheme name="VeReMiVNDN_Advanced">
+        <!-- Background -->
+        <backgroundColor r="0.15" g="0.20" b="0.25"/>
+        <colorByParam value=""/>
+
+        <!-- ============= VEHICLES ============= -->
+
+        <!-- Vehicle color settings -->
+        <vehicles>
+            <colorMode value="given"/>
+            <colorByParam value=""/>
+            <scalingByParam value=""/>
+
+            <!-- Vehicle quality and detail -->
+            <vehicleQuality value="5"/>
+            <showBlinker value="true"/>
+            <drawMinGap value="true"/>
+            <showBTRange value="true"/>
+            <showRouteIndex value="false"/>
+            <scaleLength value="true"/>
+            <drawReversed value="false"/>
+            <showParkingInfo value="true"/>
+
+            <!-- Vehicle name display -->
+            <vehicleName>
+                <show value="true"/>
+                <size value="60.0"/>
+                <color r="0.9" g="0.9" b="0.1"/>
+            </vehicleName>
+
+            <!-- Vehicle shapes and sizes -->
+            <vehicleSize value="1.0"/>
+            <vehicleScaler value="1.0"/>
+
+            <!-- Color by speed (for speed visualization) -->
+            <vehicleColorer>
+                <color name="passenger" r="0.2" g="0.5" b="1.0"/>
+                <color name="bus" r="0.0" g="0.7" b="0.3"/>
+                <color name="truck" r="0.8" g="0.5" b="0.2"/>
+                <color name="emergency" r="1.0" g="0.0" b="0.0"/>
+                <color name="motorcycle" r="0.0" g="0.0" b="0.0"/>
+                <color name="bicycle" r="0.0" g="1.0" b="0.0"/>
+                <color name="pedestrian" r="1.0" g="0.8" b="0.0"/>
+                <color name="taxi" r="1.0" g="1.0" b="0.0"/>
+            </vehicleColorer>
+        </vehicles>
+
+        <!-- ============= ROAD NETWORK ============= -->
+
+        <edges>
+            <!-- Edge (road) visualization -->
+            <edgeMode value="street"/>
+            <edgeScaleMode value="width"/>
+            <laneScaleMode value="width"/>
+
+            <!-- Road colors by type -->
+            <edgeColorer>
+                <!-- Highways (red tones) -->
+                <color name="highway.motorway" r="1.0" g="0.3" b="0.3"/>
+                <color name="highway.trunk" r="1.0" g="0.5" b="0.3"/>
+                <color name="highway.primary" r="1.0" g="0.7" b="0.4"/>
+
+                <!-- Major roads (orange/yellow tones) -->
+                <color name="highway.secondary" r="1.0" g="0.85" b="0.5"/>
+                <color name="highway.tertiary" r="1.0" g="0.95" b="0.6"/>
+
+                <!-- Local roads (white/gray tones) -->
+                <color name="highway.residential" r="0.9" g="0.9" b="0.9"/>
+                <color name="highway.unclassified" r="0.8" g="0.8" b="0.8"/>
+                <color name="highway.service" r="0.7" g="0.7" b="0.7"/>
+
+                <!-- Special roads -->
+                <color name="highway.pedestrian" r="0.5" g="0.8" b="0.5"/>
+                <color name="highway.cycleway" r="0.3" g="0.9" b="0.3"/>
+                <color name="highway.footway" r="0.6" g="0.9" b="0.6"/>
+            </edgeColorer>
+
+            <!-- Edge width and appearance -->
+            <edgeWidth value="1.0"/>
+            <edgeWidthExaggeration value="1.0"/>
+            <laneWidth value="1.0"/>
+            <laneWidthExaggeration value="1.0"/>
+            <laneMinSize value="0.0"/>
+
+            <!-- Edge name display -->
+            <edgeName>
+                <show value="false"/>
+                <size value="50.0"/>
+                <color r="0.4" g="0.7" b="1.0"/>
+            </edgeName>
+
+            <!-- Internal edge display -->
+            <internalEdgeName>
+                <show value="false"/>
+            </internalEdgeName>
+
+            <!-- Street name display -->
+            <streetName>
+                <show value="true"/>
+                <size value="55.0"/>
+                <color r="0.3" g="0.8" b="1.0"/>
+            </streetName>
+
+            <!-- Lane details -->
+            <hideMacroConnectors value="true"/>
+            <showLinkDecals value="true"/>
+            <showLaneDirection value="true"/>
+            <showSublanes value="false"/>
+            <spreadSuperposed value="false"/>
+            <drawCrossingsAndWalkingareas value="true"/>
+        </edges>
+
+        <!-- ============= JUNCTIONS ============= -->
+
+        <junctions>
+            <junctionMode value="shape"/>
+            <drawLinkTLIndex value="false"/>
+            <drawLinkJunctionIndex value="false"/>
+            <junctionName>
+                <show value="false"/>
+            </junctionName>
+            <internalJunctionName>
+                <show value="false"/>
+            </internalJunctionName>
+            <junctionSize value="1.0"/>
+            <junctionSizeExaggeration value="1.0"/>
+
+            <!-- Junction colors -->
+            <colorByParam value=""/>
+            <junctionColorer>
+                <color name="default" r="0.3" g="0.3" b="0.4"/>
+                <color name="traffic_light" r="0.0" g="0.5" b="0.8"/>
+                <color name="priority" r="0.5" g="0.5" b="0.5"/>
+                <color name="right_before_left" r="0.6" g="0.6" b="0.6"/>
+            </junctionColorer>
+        </junctions>
+
+        <!-- ============= TRAFFIC LIGHTS ============= -->
+
+        <additionals>
+            <addMode value="0"/>
+            <addSize value="1.0"/>
+            <addSizeExaggeration value="1.0"/>
+            <addName>
+                <show value="false"/>
+            </addName>
+            <addFullName>
+                <show value="false"/>
+            </addFullName>
+
+            <!-- POI (Points of Interest) -->
+            <poiDetail value="5"/>
+            <poiName>
+                <show value="true"/>
+                <size value="60.0"/>
+                <color r="1.0" g="1.0" b="0.0"/>
+            </poiName>
+            <poiType>
+                <show value="true"/>
+                <size value="55.0"/>
+                <color r="0.8" g="0.8" b="0.0"/>
+            </poiType>
+        </additionals>
+
+        <!-- ============= POLYGONS (Buildings, Areas) ============= -->
+
+        <polys>
+            <polySize value="1.0"/>
+            <polySizeExaggeration value="1.0"/>
+            <polyName>
+                <show value="false"/>
+            </polyName>
+            <polyType>
+                <show value="false"/>
+            </polyType>
+
+            <!-- Building and area colors -->
+            <polyColorer>
+                <color name="building" r="0.6" g="0.5" b="0.4"/>
+                <color name="industrial" r="0.5" g="0.4" b="0.4"/>
+                <color name="commercial" r="0.8" g="0.7" b="0.6"/>
+                <color name="residential" r="0.7" g="0.6" b="0.5"/>
+                <color name="park" r="0.3" g="0.7" b="0.3"/>
+                <color name="water" r="0.2" g="0.4" b="0.8"/>
+                <color name="forest" r="0.2" g="0.6" b="0.2"/>
+                <color name="military" r="0.6" g="0.3" b="0.3"/>
+            </polyColorer>
+        </polys>
+
+        <!-- ============= PERSONS (Pedestrians) ============= -->
+
+        <persons>
+            <personMode value="as-people"/>
+            <personQuality value="5"/>
+            <personSize value="1.0"/>
+            <personSizeExaggeration value="1.0"/>
+            <personName>
+                <show value="false"/>
+                <size value="50.0"/>
+                <color r="1.0" g="0.8" b="0.0"/>
+            </personName>
+            <personValue>
+                <show value="false"/>
+            </personValue>
+        </persons>
+
+        <!-- ============= CONTAINERS ============= -->
+
+        <containers>
+            <containerMode value="as-container"/>
+            <containerQuality value="3"/>
+            <containerSize value="1.0"/>
+            <containerSizeExaggeration value="1.0"/>
+            <containerName>
+                <show value="false"/>
+            </containerName>
+        </containers>
+
+        <!-- ============= LEGEND & INFO ============= -->
+
+        <legend>
+            <showSizeLegend value="true"/>
+            <showColorLegend value="true"/>
+            <showVehicleColorLegend value="true"/>
+        </legend>
+
+        <!-- ============= 3D SETTINGS ============= -->
+
+        <opengl>
+            <antialiase value="true"/>
+            <dither value="true"/>
+        </opengl>
+
+        <!-- Grid display -->
+        <showGrid value="false"/>
+        <gridXSize value="100.0"/>
+        <gridYSize value="100.0"/>
+
+    </scheme>
+
+    <!-- =============================================== -->
+    <!-- ADDITIONAL SPECIALIZED SCHEMES -->
+    <!-- =============================================== -->
+
+    <!-- Speed-based coloring scheme -->
+    <scheme name="by_speed">
+        <vehicles>
+            <colorMode value="by_speed"/>
+            <colorByParam value=""/>
+        </vehicles>
+        <edges>
+            <edgeMode value="by_speed"/>
+        </edges>
+    </scheme>
+
+    <!-- Traffic density scheme -->
+    <scheme name="by_density">
+        <vehicles>
+            <colorMode value="by_odometer"/>
+        </vehicles>
+        <edges>
+            <edgeMode value="by_loaded_occupancy"/>
+        </edges>
+    </scheme>
+
+    <!-- Waiting time visualization -->
+    <scheme name="by_waiting_time">
+        <vehicles>
+            <colorMode value="by_waiting_time"/>
+        </vehicles>
+        <edges>
+            <edgeMode value="by_waiting_time"/>
+        </edges>
+    </scheme>
+
+    <!-- Route-based coloring -->
+    <scheme name="by_route">
+        <vehicles>
+            <colorMode value="by_route"/>
+        </vehicles>
+    </scheme>
+
+    <!-- Type-based coloring -->
+    <scheme name="by_type">
+        <vehicles>
+            <colorMode value="by_type"/>
+        </vehicles>
+    </scheme>
+
+    <!-- =============================================== -->
+    <!-- DECALS (Overlay Images) -->
+    <!-- =============================================== -->
+
+    <!-- Can add custom decals for zones, landmarks, etc. -->
+    <!-- <decal filename="logo.png" centerX="6722" centerY="7380"
+           width="1000" height="1000" rotation="0" layer="0"/> -->
+
+    <!-- =============================================== -->
+    <!-- BREAKPOINTS (for debugging) -->
+    <!-- =============================================== -->
+
+    <breakpoints-file value=""/>
+
+    <!-- =============================================== -->
+    <!-- SNAPSHOTS (Auto-screenshot settings) -->
+    <!-- =============================================== -->
+
+    <!-- Example: Take screenshot every 10 seconds -->
+    <!-- <snapshot file="snapshot_%05d.png" time="0:10"/> -->
+
+</viewsettings>

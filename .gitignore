@@ -1,0 +1,86 @@
+# Large simulation data - too big for GitHub (publish via GitHub Release)
+simulations/configs/results/
+simulations/configs/frames/
+simulations/configs/VeReMiVNDN-OmNetpp-Dataset/
+simulations/configs/VeReMiVNDN-OmNetpp-Dataset.zip
+Makefile.backup
+winehq.key
+
+# IEEE paper preparation folder
+Preparation_of_Papers_for_IEEE_ACCESS(1)/
+
+# Custom documentation .md files (keep only README.md)
+ATTACK_IMPLEMENTATIONS.md
+COMPILE_FIXES_NEEDED.md
+COMPLETE_IMPLEMENTATION_GUIDE.md
+FINAL_SUMMARY.md
+IMPLEMENTATION_GUIDE.md
+IMPLEMENTATION_STATUS.md
+PROJECT_STRUCTURE.md
+QUICK_REFERENCE.md
+QUICK_START.md
+README_IMPLEMENTATION_STATUS.md
+SUMO_ENHANCEMENTS_README.md
+NETWORK_PARAMETERS_TABLE.txt
+PAPER_SCENARIOS_AND_PARAMETERS.txt
+doc/ATTACKS.md
+paper writing /simulation_information.md
+paper writing /simulation_information_complete.md
+simulations/scenarios/sumo/CUSTOM_MAP_GUIDE.md
+
+# OMNeT++ Build Artifacts
+*.o
+*.so
+*.a
+*.dylib
+*.exe
+*_m.cc
+*_m.h
+.oppbuildspec
+.qtenvrc
+.cmdenv-log
+out/
+results/
+.claude/
+
+# Simulation Results
+*.vec
+*.sca
+*.vci
+*.elog
+*.log
+simulations/results/*
+!simulations/results/.gitkeep
+
+# Generated Datasets
+datasets/raw/*
+datasets/processed/*
+!datasets/raw/.gitkeep
+!datasets/processed/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation Build
+doc/_build/
+doc/*.pdf
+
+# Temporary files
+*.tmp
+*.bak
+*.orig

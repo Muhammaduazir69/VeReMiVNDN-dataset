@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2025-11-12 23:22:56 by Eclipse SUMO sumo Version 1.18.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="aljubail_saudi.net.xml"/>
+        <route-files value="vTypes.add.xml,aljubail_saudi.rou.xml"/>
+        <additional-files value="aljubail_zones.poly.xml"/>
+    </input>
+
+    <output>
+        <summary-output value="aljubail_summary.xml"/>
+        <tripinfo-output value="aljubail_tripinfo.xml"/>
+        <tripinfo-output.write-unfinished value="true"/>
+        <vehroute-output value="aljubail_vehroutes.xml"/>
+        <vehroute-output.write-unfinished value="true"/>
+        <statistic-output value="aljubail_statistics.xml"/>
+    </output>
+
+    <time>
+        <begin value="0"/>
+        <end value="10"/>
+        <step-length value="0.1"/>
+    </time>
+
+    <processing>
+        <lateral-resolution value="0.8"/>
+        <ignore-route-errors value="false"/>
+        <collision.action value="warn"/>
+        <collision.check-junctions value="true"/>
+        <collision.mingap-factor value="1.0"/>
+        <time-to-teleport value="-1"/>
+        <time-to-teleport.highways value="-1"/>
+        <max-depart-delay value="300"/>
+        <pedestrian.model value="striping"/>
+        <pedestrian.striping.stripe-width value="0.65"/>
+        <pedestrian.striping.dawdling value="0.2"/>
+    </processing>
+
+    <routing>
+        <routing-algorithm value="dijkstra"/>
+        <device.rerouting.probability value="0.7"/>
+        <device.rerouting.pre-period value="60"/>
+        <device.rerouting.adaptation-steps value="180"/>
+        <device.rerouting.adaptation-interval value="10"/>
+        <device.rerouting.with-taz value="false"/>
+    </routing>
+
+    <report>
+        <verbose value="true"/>
+        <no-warnings value="false"/>
+        <error-log value="sumo_errors.log"/>
+        <duration-log.disable value="true"/>
+        <duration-log.statistics value="true"/>
+        <no-step-log value="true"/>
+    </report>
+
+    <emissions>
+        <device.emissions.probability value="1.0"/>
+    </emissions>
+
+    <random_number>
+        <random value="false"/>
+        <seed value="42"/>
+    </random_number>
+
+    <gui_only>
+        <gui-settings-file value="aljubail_saudi_advanced.gui.xml"/>
+        <quit-on-end value="false"/>
+        <start value="true"/>
+        <delay value="40"/>
+        <window-size value="1920,1080"/>
+        <window-pos value="50,50"/>
+    </gui_only>
+
+</configuration>
+-->
+
+<tripinfos xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/tripinfo_file.xsd">
+    <tripinfo id="0" depart="0.00" departLane="165300985#1_0" departPos="5.10" departPosLat="0.00" departSpeed="13.17" departDelay="0.00" arrival="-1.00" arrivalLane="" arrivalPos="-1.00" arrivalPosLat="0.00" arrivalSpeed="-1.00" duration="10.00" routeLength="129.73" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="0.05" rerouteNo="0" devices="vehroute_0 tripinfo_0 routing_0 emissions_0" vType="passenger" speedFactor="0.95" vaporized="end">
+        <emissions CO_abs="151.467541" CO2_abs="22576.352648" HC_abs="1.153093" PMx_abs="0.268057" NOx_abs="8.103502" fuel_abs="7200.856984" electricity_abs="0"/>
+    </tripinfo>
+    <tripinfo id="1" depart="2.00" departLane="-225030260_0" departPos="5.10" departPosLat="0.00" departSpeed="14.89" departDelay="0.00" arrival="-1.00" arrivalLane="" arrivalPos="-1.00" arrivalPosLat="0.00" arrivalSpeed="-1.00" duration="8.00" routeLength="117.09" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="0.04" rerouteNo="0" devices="vehroute_1 tripinfo_1 emissions_1" vType="passenger" speedFactor="1.07" vaporized="end">
+        <emissions CO_abs="108.037967" CO2_abs="18870.914743" HC_abs="0.876969" PMx_abs="0.240187" NOx_abs="6.745963" fuel_abs="6018.961379" electricity_abs="0"/>
+    </tripinfo>
+    <tripinfo id="2" depart="4.00" departLane="171196237#14_0" departPos="5.10" departPosLat="0.00" departSpeed="32.27" departDelay="0.00" arrival="-1.00" arrivalLane="" arrivalPos="-1.00" arrivalPosLat="0.00" arrivalSpeed="-1.00" duration="6.00" routeLength="190.06" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="0.01" rerouteNo="0" devices="vehroute_2 tripinfo_2 emissions_2" vType="passenger" speedFactor="1.16" vaporized="end">
+        <emissions CO_abs="686.380963" CO2_abs="39164.282467" HC_abs="4.141203" PMx_abs="0.950363" NOx_abs="14.539932" fuel_abs="12491.610322" electricity_abs="0"/>
+    </tripinfo>
+    <tripinfo id="3" depart="6.00" departLane="266653534#1_0" departPos="5.10" departPosLat="0.00" departSpeed="24.48" departDelay="0.00" arrival="-1.00" arrivalLane="" arrivalPos="-1.00" arrivalPosLat="0.00" arrivalSpeed="-1.00" duration="4.00" routeLength="95.25" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="0.01" rerouteNo="0" devices="vehroute_3 tripinfo_3 routing_3 emissions_3" vType="passenger" speedFactor="0.88" vaporized="end">
+        <emissions CO_abs="117.744106" CO2_abs="16265.104035" HC_abs="0.904124" PMx_abs="0.286871" NOx_abs="5.593190" fuel_abs="5187.811139" electricity_abs="0"/>
+    </tripinfo>
+    <tripinfo id="4" depart="8.00" departLane="129213890#1_0" departPos="5.10" departPosLat="0.00" departSpeed="25.87" departDelay="0.00" arrival="-1.00" arrivalLane="" arrivalPos="-1.00" arrivalPosLat="0.00" arrivalSpeed="-1.00" duration="2.00" routeLength="46.13" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="0.12" rerouteNo="0" devices="vehroute_4 tripinfo_4 routing_4 emissions_4" vType="passenger" speedFactor="0.93" vaporized="end">
+        <emissions CO_abs="39.127941" CO2_abs="3790.445810" HC_abs="0.266652" PMx_abs="0.075233" NOx_abs="1.379663" fuel_abs="1208.972954" electricity_abs="0"/>
+    </tripinfo>
+</tripinfos>

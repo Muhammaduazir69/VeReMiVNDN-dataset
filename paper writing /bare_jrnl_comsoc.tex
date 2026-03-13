@@ -1,0 +1,849 @@
+
+%% bare_jrnl_comsoc.tex
+%% V1.4b
+%% 2015/08/26
+%% by Michael Shell
+%% see http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
+%% Communications Society journal paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/pkg/ieeetran
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall the IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%*************************************************************************
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. The IEEE's font choices and paper sizes can   ***
+% *** trigger bugs that do not appear when using other class files.       ***                          ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+
+\documentclass[journal,comsoc]{IEEEtran}
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[journal,comsoc]{../sty/IEEEtran}
+
+
+\usepackage[T1]{fontenc}% optional T1 font encoding
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/pkg/ifpdf
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+
+
+
+
+% *** CITATION PACKAGES ***
+%
+%\usepackage{cite}
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+ \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation
+% can be obtained at: 
+% http://www.ctan.org/pkg/graphicx
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found at:
+% http://www.ctan.org/pkg/epslatex
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). The IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+% *** MATH PACKAGES ***
+%
+\usepackage{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics.
+% Do NOT use the amsbsy package under comsoc mode as that feature is
+% already built into the Times Math font (newtxmath, mathtime, etc.).
+% 
+% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/amsmath
+
+
+% Select a Times math font under comsoc mode or else one will automatically
+% be selected for you at the document start. This is required as Communications
+% Society journals use a Times, not Computer Modern, math font.
+\usepackage[cmintegrals]{newtxmath}
+% The freely available newtxmath package was written by Michael Sharpe and
+% provides a feature rich Times math font. The cmintegrals option, which is
+% the default under IEEEtran, is needed to get the correct style integral
+% symbols used in Communications Society journals. Version 1.451, July 28,
+% 2015 or later is recommended. Also, do *not* load the newtxtext.sty package
+% as doing so would alter the main text font.
+% http://www.ctan.org/pkg/newtx
+%
+% Alternatively, you can use the MathTime commercial fonts if you have them
+% installed on your system:
+%\usepackage{mtpro2}
+%\usepackage{mt11p}
+%\usepackage{mathtime}
+
+
+%\usepackage{bm}
+% The bm.sty package was written by David Carlisle and Frank Mittelbach.
+% This package provides a \bm{} to produce bold math symbols.
+% http://www.ctan.org/pkg/bm
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/pkg/algorithms
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/pkg/algorithmicx
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/array
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\ifCLASSOPTIONcompsoc
+%  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+%\else
+%  \usepackage[caption=false,font=footnotesize]{subfig}
+%\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a larger sans serif font
+% than the serif footnote size font used in traditional IEEE formatting
+% and thus the need to invoke different subfig.sty package options depending
+% on whether compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/pkg/subfig
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure.
+% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
+% corrections already built into the system in which case a warning will
+% be issued if an attempt is made to load fixltx2e.sty as it is no longer
+% needed.
+% The latest version and documentation can be found at:
+% http://www.ctan.org/pkg/fixltx2e
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/stfloats
+% Do not use the stfloats baselinefloat ability as the IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that the IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/pkg/dblfloatfix
+
+
+
+
+%\ifCLASSOPTIONcaptionsoff
+%  \usepackage[nomarkers]{endfloat}
+% \let\MYoriglatexcaption\caption
+% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
+%\fi
+% endfloat.sty was written by James Darrell McCauley, Jeff Goldberg and 
+% Axel Sommerfeldt. This package may be useful when used in conjunction with 
+% IEEEtran.cls'  captionsoff option. Some IEEE journals/societies require that
+% submissions have lists of figures/tables at the end of the paper and that
+% figures/tables without any captions are placed on a page by themselves at
+% the end of the document. If needed, the draftcls IEEEtran class option or
+% \CLASSINPUTbaselinestretch interface can be used to increase the line
+% spacing as well. Be sure and use the nomarkers option of endfloat to
+% prevent endfloat from "marking" where the figures would have been placed
+% in the text. The two hack lines of code above are a slight modification of
+% that suggested by in the endfloat docs (section 8.4.1) to ensure that
+% the full captions always appear in the list of figures/tables - even if
+% the user used the short optional argument of \caption[]{}.
+% IEEE papers do not typically make use of \caption[]'s optional argument,
+% so this should not be an issue. A similar trick can be used to disable
+% captions of packages such as subfig.sty that lack options to turn off
+% the subcaptions:
+% For subfig.sty:
+% \let\MYorigsubfloat\subfloat
+% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
+% However, the above trick will not work if both optional arguments of
+% the \subfloat command are used. Furthermore, there needs to be a
+% description of each subfigure *somewhere* and endfloat does not add
+% subfigure captions to its list of figures. Thus, the best approach is to
+% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
+% and instead reference/explain all the subfigures within the main caption.
+% The latest version of endfloat.sty and its documentation can obtained at:
+% http://www.ctan.org/pkg/endfloat
+%
+% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
+% later in the document, say, to conditionally put the References on a 
+% page by themselves.
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/url
+% Basically, \url{my_url_here}.
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{A Dataset for Misbehavior Detection in Vehicular Named Data Networking Using the JubST SUMO Scenario}
+%
+%
+% author names and IEEE memberships
+% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
+% a structure at a ~ so this keeps an author's name from being broken across
+% two lines.
+% use \thanks{} to gain access to the first footnote area
+% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
+% was not built to handle multiple paragraphs
+%
+
+\author{Michael~Shell,~\IEEEmembership{Member,~IEEE,}
+        John~Doe,~\IEEEmembership{Fellow,~OSA,}
+        and~Jane~Doe,~\IEEEmembership{Life~Fellow,~IEEE}% <-this % stops a space
+\thanks{M. Shell was with the Department
+of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
+GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this % stops a space
+\thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
+\thanks{Manuscript received April 19, 2005; revised August 26, 2015.}}
+
+% note the % following the last \IEEEmembership and also \thanks - 
+% these prevent an unwanted space from occurring between the last author name
+% and the end of the author line. i.e., if you had this:
+% 
+% \author{....lastname \thanks{...} \thanks{...} }
+%                     ^------------^------------^----Do not want these spaces!
+%
+% a space would be appended to the last name and could cause every name on that
+% line to be shifted left slightly. This is one of those "LaTeX things". For
+% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
+% "AB" then you have to do: "\textbf{A}\textbf{B}"
+% \thanks is no different in this regard, so shield the last } of each \thanks
+% that ends a line with a % and do not let a space in before the next \thanks.
+% Spaces after \IEEEmembership other than the last one are OK (and needed) as
+% you are supposed to have spaces between the names. For what it is worth,
+% this is a minor point as most people would not even notice if the said evil
+% space somehow managed to creep in.
+
+
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2015}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for IEEE Communications Society Journals}
+% The only time the second header will appear is for the odd numbered pages
+% after the title page when using the twoside option.
+% 
+% *** Note that you probably will NOT want to include the author's ***
+% *** name in the headers of peer review papers.                   ***
+% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
+% you desire.
+
+
+
+
+% If you want to put a publisher's ID mark on the page you can do it like
+% this:
+%\IEEEpubid{0000--0000/00\$00.00~\copyright~2015 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+
+% make the title area
+\maketitle
+
+% As a general rule, do not put math, special symbols or citations
+% in the abstract or keywords.
+\begin{abstract}
+
+Vehicular Named Data Networking (VNDN) has emerged as a promising communication paradigm for intelligent transportation systems, offering improved scalability, caching efficiency, and content availability over traditional IP-based VANET architectures. However, these advantages also introduce new security vulnerabilities at the forwarding layer, where malicious vehicles can exploit name-based communication to disrupt data dissemination or manipulate routing behavior. Despite growing interest in VNDN security, the research community lacks a publicly available dataset that captures forwarding-layer misbehavior within a realistic VNDN architecture, making it difficult to evaluate, compare, and reproduce intrusion detection mechanisms.
+
+To address this gap, this paper presents a new dataset generated using the JubST SUMO mobility scenario integrated with VEINS and OMNeT++. The dataset includes four representative VNDN forwarding attacks—Interest Flooding, Interest Aggregation, Selective Forwarding (Gray Hole), and Name Prefix Hijacking (Route Hijack)—simulated under varying traffic densities, attacker ratios, and random seeds. A lightweight trust-based evaluation mechanism is incorporated to label malicious behavior and support supervised, unsupervised, and hybrid detection approaches. The final dataset comprises 225 simulation runs, providing detailed message logs, ground truth attacker annotations, and complete configuration files for full reproducibility.
+
+This dataset establishes the first unified baseline for evaluating misbehavior detection mechanisms in VNDN, reducing simulation complexity, enabling fair comparison across studies, and supporting future extensions by the research community. It represents an essential step toward standardized benchmarking tools for securing next-generation vehicular communication networks.
+\end{abstract}
+
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+Vehicular Named Data Networking, Cooperative Intelligent Transport Systems, intrusion detection system
+\end{IEEEkeywords}
+
+
+
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Introduction}
+% The very first letter is a 2 line initial drop letter followed
+% by the rest of the first word in caps.
+% 
+% form to use if the first word consists of a single letter:
+% \IEEEPARstart{A}{demo} file is ....
+% 
+% form to use if you need the single drop letter followed by
+% normal text (unknown if ever used by the IEEE):
+% \IEEEPARstart{A}{}demo file is ....
+% 
+% Some journals put the first two words in caps:
+% \IEEEPARstart{T}{his demo} file is ....
+% 
+% Here we have the typical use of a "T" for an initial drop letter
+% and "HIS" in caps to complete the first word.
+\IEEEPARstart{V}{ehicular}  Ad Hoc Networks (VANETs) are a fundamental component of Intelligent Transportation Systems (ITS). They are specialized forms of Mobile Ad Hoc Networks (MANETs) that facilitate communication between vehicles and roadside infrastructure. In VANETs, vehicles are equipped with wireless communication devices that allow them to exchange information with other vehicles and fixed Roadside Units (RSUs). This network supports a variety of applications related to traffic management, road safety, entertainment, and internet access.
+
+VANETs utilize different levels of communication, including vehicle-to-vehicle (V2V), vehicle-to-infrastructure (V2I), and hybrid communication, which combines both V2V and V2I. They operate based on multiple communication standards, such as Dedicated Short-Range Communications (DSRC) and Cellular Vehicle-to-Everything (C-V2X). However, VANETs encounter several challenges, including high node mobility, frequent changes in network topology, broadcast storms, limited bandwidth, security threats, and the need to maintain quality of service (QoS).
+
+
+Vehicular Named Data Networking (VNDN) has emerged as a promising paradigm for next-generation intelligent transportation systems, combining the content-centric communication model of Named Data Networking (NDN) with the dynamic topology and VANETs. By retrieving data based on names rather than host addresses, VNDN enhances scalability, caching efficiency, and content availability in vehicular environments. However, this architectural shift introduces a new range of security vulnerabilities that can be exploited by malicious or faulty vehicles, particularly at the forwarding layer where Interest and Data packets are exchanged dynamically. Such misbehavior can lead to serious degradation in network performance, congestion, and even compromise safety-critical applications such as collision warnings or cooperative awareness.
+
+Despite significant progress in the design of VNDN-based intrusion detection systems (IDS), a major limitation persists in the form of \textbf{dataset availability}. Most prior studies rely on IP-based VANET datasets that do not accurately capture the name-based communication semantics or the hierarchical forwarding structures of VNDN. Consequently, the evaluation of VNDN security mechanisms often requires reimplementation of complex simulation environments, making fair comparison and reproducibility difficult. To address this gap, this paper introduces a new publicly available dataset. The dataset is generated using the \textit{JubST} mobility scenario implemented in the SUMO simulation framework and modeled through the VEINS and OMNeT++ network simulators.
+
+The proposed dataset incorporates four representative forwarding-layer attacks in VNDN: \textit{Interest Flooding}, \textit{Interest Aggregation}, \textit{Selective Forwarding (Gray Hole)}, and \textit{Name Prefix Hijacking (Route Hijack)}. Each attack is simulated under varying network conditions, attacker densities, and traffic loads to evaluate detection mechanisms in realistic vehicular environments. A lightweight trust-based evaluation mechanism is integrated to label and assess malicious forwarding behavior in real time, enabling both supervised and semi-supervised learning approaches for misbehavior detection. 
+
+The main objective of this work is to provide the VNDN research community with a standardized, reproducible, and extensible dataset that serves as a baseline for evaluating misbehavior detection algorithms. This dataset not only reduces simulation complexity and setup time but also ensures consistency and comparability across different studies. Ultimately, the proposed dataset represents a foundational step toward establishing a comprehensive benchmarking framework for securing future VNDN-based vehicular communication systems.
+
+% You must have at least 2 lines in the paragraph with the drop letter
+% (should never be an issue)
+I wish you the best of success.
+
+\hfill mds
+ 
+\hfill August 26, 2015
+
+
+
+\section{Related Work}
+\label{related:2}
+
+Cooperative Intelligent Transport Systems (C-ITS) enable vehicles and roadside infrastructure to exchange information in real-time, improving traffic safety and efficiency. C-ITS applications, such as collision avoidance, congestion control, and cooperative perception, rely heavily on the timely dissemination of trustworthy data. However, the open and decentralized nature of VANETs exposes them to a broad range of security and privacy threats. 
+Vehicles can be compromised, impersonated, or manipulated by different types of threats and attacks.
+Therefore, misbehavior detection systems (MDS)are essential for identifying malicious or faulty entities by analyzing behavioral, contextual, and communication features of vehicles. 
+Traditional security mechanisms, such as Public Key Infrastructure (PKI) and certificate revocation lists (CRL), ensure authentication and message integrity, but cannot detect deceitful insiders, including legitimate participants who purposely misbehave. 
+To design and evaluate effective MDS techniques, realistic datasets are essential. Prior research has initiated several datasets on misbehavior using the IP-based VANET environment. 
+This section reviews the most relevant datasets designed for VANETs, specifically in an IP-basedVANET environment and emerging data-centric architectures. 
+
+The baseline benchmark that is used widely is the Vehicular Reference Misbehavior dataset (VeReMi)~\cite{Kamel2020}, developed to provide a standard testbed for evaluating position-based misbehavior detection mechanisms in vehicular environments. The data set was generated using the Luxembourg SUMO Traffic Scenario (LuST) \cite{7385539} through the Simulation of Urban Mobility (SUMO) \cite {Krajzewicz_SUMO_2012}and VEINS frameworks \cite{Sommer_Veins_2011} integrated with the Misbehavior Detection Framework (F2MD) \cite{Kamel_F2MD_2020}. 
+VeReMi includes five representative position-falsification attacks on Basic Safety Messages (BSMs) and follows a standardized logging format. 
+VeReMi has been broadly adopted to validate both rule-based and machine-learning-based misbehavior detection models. 
+Despite its influence, VeReMi includes only a limited number of attack types and omits environmental attributes such as traffic density, weather, or interference.
+Therefore, as an enhancement to the VeReMi baseline, the same authors proposed the VeReMi-Extension dataset~\cite{Kamel2021} to enable more realistic, diversified, and comparable evaluation scenarios. 
+This version introduced new attack categories and integrated sensor error models to simulate real-world measurement uncertainty in position, speed, acceleration, and heading. VeReMi-Extension dataset includes different misbehavior types, including message delay, data replay, Denial-of-Service (DoS), disruptive, and Sybil-based attacks. 
+Although VeReMi-Extension increased dataset realism, it lacked temporal continuity between message sequences.
+The MisbehaviorX dataset~\cite{MisbehaviorX2023} was developed using the VEINS framework integrated with the Vehicular Ad-hoc Simulation Platform (VASP) and modeled on realistic Boston-area traffic maps. 
+It addresses the narrow attack coverage and limited scale of prior datasets by providing both benign and malicious traces encompassing 68 distinct types of misbehavior. The MisbehaviorX dataset encompasses various attacks, including position falsification, speed manipulation, data replay, DoS flooding, Sybil amplification, and collusion attacks, as well as hybrid behaviors executed by coordinated vehicle groups. 
+MisbehaviorX records Cooperative Awareness Messages (CAMs) and Decentralized Environmental Notification Messages (DENMs) along with contextual features such as packet delivery ratio, received signal strength indicator (RSSI), delay, and mobility metrics. 
+The VeReMi-AP dataset~\cite{Kamel2023} extends the VeReMi framework to enable the evaluation of predictive and proactive detection mechanisms. VeReMi-AP introduces the concept of attack prediction, which estimates the possibility of upcoming malicious activity based on historical communication patterns. It also includes Fake Reporting Attack, where vehicles broadcast fabricated safety alerts (e.g., false accident or congestion notifications) that mislead other vehicles and degrade traffic flow. Temporal indicators such as message rate and inter-alert time are included to support time-series learning. 
+
+The BurST–Australian Dataset for Misbehaviour Analysis (BurST-ADMA)~\cite{Amanullah2022} was designed to model vehicular misbehavior within an Australian context using the Burwood SUMO Traffic (BurST) scenario from Melbourne.  It features one-second interval Basic Safety Messages (BSMs) for urban and suburban environments, comprising both benign and malicious entries that inject false position, speed, and heading data. 
+The dataset contains seven attack types, including constant and random position or speed falsification and reversed heading attacks. 
+While BurST-ADMA diversifies the geographical scope and traffic patterns of vehicular datasets, it remains limited to BSM-level falsification without modeling network-level or content-centric misbehavior. 
+
+The reviewed datasets collectively contributed to advancing misbehavior detection research within VANETs. 
+However, most of them are confined to IP-based architectures and focus primarily on physical or message-level falsification. The BurST–Australian Dataset focused on the data-centric environment.  However, there are no currently available datasets that are suitable for VNDN-specific communication behaviors such as Interest/Data exchanges, cache manipulation, or privacy leakage through semantic naming. 
+Moreover, none integrates multi-layer trust evaluation or temporal feature correlation. 
+VeReMiVND uses a data-centric vehicular networking framework, enabling the study of sophisticated intrusion detection and secure forwarding strategies in VNDN.
+ \begin{figure*}[htp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{IEEE-Transactions-LaTeX2e-templates-and-instructions/IEEETransactions_LaTeX/IEEEtran/Evaluation Overflow.png}
+    \caption{Evaluation Overflow}
+   \label{Figure:Inaggre}
+\end{figure*}
+
+\section{JubST SCENARIO}
+
+\subsection{Motivation}
+\subsection{Overview of JubST Scenario}
+
+Jubail Industrial City is one of the largest industrial cities in the world, established in 1975. It is strategically located in Saudi Arabia, in the Middle East, covering an area of 1,016 square kilometers that includes various industrial complexes and port facilities. The city's proximity to energy sources and essential raw materials contributes to its significance. Jubail's advanced infrastructure has laid the foundation for industrial, commercial, and social sectors to thrive within an interconnected framework. It also meets transportation needs with modern standards, offering elements of practical daily life \cite{RCJY_Jubail_2025}.
+
+The JubST scenario was simulated using the Simulation of Urban Mobility (SUMO) \cite {Krajzewicz_SUMO_2012} road traffic simulation suite. Below, the main steps involved in the simulation process are described:
+
+\begin{enumerate}
+    \item Map Extraction: We utilized OSMWebWizard \cite{OSMWebWizard_SUMO_2025}, available in the SUMO suite, for map generation and extraction for the Jubail City. The OSMWebWizard is a graphical user interface (GUI) tool that allows users to select an area for map and traffic generation. For this project, Jubail Industrial City was selected using a boundary box (bbox).
+    \item Traffic Demand Generation: The OSMWebWizard generates traffic based on the provided input. For this study, we focused solely on vehicles for simplicity, as our main interest is in generating different VNDN attacks. Traffic demand was generated randomly. Table I summarizes the inputs used for traffic demand generation. The simulation was run for an arbitrary time of ----- seconds to generate a preliminary dataset. However, we plan to optimize the JubST scenario in the future to create a more realistic traffic demand and network topology for a longer duration.
+\end{enumerate}
+
+\subsection{Overview of VNDN Attacks}
+
+The VNDN architecture enhances the scalability, caching efficiency, and data availability of VANETs; however, it also introduces a new class of security vulnerabilities across multiple networking layers. The proposed dataset will focus on specific VNDN forwarding attacks/ architecture attacks. Instead of implementing a broad range of attacks, we are concentrating on these particular threats to demonstrate the efficacy of our approach. We anticipate that other researchers will contribute new attack implementations and corresponding datasets to our repository, which we will maintain.
+
+Our approach involves testing some forwarding layer attacks of VNDN that can detect malicious forwarding behavior in real-time. We selected the following attacks: Interest Flooding, Interest Aggregation, Selective Forwarding (also known as Gray Hole), and Name Prefix Hijacking (Route Hijacking). Below is an overview of these VNDN attacks.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{IEEE-Transactions-LaTeX2e-templates-and-instructions/IEEETransactions_LaTeX/IEEEtran/flooding attack (2).png}
+    \caption{ A flooding Attack}
+   \label{Figure:Flooding}
+\end{figure}
+
+
+
+
+ 
+\begin{enumerate}
+    \item Interest Flooding (IF): IF attack is one of the most common DoS attack that targeted VNDN. In IF attack,  a malicious vehicle generates a storm of Interest packets for non-existent, unpopular, or randomly varying content names. These interest packets  must be recorded in the Pending Interest Table (PIT) of intermediate nodes, causing  abnormal traffic leads to PIT overflow, queue congestion, and exhaustion of memory and bandwidth resources \cite{Hidouri_NDN_SecuritySurvey_2022}. IF can affect the VNDN infrastructure even the other vehicles or  RSUs. When multiple malicious vehicles broadcast a surge of Interests,the RSUs and forwarding nodes become overloaded, causing legitimate Interest packets to be dropped or delayed, thereby disrupting real-time safety applications such as collision warnings, traffic congestion alerts, and emergency message dissemination.  Over time, such attacks can destabilize the control plane of the vehicular infrastructure, impairing coordination between fog nodes, RSUs, and cloud controllers, which depend on consistent forwarding performance for route optimization and trust management \cite{abdullah2021interest}.  Figure \ref{Figure:Flooding} depicts the IF attack in VDND. 
+    \begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{IEEE-Transactions-LaTeX2e-templates-and-instructions/IEEETransactions_LaTeX/IEEEtran/nterest Aggregation Attack (2).png}
+    \caption{Interest Aggregation in VNDN}
+   \label{Figure:Inaggre}
+\end{figure}
+    \item Name Prefix Hijacking / Route Hijack: It is known as Prefix Hijacking or as Route Hijacking. It is a critical routing-layer attack in VNDN that targets the name-based forwarding mechanism.As a natural of NDN, Data packets are routed based on the name prefixes rather than IP addresses, and each node maintains a Forwarding Information Base (FIB) mapping content names to outgoing interfaces \cite{Hidouri_NDN_SecuritySurvey_2022}. In this attack, a malicious vehicle falsely advertises ownership of certain name prefixes—for instance, /traffic/alert or /safety/data—and claims to be the legitimate source of that content. This deception causes nearby vehicles or RSUs to update their FIB entries and forward Interests toward the attacker instead of the genuine data producer. An attacker can exploit the  dynamic environment of VNDN to intermittently hijack routes, redirect safety-critical data, or blackhole legitimate Interests, thereby interrupting time-sensitive applications such as collision avoidance and traffic coordination. Moreover, hijacked name prefixes can be used to inject false data (e.g., fake congestion warnings or bogus location updates).  Figure \ref{Figure:Flooding} shows the scenario of this attack. In large-scale deployments, prefix hijacking can disrupt fog–cloud synchronization and cluster-based forwarding to alter the trust and reliability across the VNDN infrastructure.
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{IEEE-Transactions-LaTeX2e-templates-and-instructions/IEEETransactions_LaTeX/IEEEtran/Seclectattack.png}
+    \caption{Caption}
+    \label{fig:placeholder}
+\end{figure}
+    
+     \item Selective Forwarding (Gray Hole): The Selective Forwarding attack is a forwarding-layer misbehavior in which a malicious vehicle selectively drops Interest or Data packets rather than forwarding them normally. Unlike blackhole attackers, which discard all traffic, gray hole nodes forward a subset of packets to remain undetected, while strategically dropping those related to safety messages or trust-estimation data \cite{Hidouri_NDN_SecuritySurvey_2022}. In  VNDN, where timely content dissemination and multi-hop reliability are essential for maintaining vehicular safety and network stability, this attack reduces cache hit ratios, increases end-to-end delay, and disrupts cooperative forwarding, leading to reduced throughput and poor quality of service in fog-assisted vehicular networks. Furthermore, since the attacker still appears partially cooperative, trust-based detection models find it challenging to differentiate gray hole behavior from legitimate fluctuations in connectivity \cite{Chen_VNDN_2021}. Recent studies have highlighted that such attacks can compromise cluster stability and RSU coordination, making the infrastructure vulnerable to cascading failures \cite{Kumar_FogVNDN_2023}. 
+     \item Interest Aggregation Attack: Interest aggregation is an NDN forwarding optimization that collapses multiple identical Interest packets arriving at a router into a single forwarded Interest and records the requesting interfaces in the PIT. While this reduces redundant traffic, it can be abused by adversaries. In an Interest Aggregation Attack, malicious nodes intentionally craft Interest patterns (e.g., repeated identical names, long lifetimes, or name variants that converge at a specific router) to force aggregation at strategic points in the network. By doing so the attacker can artificially inflate PIT occupancy at targeted routers,  prolong PIT entries (by renewing or keeping Interests alive), and collapse distinct legitimate Interests behind a single aggregated Interest that may be delayed or lost. The outcome is increased response latency, content unavailability for legitimate users, degraded cache utilization, and a subtle DoS effect because multiple consumers’ Interests are effectively serialized or starved. In vehicular environments (VNDN) these effects are magnified by high mobility and tight real-time requirements — safety messages or time-sensitive content may be delayed or suppressed when Interests are aggregated maliciously at overloaded Roadside Units (RSUs) or fog nodes, undermining both safety and QoS for applications such as collision warnings, cooperative perception, or traffic control.
+     \begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{IEEE-Transactions-LaTeX2e-templates-and-instructions/IEEETransactions_LaTeX/IEEEtran/hijack.png}
+    \caption{ A flooding Attack}
+   \label{Figure:Flooding}
+\end{figure}
+
+\end{enumerate}
+
+
+
+
+
+\section{JubST-Dataset for Misbehaviour Analysis}
+\section{Dataset Contribution and Motivation}
+
+The primary contribution of this paper is the introduction of a novel dataset specifically designed to fit within the VNDN architecture. The dataset aims to establish a common baseline for the evaluation of misbehavior detection mechanisms in VNDN environments. Meanwhile, previous studies have predominantly relied on IP-based vehicular datasets, such as those used in conventional VANET simulations, these datasets do not accurately represent the communication and forwarding mechanisms of VNDN. Although IP-based frameworks offer flexibility in defining custom attack scenarios, they fail to capture the unique characteristics of name-based communication, caching, and interest–data exchanges inherent to VNDN. To the best of our knowledge, there is currently no publicly available dataset that explicitly supports misbehavior detection research within the VNDN architecture. 
+
+The goal of this dataset is to provide an initial baseline against which detection mechanisms for VNDN can be systematically evaluated. This resource significantly reduces the time required for researchers to perform high-quality simulation studies and facilitates fair comparison across different detection frameworks. We acknowledge that no dataset can fully replace a detailed implementation and analysis of each detection mechanism. However, the current state of the art—where researchers must perform time-consuming and error-prone re-implementations of prior methods for each study—poses a major barrier to reproducibility and scientific progress. Our dataset therefore represents the first step toward a standardized and comprehensive evaluation methodology for misbehavior detection in VNDN.
+
+The dataset comprises detailed message logs for every vehicle participating in the simulation, along with a ground truth file specifying the behavior of each attacker. Each log includes both network-level communication data and local information collected from the vehicle, such as periodic position updates from on-board sensors (e.g., GPS). This structure enables any detection algorithm to process the sequence of messages and assess the reliability or malicious intent of each event or packet exchange. 
+
+The dataset and all corresponding source code used to generate it are publicly available\footnote{Link to dataset repository will be provided upon publication.}. It currently consists of   --- encompassing diverse network conditions: 
+\begin{itemize}
+  \item {}, 
+  \item {attacker densities} (low, medium, high),
+  \item { traffic densities}, and 
+  \item { repetitions} per parameter set using different random seeds. 
+\end{itemize}
+
+ A detailed discussion of these parameters, the attack scenarios, and the data generation methodology is presented in the following subsections.
+
+\subsection{Scenario Selection}
+
+The purpose of the proposed dataset is to provide a holistic and unbiased foundation for the evaluation of misbehavior detection mechanisms within the VNDN architecture. The dataset is designed to minimize unintentional selection bias that may arise from the specific properties of a detection mechanism or simulation scenario, even if this means sacrificing some degree of detail in individual case studies. The common approach adopted in prior work has been to select a limited number of specific scenarios (e.g., a-------) to analyze the performance of a mechanism in depth. While this method provides valuable insights into behavior under well-controlled conditions, it relies heavily on manual decision-making and assumptions, thereby complicating fair and reproducible comparisons between different detection techniques.
+
+In contrast, our work emphasizes how detection mechanisms perform across a diverse and representative set of scenarios. To achieve this, we constructed a larger, more comprehensive dataset that captures a variety of traffic and attacker configurations, allowing researchers to first assess overall detection performance before focusing on specific conditions for mechanism-specific improvements.
+
+%% I am not sure 
+The dataset thus enables both broad generalization fine-grained analysis} of detection schemes under different operational environments.
+
+To ensure scenario diversity, we selected a representative sample of the complete simulation environment based on the included road types (urban and highway) and their corresponding traffic densities. Our simulation design was inspired by the JubST scenario, which was originally developed to provide a comprehensive and realistic testbed for evaluating VANET applications. As a result, most studies referencing prior VNDN work tend to rely on partial or follow-up experiments rather than full reproductions.
+
+This is precisely where our dataset makes a novel contribution. It provides a simplified and reusable message stream per vehicle, making it significantly easier to reproduce detection studies and to benchmark newly proposed mechanisms. The dataset preserves the essential temporal and behavioral features of each vehicle, including transmission events, Interest/Data exchanges, and local sensing data. This structure allows straightforward parsing by any detection algorithm while maintaining fidelity to the dynamics of vehicular communication. 
+
+Table~\ref{tab:simulation_parameters} summarizes the core parameters of our simulation setup. Additional technical details, including complete configuration parameters, can be found in the OMNeT++ configuration files that are publicly available in our source repository.
+\begin{table*}[!t]
+\centering
+\caption{Simulation Parameters for VNDN Dataset Generation}
+\label{tab:simulation_parameters}
+\begin{tabular}{|p{5cm}|p{4cm}|p{5.5cm}|}
+\hline
+Parameter & & \\ \hline
+Mobility Model & SUMO JubST  & Jubail Industrial City  SUMO Traffic scenario used for realistic urban mobility \cite{}. \\ \hline
+Simulation Start Time & & \\ \hline
+Simulation Duration & & \\ \hline
+Attacker Probability & & \\ \hline
+Simulation Area & & \\ \hline
+Signal Interference Model & & \\ \hline
+Obstacle Shadowing Model & &\\ \hline
+Fading Model & & \\ \hline
+Shadowing Model & & \\ \hline
+MAC Implementation & & \\ \hline
+Thermal Noise & & \\ \hline
+Transmit Power& & \\ \hline
+Bit Rate & &. \\ \hline
+Receiver Sensitivity& & \\ \hline
+Antenna Model & & \\ \hline
+Beaconing Rate & & \\ \hline
+\end{tabular}
+\end{table*}
+
+\subsection{ VNDN Enabled Dataset Structure}
+
+
+
+\subsection{Attacks and Implementation} 
+\subsection{Characteristics}
+\subsection{Limitations}
+
+\section{Metrics}
+\subsection{Evaluating Detection Quality}
+\subsection{Evaluating Detector Limitations}
+\section{Conclusion and Discussion}
+%Despite its diversity and scale, MisbehaviorX remains limited in several aspects relevant to future vehicular communication architectures. 
+%First, it is still built on the IP-centric VANET model, which lacks the data-centric communication semantics of Named Data Networking (NDN). 
+%Consequently, the dataset does not capture VNDN-specific attacks such as Interest flooding, content poisoning, or cache manipulation. 
+%Second, although it provides temporal sequences, it does not include explicit trust or reputation values, nor privacy-related metadata such as pseudonym lifetimes or rotation events. 
+%Finally, MisbehaviorX does not model privacy leakage or semantic-name inference—key challenges in data-centric vehicular systems. 
+
+%For these reasons, MisbehaviorX is a valuable intermediate step between early misbehavior datasets and fully data-centric frameworks. 
+%The proposed \textbf{VeReMiVNDN} dataset builds upon its strengths by introducing VNDN-specific communication features, multi-layer trust assessment, temporal correlations across Interest/Data exchanges, and privacy-preserving name modeling, thus filling the existing gaps in evaluating secure and privacy-aware vehicular Named Data Networking.
+
+
+
+    
+
+\begin{table*}[!t]
+\centering
+\caption{Comparison of Existing Vehicular Misbehavior Datasets and the Proposed VeReMiVNDN Dataset}
+\label{tab:dataset_comparison}
+\begin{tabular}{|p{2.2cm}|p{4.3cm}|p{5.2cm}|p{4.3cm}|}
+\hline
+\textbf{Dataset} & \textbf{Description and Simulation Environment} & \textbf{Attack Coverage and Features} & \textbf{Limitations / Missing Aspects} \\ \hline
+
+\textbf{VeReMi}~\cite{Kamel2020} &
+Baseline dataset for position-based misbehavior detection; generated using SUMO + VEINS + F2MD on the LuST scenario. &
+Five basic position-falsification attacks (\textit{constant}, \textit{random}, \textit{constant-offset}, \textit{random-offset}, \textit{eventual-stop}). &
+Limited attack diversity; no trust, privacy, temporal, or environmental attributes; IP-based VANET only (no VNDN). \\ \hline
+
+\textbf{VeReMi-Extension}~\cite{Kamel2021} &
+Enhanced VeReMi using same framework with added sensor error models. &
+Adds new attacks: message delay, data replay, DoS, disruptive, Sybil-based; introduces measurement noise in position, speed, acceleration, and heading. &
+Still lacks temporal continuity, trust, and privacy indicators; IP-centric only. \\ \hline
+
+\textbf{VeReMi-AP}~\cite{Kamel2023} &
+Predictive extension of VeReMi for proactive detection; SUMO–VEINS with F2MD. &
+Introduces \textit{Fake Reporting Attack} for forecasting misbehavior; includes temporal indicators (message rate, inter-alert time). &
+No trust or privacy layer; single-layer IP communication; excludes data-centric (VNDN) misbehavior. \\ \hline
+
+\textbf{MisbehaviorX}~\cite{MisbehaviorX2023} &
+Comprehensive dataset using VEINS + VASP over Boston maps. &
+68 attack types: position falsification, speed manipulation, replay, DoS, Sybil, collusion; includes temporal logs, RSSI, delay, and PDR metrics. &
+Large-scale but lacks trust, privacy, and VNDN-level semantics (Interest/Data, cache, or PIT features). \\ \hline
+
+\textbf{BurST-ADMA}~\cite{Amanullah2022} &
+Australian dataset (Burwood SUMO Traffic scenario) with 1-s BSM intervals for urban/suburban settings. &
+7 attack types: position/speed falsification and reversed heading; supports local traffic diversity and left-hand drive models. &
+Confined to BSM-level falsification; no trust, privacy, temporal correlation, or network/content-centric features. \\ \hline
+
+\textbf{Proposed VeReMiVNDN} &
+Next-generation dataset integrating VANET and VNDN simulation using SUMO + VEINS + NDNSim. &
+Multi-layer attacks (Interest flooding, content poisoning, cache pollution, Sybil amplification, replay); includes trust and privacy-aware features; temporal sequences; pseudonym rotation; privacy-preserving naming. &
+Designed to overcome previous gaps by combining temporal, trust, and privacy modeling in a data-centric vehicular environment. \\ \hline
+\end{tabular}
+\end{table*}
+
+
+
+% use section* for acknowledgment
+\section*{Acknowledgment}
+
+
+The authors would like to thank...
+
+
+% Can use something like this to put references on a page
+% by themselves when using endfloat and the captionsoff option.
+\ifCLASSOPTIONcaptionsoff
+  \newpage
+\fi
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+\bibliography{IEEE-Transactions-LaTeX2e-templates-and-instructions/IEEETransactions_LaTeX/Transactions-Bibliography/IEEEfull}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+%\begin{thebibliography}{1}
+
+%\bibitem{IEEEhowto:kopka}
+%H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+ % 0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+%\end{thebibliography}
+
+% biography section
+% 
+% If you have an EPS/PDF photo (graphicx package needed) extra braces are
+% needed around the contents of the optional argument to biography to prevent
+% the LaTeX parser from getting confused when it sees the complicated
+% \includegraphics command within an optional argument. (You could create
+% your own custom macro containing the \includegraphics command to make things
+% simpler here.)
+%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
+% or if you just want to reserve a space for a photo:
+
+\begin{IEEEbiography}{Michael Shell}
+Biography text here.
+\end{IEEEbiography}
+
+% if you will not have a photo at all:
+\begin{IEEEbiographynophoto}{John Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% insert where needed to balance the two columns on the last page with
+% biographies
+%\newpage
+
+\begin{IEEEbiographynophoto}{Jane Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% You can push biographies down or up by placing
+% a \vfill before or after them. The appropriate
+% use of \vfill depends on what kind of text is
+% on the last page and whether or not the columns
+% are being equalized.
+
+%\vfill
+
+% Can be used to pull up biographies so that the bottom of the last one
+% is flush with the other column.
+%\enlargethispage{-5in}
+
+
+
+% that's all folks
+\end{document}
+
+
