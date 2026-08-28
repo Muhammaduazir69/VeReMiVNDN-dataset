@@ -95,9 +95,15 @@
   <h2>Get the data</h2>
   <p>The data ships as GitHub release assets rather than as files in the
      repository, because git handles a few GB of compressed CSV badly.</p>
-<pre><code>curl -LO {{RELEASE_URL_DL}}/veremivndn_ml.tar.gz
+<pre><code>for i in 00 01 02 03 04 05 06 07; do
+  curl -LO {{RELEASE_URL_DL}}/veremivndn_ml.tar.gz.part$i
+done
+cat veremivndn_ml.tar.gz.part* &gt; veremivndn_ml.tar.gz
 tar xzf veremivndn_ml.tar.gz
 sha256sum -c CHECKSUMS.sha256</code></pre>
+  <p>The main archive ships in 48 MB parts: a single large asset has no resume,
+     and this release was produced over a slow uplink. The checksum file covers
+     both the parts and the joined archive.</p>
 
   <p>Each file is a gzipped CSV with a header, so pandas reads it directly.</p>
 <pre><code>import glob, pandas as pd

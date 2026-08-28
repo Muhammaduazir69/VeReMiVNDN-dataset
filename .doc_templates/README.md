@@ -19,15 +19,31 @@ this repository. Git is a poor fit for a few GB of compressed CSV, so the
 release assets carry the data and this repository carries the code that
 produced it.
 
+The main archive is uploaded in 48 MB parts. A single large asset has no
+resume, and this release was produced over a slow uplink, so a stalled transfer
+would otherwise mean starting the whole file again. Fetch the parts and join
+them with `cat`; the order is guaranteed by the shell glob.
+
 ```bash
 # the labeled machine-learning dataset, one gzipped CSV per run
-curl -LO {{RELEASE_URL_DL}}/veremivndn_ml.tar.gz
+for i in 00 01 02 03 04 05 06 07; do
+  curl -LO {{RELEASE_URL_DL}}/veremivndn_ml.tar.gz.part$i
+done
+cat veremivndn_ml.tar.gz.part* > veremivndn_ml.tar.gz
 tar xzf veremivndn_ml.tar.gz
 ```
 
-Verify what you downloaded:
+The per-neighbor view is small enough to come as one file:
 
 ```bash
+curl -LO {{RELEASE_URL_DL}}/veremivndn_plane.tar.gz
+```
+
+Verify what you downloaded. `CHECKSUMS.sha256` covers both the individual parts
+and the reassembled archives, so it will catch a truncated part and a bad join.
+
+```bash
+curl -LO {{RELEASE_URL_DL}}/CHECKSUMS.sha256
 sha256sum -c CHECKSUMS.sha256
 ```
 
@@ -97,10 +113,10 @@ y = df.isAttack
 
 | Asset | Contents |
 |---|---|
-| `veremivndn_ml.tar.gz` | The main dataset. One gzipped CSV per run, 69 features plus labels. |
+| `veremivndn_ml.tar.gz.part00` .. `part07` | The main dataset, in 48 MB parts. One gzipped CSV per run, 69 features plus labels. Join with `cat`. |
 | `veremivndn_plane.tar.gz` | A second view: 23 per-neighbor features, one row per monitor and observed neighbor. |
-| `veremivndn_scalars.tar.gz` | The OMNeT++ scalar file for every run, holding the network-level measurements. |
-| `CHECKSUMS.sha256` | SHA-256 of every released file. |
+| `veremivndn_scalars.tar.gz.part00` .. `part03` | The OMNeT++ scalar file for every run, holding the network-level measurements. Join with `cat`. |
+| `CHECKSUMS.sha256` | SHA-256 of every part and of the reassembled archives. |
 
 Documentation lives in [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md),
 which defines every column, and [`docs/INSTRUCTIONS.md`](docs/INSTRUCTIONS.md),

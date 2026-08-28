@@ -104,7 +104,18 @@ Treat the result as a starting point, not as a target. It is a per-node,
 per-window classifier with no temporal context; the features support sequence
 models, and the `plane` view supports per-neighbor attribution.
 
-## Verifying the download
+## Reassembling and verifying the download
+
+The two large archives ship as 48 MB parts. Join them before use:
+
+```bash
+cat veremivndn_ml.tar.gz.part*      > veremivndn_ml.tar.gz
+cat veremivndn_scalars.tar.gz.part* > veremivndn_scalars.tar.gz
+tar xzf veremivndn_ml.tar.gz
+```
+
+`CHECKSUMS.sha256` lists both the parts and the joined archives, so it catches a
+truncated part as well as a bad join:
 
 ```bash
 sha256sum -c CHECKSUMS.sha256

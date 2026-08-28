@@ -11,9 +11,9 @@ pointed to this page while no release existed.
 
 | Asset | Contents |
 |---|---|
-| `veremivndn_ml.tar.gz` | The main dataset. One gzipped CSV per run, 69 features plus labels. |
+| `veremivndn_ml.tar.gz.part00` .. `part07` | The main dataset, in 48 MB parts. One gzipped CSV per run, 69 features plus labels. |
 | `veremivndn_plane.tar.gz` | Per-neighbor view, 23 features per monitor and observed neighbor. |
-| `veremivndn_scalars.tar.gz` | OMNeT++ scalar output for every run. |
+| `veremivndn_scalars.tar.gz.part00` .. `part03` | OMNeT++ scalar output for every run, in 48 MB parts. |
 | `DATA_DICTIONARY.md`, `INSTRUCTIONS.md` | Column definitions, loading, splitting, limitations. |
 | `CHECKSUMS.sha256` | SHA-256 of every asset. |
 
@@ -27,10 +27,18 @@ pointed to this page while no release existed.
 
 ## Quick start
 
+The large archives are split into 48 MB parts, because a single large asset has
+no resume and this release was produced over a slow uplink. Join them with
+`cat`; the glob orders them correctly.
+
 ```bash
-curl -LO https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/releases/download/v1.0.0/veremivndn_ml.tar.gz
-tar xzf veremivndn_ml.tar.gz
+B=https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/releases/download/v1.0.0
+for i in 00 01 02 03 04 05 06 07; do curl -LO $B/veremivndn_ml.tar.gz.part$i; done
+curl -LO $B/CHECKSUMS.sha256
+
+cat veremivndn_ml.tar.gz.part* > veremivndn_ml.tar.gz
 sha256sum -c CHECKSUMS.sha256
+tar xzf veremivndn_ml.tar.gz
 ```
 
 ```python
