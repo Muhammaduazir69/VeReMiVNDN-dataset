@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TRIDENT highway corridor: main E-W highway at y=400 with three N-S cross
+     roads forming interchanges; netconvert ramps.guess adds accel/decel ramps. -->
+<nodes>
+    <!-- main highway line (west -> east), 4.5 km -->
+    <node id="H0" x="0"    y="400" type="priority"/>
+    <node id="H1" x="1100" y="400" type="priority"/>
+    <node id="H2" x="2250" y="400" type="priority"/>
+    <node id="H3" x="3400" y="400" type="priority"/>
+    <node id="H4" x="4500" y="400" type="priority"/>
+
+    <!-- cross road at H1 -->
+    <node id="C1n" x="1100" y="750" type="priority"/>
+    <node id="C1s" x="1100" y="50"  type="priority"/>
+    <!-- cross road at H2 (central interchange, signalized) -->
+    <node id="C2n" x="2250" y="800" type="traffic_light"/>
+    <node id="C2s" x="2250" y="0"   type="traffic_light"/>
+    <!-- cross road at H3 -->
+    <node id="C3n" x="3400" y="750" type="priority"/>
+    <node id="C3s" x="3400" y="50"  type="priority"/>
+</nodes>

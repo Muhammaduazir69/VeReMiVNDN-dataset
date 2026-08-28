@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
 <!--
-    VeReMiVNDN - Enhanced Urban Scenario Launch Configuration
+    TRIDENT-VNDN - Urban scenario launch (purpose-built realistic city grid).
+    Loads urban_grid.* : 1040 m signalised grid with buildings, RSU coverage
+    rings, traffic signs, and dense low-speed round-trip traffic.
 -->
 <launch>
     <basedir path="/home/uzair/Desktop/omnet++/omnetpp-6.0.3/VNDN/VeReMiVNDN/simulations/scenarios/sumo/"/>
-    <copy file="aljubail_saudi.net.xml"/>
-    <copy file="urban_enhanced.rou.xml"/>
+    <copy file="urban_grid.net.xml"/>
+    <copy file="urban_grid.rou.xml"/>
     <copy file="vTypes.add.xml"/>
-    <copy file="aljubail_zones.poly.xml"/>
-    <copy file="urban_enhanced.sumo.cfg" type="config"/>
+    <copy file="urban_grid.poly.xml"/>
+    <copy file="urban_grid.gui.xml"/>
+    <copy file="urban_grid.sumo.cfg" type="config"/>
     <commands>
         <sumo-gui>sumo-gui --start --quit-on-end</sumo-gui>
         <sumo>sumo</sumo>

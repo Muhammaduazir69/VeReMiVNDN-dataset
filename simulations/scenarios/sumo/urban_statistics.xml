@@ -1,32 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2025-11-12 23:24:23 by Eclipse SUMO GUI Version 1.18.0
+<!-- generated on 2026-06-10 20:19:46 by Eclipse SUMO GUI Version 1.18.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
         <net-file value="aljubail_saudi.net.xml"/>
         <route-files value="vTypes.add.xml,urban_enhanced.rou.xml"/>
-        <additional-files value="aljubail_zones.poly.xml"/>
     </input>
 
     <output>
+        <emission-output value="urban_emissions.xml"/>
         <summary-output value="urban_summary.xml"/>
         <tripinfo-output value="urban_tripinfo.xml"/>
+        <tripinfo-output.write-unfinished value="true"/>
+        <vehroute-output value="urban_vehroutes.xml"/>
+        <vehroute-output.write-unfinished value="true"/>
+        <lanechange-output value="urban_lanechanges.xml"/>
         <statistic-output value="urban_statistics.xml"/>
     </output>
 
     <time>
         <begin value="0"/>
-        <end value="20"/>
+        <end value="2000"/>
         <step-length value="0.1"/>
     </time>
 
     <processing>
-        <lateral-resolution value="0.8"/>
+        <extrapolate-departpos value="true"/>
         <collision.action value="warn"/>
         <collision.check-junctions value="true"/>
+        <collision.mingap-factor value="1.0"/>
         <time-to-teleport value="-1"/>
-        <max-depart-delay value="600"/>
+        <time-to-teleport.highways value="120"/>
+        <max-depart-delay value="900"/>
+        <eager-insert value="true"/>
         <pedestrian.model value="striping"/>
         <pedestrian.striping.stripe-width value="0.65"/>
         <pedestrian.striping.dawdling value="0.3"/>
@@ -35,13 +42,17 @@
 
     <routing>
         <routing-algorithm value="dijkstra"/>
-        <device.rerouting.probability value="0.9"/>
+        <device.rerouting.probability value="0.6"/>
+        <device.rerouting.period value="30"/>
         <device.rerouting.adaptation-steps value="90"/>
         <device.rerouting.adaptation-interval value="5"/>
     </routing>
 
     <report>
         <verbose value="true"/>
+        <xml-validation value="never"/>
+        <no-warnings value="false"/>
+        <duration-log.disable value="false"/>
         <duration-log.statistics value="true"/>
         <no-step-log value="true"/>
     </report>
@@ -50,26 +61,34 @@
         <device.emissions.probability value="1.0"/>
     </emissions>
 
+    <traci_server>
+        <remote-port value="36093"/>
+    </traci_server>
+
     <random_number>
+        <random value="false"/>
         <seed value="23"/>
     </random_number>
 
     <gui_only>
+        <gui-settings-file value="urban_enhanced.gui.xml"/>
         <quit-on-end value="true"/>
         <start value="true"/>
+        <delay value="40"/>
+        <window-size value="1920,1080"/>
     </gui_only>
 
 </configuration>
 -->
 
 <statistics xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/statistic_file.xsd">
-    <performance clockBegin="1762971863.02" clockEnd="1762971863.29" clockDuration="0.27" traciDuration="0.00" realTimeFactor="73.26" vehicleUpdatesPerSecond="4029.30" personUpdatesPerSecond="0.00" begin="0.00" end="20.00" duration="20.00"/>
-    <vehicles loaded="9" inserted="9" running="9" waiting="0"/>
+    <performance clockBegin="1781104786.30" clockEnd="1781104790.20" clockDuration="3.90" traciDuration="0.10" realTimeFactor="23.26" vehicleUpdatesPerSecond="6658.02" personUpdatesPerSecond="0.00" begin="0.00" end="90.60" duration="90.60"/>
+    <vehicles loaded="123" inserted="52" running="52" waiting="0"/>
     <teleports total="0" jam="0" yield="0" wrongLane="0"/>
     <safety collisions="0" emergencyStops="0" emergencyBraking="0"/>
     <persons loaded="0" running="0" jammed="0"/>
     <personTeleports total="0" abortWait="0" wrongDest="0"/>
-    <vehicleTripStatistics count="0" routeLength="0.00" speed="0.00" duration="0.00" waitingTime="0.00" timeLoss="0.00" departDelay="0.00" departDelayWaiting="-1.00" totalTravelTime="0.00" totalDepartDelay="0.00"/>
+    <vehicleTripStatistics count="52" routeLength="604.41" speed="11.99" duration="49.87" waitingTime="0.06" timeLoss="4.90" departDelay="0.01" departDelayWaiting="0.00" totalTravelTime="2593.30" totalDepartDelay="0.70"/>
     <pedestrianStatistics number="0" routeLength="0.00" duration="0.00" timeLoss="0.00"/>
     <rideStatistics number="0"/>
     <transportStatistics number="0"/>

@@ -52,17 +52,32 @@ void AttackBase::initialize(int stage) {
         attackActive = false;
         stats = AttackStatistics();
 
+        // WATCH for Qtenv inspector
+        WATCH(attackActive);
+        WATCH(attackType);
+        WATCH(intensity);
+        WATCH(stats.packetsGenerated);
+        WATCH(stats.packetsModified);
+        WATCH(stats.packetsDropped);
+
         EV_INFO << "Attack module initialized: " << attackType << " at node " << nodeIdentifier << endl;
     }
     else if (stage == 2) {
+        // Vehicles are created by TraCI throughout the run, so a node that
+        // enters the scenario after its configured start time must begin
+        // attacking immediately rather than trying to schedule into the past.
         if (startTime > 0) {
+            simtime_t begin = std::max(startTime, simTime());
             startAttackMsg = new cMessage("startAttack");
-            scheduleAt(startTime, startAttackMsg);
-        }
+            scheduleAt(begin, startAttackMsg);
 
-        if (duration > 0 && startTime > 0) {
-            stopAttackMsg = new cMessage("stopAttack");
-            scheduleAt(startTime + duration, stopAttackMsg);
+            if (duration > 0) {
+                simtime_t end = startTime + duration;
+                if (end > begin) {
+                    stopAttackMsg = new cMessage("stopAttack");
+                    scheduleAt(end, stopAttackMsg);
+                }
+            }
         }
     }
 }
@@ -82,6 +97,11 @@ void AttackBase::handleMessage(cMessage *msg) {
         attackTickMsg = new cMessage("attackTick");
         scheduleAt(simTime() + 0.1, attackTickMsg);
 
+        // Visual feedback
+        bubble(("ATTACK: " + attackType).c_str());
+        getParentModule()->getDisplayString().setTagArg("i", 1, "red");
+        getParentModule()->getDisplayString().setTagArg("i2", 0, "status/excl");
+
         EV_WARN << "[ATTACK START] " << attackType << " activated at t=" << simTime() << endl;
     }
     else if (msg == stopAttackMsg) {
@@ -93,6 +113,11 @@ void AttackBase::handleMessage(cMessage *msg) {
 
         cancelAndDelete(attackTickMsg);
         attackTickMsg = nullptr;
+
+        // Visual feedback
+        bubble("Attack stopped");
+        getParentModule()->getDisplayString().setTagArg("i", 1, "");
+        getParentModule()->getDisplayString().setTagArg("i2", 0, "");
 
         EV_WARN << "[ATTACK STOP] " << attackType << " deactivated at t=" << simTime() << endl;
     }
@@ -140,6 +165,45 @@ void AttackBase::handleMessage(cMessage *msg) {
     else {
         send(msg, "ndnOut");
     }
+}
+
+void AttackBase::refreshDisplay() const {
+    // Show attack status on the attack module icon
+    auto &ds = const_cast<AttackBase*>(this)->getDisplayString();
+
+    if (attackActive) {
+        // Pulsing red icon with attack stats
+        char label[128];
+        snprintf(label, sizeof(label), "%s\nGen:%lu Mod:%lu Drop:%lu",
+                 attackType.c_str(),
+                 (unsigned long)stats.packetsGenerated,
+                 (unsigned long)stats.packetsModified,
+                 (unsigned long)stats.packetsDropped);
+        ds.setTagArg("t", 0, label);
+        ds.setTagArg("t", 2, "red");
+        ds.setTagArg("i", 1, "red");
+    } else if (stats.packetsGenerated > 0) {
+        // Attack completed
+        char label[64];
+        snprintf(label, sizeof(label), "%s (done)", attackType.c_str());
+        ds.setTagArg("t", 0, label);
+        ds.setTagArg("t", 2, "gray");
+        ds.setTagArg("i", 1, "gray");
+    }
+
+    // Tooltip with full attack details
+    char tt[512];
+    snprintf(tt, sizeof(tt),
+             "Attack: %s\nNode: %s\nActive: %s\n"
+             "Intensity: %.1f%%\nStart: %.1fs\nDuration: %.1fs\n"
+             "Packets Generated: %lu\nPackets Modified: %lu\nPackets Dropped: %lu",
+             attackType.c_str(), nodeIdentifier.c_str(),
+             attackActive ? "YES" : "NO",
+             intensity * 100.0, startTime.dbl(), duration.dbl(),
+             (unsigned long)stats.packetsGenerated,
+             (unsigned long)stats.packetsModified,
+             (unsigned long)stats.packetsDropped);
+    ds.setTagArg("tt", 0, tt);
 }
 
 void AttackBase::finish() {

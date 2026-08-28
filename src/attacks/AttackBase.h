@@ -100,6 +100,7 @@ protected:
     virtual void initialize(int stage) override;
     virtual int numInitStages() const override { return 3; }
     virtual void handleMessage(cMessage *msg) override;
+    virtual void refreshDisplay() const override;
     virtual void finish() override;
 
     /**

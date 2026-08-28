@@ -46,6 +46,9 @@ packet NdnPacket {
     simtime_t timestamp;            // Packet creation timestamp
     int hopCount = 0;               // Number of hops traversed
     string forwardingHint = "";     // Forwarding hint for routing
+    string senderId = "";           // TRIDENT: last-hop transmitter module name
+                                    // (stamped at broadcast, read for in-network
+                                    //  isolation of quarantined neighbours)
 }
 
 //

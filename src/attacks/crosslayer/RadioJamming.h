@@ -96,6 +96,7 @@ protected:
     // Interference simulation
     void generateInterference();
     bool isInJammingRange(double distance);
+    void publishJammingState();
     double calculateInterferencePower(double distance);
 
 public:

@@ -11,7 +11,7 @@ Define_Module(PIT);
 
 PIT::PIT() : cleanupTimer(nullptr), currentSize(0), totalInsertions(0),
              totalRemovals(0), totalExpirations(0), totalSatisfied(0),
-             totalAggregated(0) {}
+             totalAggregated(0), previousSize(0), lastGrowthCheck(0) {}
 
 PIT::~PIT() {
     cancelAndDelete(cleanupTimer);
@@ -41,6 +41,12 @@ void PIT::initialize() {
     pitOccupancySignal = registerSignal("pitOccupancy");
     pitExpiredSignal = registerSignal("pitExpired");
     pitSatisfiedSignal = registerSignal("pitSatisfied");
+    pitInsertionEventSignal = registerSignal("pitInsertionEvent");
+    pitExpirationEventSignal = registerSignal("pitExpirationEvent");
+
+    // Initialize DP-IDS monitoring state
+    previousSize = 0;
+    lastGrowthCheck = simTime();
 
     // Schedule cleanup timer
     cleanupTimer = new cMessage("cleanupTimer");
@@ -125,11 +131,13 @@ void PIT::handleInsertRequest(PITInsertRequest *request) {
     entry->incomingFaces.insert(inFace);
     entry->nonces.insert(nonce);
 
+    entries[name] = entry;   // register in the table so findEntry()/satisfy can see it
     currentSize++;
     totalInsertions++;
 
     emit(pitSizeSignal, (long)currentSize);
     emit(pitOccupancySignal, getOccupancy());
+    emit(pitInsertionEventSignal, 1L);
 
     response->setSuccess(true);
     response->setAggregated(false);  // New entry, need to forward
@@ -244,6 +252,7 @@ bool PIT::insert(InterestPacket *interest, int inFace) {
     // Emit signals
     emit(pitSizeSignal, currentSize);
     emit(pitOccupancySignal, getOccupancy());
+    emit(pitInsertionEventSignal, 1L);
 
     EV_INFO << "Inserted interest in PIT: " << name << " (size=" << currentSize << ")" << endl;
     return true;
@@ -368,6 +377,21 @@ void PIT::expireEntry(const std::string &name) {
     removeEntry(name);
     totalExpirations++;
     emit(pitExpiredSignal, 1L);
+    emit(pitExpirationEventSignal, 1L);
+}
+
+void PIT::accelerateTimeout(const std::string &name, double factor) {
+    factor = std::max(0.01, std::min(1.0, factor));  // Clamp to [0.01, 1.0]
+    auto it = entries.find(name);
+    if (it != entries.end()) {
+        PITEntry *entry = it->second;
+        simtime_t remaining = entry->expiryTime - simTime();
+        if (remaining > 0) {
+            entry->expiryTime = simTime() + remaining * factor;
+            EV_INFO << "DP-IDS: Accelerated PIT timeout for " << name
+                    << " by factor " << factor << endl;
+        }
+    }
 }
 
 void PIT::cleanupExpiredEntries() {

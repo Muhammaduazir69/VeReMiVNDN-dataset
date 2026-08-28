@@ -1,5 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    VeReMiVNDN-EXE - Baseline GUI settings for the JubST (Al-Jubail) scenario.
+
+    Lightweight view-settings file. For richer cinematic visualization
+    (custom color schemes, vehicle quality 5, street-name labels,
+    multi-scheme switcher), point gui-settings-file to
+    aljubail_saudi_advanced.gui.xml in the .sumo.cfg.
+
+    This baseline keeps the upstream Veins look-and-feel ("real world"
+    scheme) but adds vehicle-quality, blinkers, and a sensible default
+    delay so screenshots are not blurry.
+
+    Pre-upgrade version preserved in aljubail_saudi.gui.xml.bak.
+-->
 <viewsettings>
+    <!-- "real world" SUMO scheme = realistic asphalt + buildings. -->
     <scheme name="real world"/>
+
+    <!-- 50 ms GUI step delay = smooth playback for screencasts. -->
     <delay value="50"/>
-    <viewport y="0" x="0" zoom="100"/>
+
+    <!-- Centered on JubST downtown (matches advanced.gui.xml viewport). -->
+    <viewport x="6722.0" y="7380.0" zoom="350.0"/>
+
+    <!-- Higher rendering quality for vibrant screenshots. -->
+    <vehicleQuality value="4"/>
+    <vehicleSize value="1.0"/>
+    <vehicleSize.exaggeration value="1.5"/>
+
+    <!-- Show turn signals + min-gap visual. -->
+    <showBlinker value="true"/>
+    <drawMinGap value="false"/>
+
+    <!-- Anti-aliasing for crisp PDF figures. -->
+    <antialiase value="true"/>
+    <dither value="true"/>
 </viewsettings>

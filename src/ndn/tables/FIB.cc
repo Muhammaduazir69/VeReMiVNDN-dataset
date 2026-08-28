@@ -38,6 +38,8 @@ void FIB::initialize() {
     fibSizeSignal = registerSignal("fibSize");
     fibLookupSignal = registerSignal("fibLookup");
     fibUpdateSignal = registerSignal("fibUpdate");
+    fibRouteAddEventSignal = registerSignal("fibRouteAddEvent");
+    fibRouteRemoveEventSignal = registerSignal("fibRouteRemoveEvent");
 
     // Schedule cleanup timer
     cleanupTimer = new cMessage("fibCleanupTimer");
@@ -45,23 +47,39 @@ void FIB::initialize() {
 
     EV_INFO << "FIB initialized: maxSize=" << maxSize << endl;
 
-    // Add default routes for common prefixes (vehicles can reach RSUs via face 0)
-    // This is a workaround since beacon-based route discovery requires VEINS frame encapsulation
-    cModule *ndnNode = getParentModule();  // NdnNode
+    // ---- Two-face static routing (no new params; role read from existing ones) ----
+    // The NDN node exposes two faces (wired in the parent NED, in order):
+    //   face 0 = APPLICATION face  (controller <-> stack, through attackModule)
+    //   face 1 = WIRE face         (broadcast-medium side of the forwarder)
+    // A PRODUCER (RSU, or a vehicle with isContentProducer=true such as an
+    // attacker) routes its served prefixes to the app face, so Interests heard
+    // off the wire are delivered up to the producer app (which answers).
+    // A pure CONSUMER routes the same prefixes to the wire face, so the
+    // Interests it originates on the app face are dispatched onto the medium.
+    cModule *ndnNode = getParentModule();              // NdnNode
     cModule *parentNode = ndnNode->getParentModule();  // Vehicle or RSU
-
-    // Check if this is a vehicle by checking the module type name
     std::string parentTypeName = parentNode->getComponentType()->getName();
 
-    if (parentTypeName.find("Vehicle") != std::string::npos || parentTypeName.find("vehicle") != std::string::npos) {
-        // Vehicles: Add default routes to common content prefixes
-        addRoute("/safety", 0, 1);
-        addRoute("/traffic", 0, 1);
-        addRoute("/emergency", 0, 1);
-        addRoute("/location", 0, 1);
+    bool isProducer = false;
+    if (parentTypeName.find("RSU") != std::string::npos)
+        isProducer = true;                              // RSUs are always producers
+    else if (parentNode->hasPar("isContentProducer"))
+        isProducer = parentNode->par("isContentProducer").boolValue();
 
-        EV_INFO << "Added default FIB routes for vehicle (4 prefixes)" << endl;
-    }
+    const int APP_FACE = 0, WIRE_FACE = 1;
+    int face = isProducer ? APP_FACE : WIRE_FACE;
+    addRoute("/safety", face, 1);
+    addRoute("/traffic", face, 1);
+    addRoute("/emergency", face, 1);
+    addRoute("/location", face, 1);
+    addRoute("/info", face, 1);
+    // /content is the namespace the Cache Pollution attacker floods; without a
+    // route its Interests are NACKed at the first hop and never reach a Content
+    // Store, so the attack cannot affect cache state.
+    addRoute("/content", face, 1);
+
+    EV_INFO << "FIB routes installed for " << parentNode->getFullName()
+            << (isProducer ? " (producer -> app face)" : " (consumer -> wire face)") << endl;
 }
 
 void FIB::handleMessage(cMessage *msg) {
@@ -191,6 +209,7 @@ bool FIB::addRoute(const std::string &prefix, int face, int cost) {
 
     emit(fibSizeSignal, currentSize);
     emit(fibUpdateSignal, 1L);
+    emit(fibRouteAddEventSignal, 1L);
 
     EV_INFO << "Added route: prefix=" << prefix << ", face=" << face << ", cost=" << cost << endl;
     return true;
@@ -341,6 +360,7 @@ void FIB::removeEntry(const std::string &prefix) {
         totalRemovals++;
 
         emit(fibSizeSignal, currentSize);
+        emit(fibRouteRemoveEventSignal, 1L);
     }
 }
 
@@ -408,6 +428,34 @@ void FIB::evictEntry() {
 
     EV_WARN << "Evicting FIB entry: " << lru->first << endl;
     removeEntry(lru->first);
+}
+
+void FIB::penalizeRoute(const std::string &prefix, int face, double costMultiplier) {
+    FIBEntry *entry = findEntry(prefix);
+    if (entry != nullptr) {
+        auto costIt = entry->costs.find(face);
+        if (costIt != entry->costs.end()) {
+            // Clamp multiplier to prevent overflow (max cost 10000)
+            double rawCost = costIt->second * std::min(costMultiplier, 1000.0);
+            int newCost = (int)std::min(rawCost, 10000.0);
+            if (newCost < 1) newCost = 1;
+            costIt->second = newCost;
+            EV_INFO << "DP-IDS: Penalized route " << prefix << " face " << face
+                    << " cost multiplied by " << costMultiplier
+                    << " -> " << newCost << endl;
+        }
+    }
+}
+
+void FIB::restoreRoutes() {
+    // TRIDENT reinstatement: reset every face cost on this table back to the base
+    // routing cost, undoing prior trust-aware penalisation so a reinstated node's
+    // routes regain normal priority. This is what makes the quarantine reversible.
+    for (auto &e : entries) {
+        for (auto &c : e.second->costs)
+            c.second = 1;
+    }
+    EV_INFO << "TRIDENT: restored all FIB route costs to base" << endl;
 }
 
 } // namespace veremivndn

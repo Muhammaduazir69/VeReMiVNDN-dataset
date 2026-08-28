@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for VeReMiVNDN
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -o VeReMiVNDN -O out -KINET4_5_PROJ=../inet4.5 -KVEINS_PROJ=../veins -KSIMU5G_PROJ=../simu5g -DINET_IMPORT -DVEINS_IMPORT -L$$\(INET4_5_PROJ\)/src -L$$\(VEINS_PROJ\)/src -lINET$$\(D\) -lveins$$\(D\)
+#  opp_makemake -f --deep -o VeReMiVNDN -O out -KINET4_5_PROJ=../inet4.5 -KVEINS_PROJ=../veins -KVEINS_INET_PROJ=../veins_inet -KSIMU5G_PROJ=../simu5g -DINET_IMPORT -DVEINS_IMPORT -DVEINS_INET_IMPORT -L$$\(INET4_5_PROJ\)/src -L$$\(VEINS_PROJ\)/src -L$$\(VEINS_INET_PROJ\)/src -L$$\(SIMU5G_PROJ\)/src -lINET$$\(D\) -lveins$$\(D\) -lveins_inet$$\(D\) -lsimu5g$$\(D\)
 #
 
 # Name of target to be created (-o option)
@@ -18,14 +18,31 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(QTENV_LIBS) $(CMDENV_LIBS)
 #USERIF_LIBS = $(CMDENV_LIBS)
 #USERIF_LIBS = $(QTENV_LIBS)
 
+# ---- LibTorch (optional) --------------------------------------------------
+# Set TORCH_HOME to a libtorch distribution to compile the MI-IDS TorchScript
+# inference path. Without it the module falls back to an untrained analytical
+# scorer, which detects nothing; the campaign in the paper is run with it set.
+# The PyTorch pip wheel ships the C++ headers and shared objects, so
+#   TORCH_HOME=$(python3 -c "import torch,os;print(os.path.dirname(torch.__file__))")
+# is enough. opp_makemake regenerates this file, so re-apply this block after
+# any regeneration.
+TORCH_HOME ?= $(shell python3 -c "import torch,os;print(os.path.dirname(torch.__file__))" 2>/dev/null)
+ifneq ($(wildcard $(TORCH_HOME)/include/torch/script.h),)
+  TORCH_CFLAGS = -DHAVE_LIBTORCH -I$(TORCH_HOME)/include -I$(TORCH_HOME)/include/torch/csrc/api/include
+  TORCH_LIBS   = -L$(TORCH_HOME)/lib -ltorch -ltorch_cpu -lc10 -Wl,-rpath,$(TORCH_HOME)/lib
+else
+  TORCH_CFLAGS =
+  TORCH_LIBS   =
+endif
+
 # C++ include paths (with -I)
-INCLUDE_PATH =
+INCLUDE_PATH = $(TORCH_CFLAGS)
 
 # Additional object and library files to link with
 EXTRA_OBJS =
 
 # Additional libraries (-L, -l options)
-LIBS = $(LDFLAG_LIBPATH)$(INET4_5_PROJ)/src $(LDFLAG_LIBPATH)$(VEINS_PROJ)/src  -lINET$(D) -lveins$(D)
+LIBS = $(LDFLAG_LIBPATH)$(INET4_5_PROJ)/src $(LDFLAG_LIBPATH)$(VEINS_PROJ)/src $(LDFLAG_LIBPATH)$(VEINS_INET_PROJ)/src $(LDFLAG_LIBPATH)$(SIMU5G_PROJ)/src  -lINET$(D) -lveins$(D) -lveins_inet$(D) -lsimu5g$(D) $(TORCH_LIBS)
 
 # Output directory
 PROJECT_OUTPUT_DIR = out
@@ -45,6 +62,9 @@ OBJS = \
     $O/src/attacks/data/ContentPoisoning.o \
     $O/src/attacks/data/ProducerImpersonation.o \
     $O/src/attacks/data/ReplayAttack.o \
+    $O/src/attacks/forwarding/CSPoisoningAttack.o \
+    $O/src/attacks/forwarding/FIBHijackingAttack.o \
+    $O/src/attacks/forwarding/PITFloodingAttack.o \
     $O/src/attacks/networks/InterestAggregation.o \
     $O/src/attacks/networks/InterestFlooding.o \
     $O/src/attacks/networks/NamePrefixHijacking.o \
@@ -55,6 +75,17 @@ OBJS = \
     $O/src/attacks/trust/Collusion.o \
     $O/src/attacks/trust/SignatureForgery.o \
     $O/src/attacks/trust/SybilAmplification.o \
+    $O/src/dpids/controller/DPIDSController.o \
+    $O/src/dpids/detectors/BehaviouralDetector.o \
+    $O/src/dpids/detectors/ForwardingPlaneDetector.o \
+    $O/src/dpids/detectors/SimplifiedIsolationForest.o \
+    $O/src/dpids/detectors/SimplifiedLSTM.o \
+    $O/src/dpids/evaluation/DPIDSMetrics.o \
+    $O/src/dpids/features/ForwardingPlaneFeatureExtractor.o \
+    $O/src/dpids/fusion/DSFusionEngine.o \
+    $O/src/dpids/miids/MIIDSModule.o \
+    $O/src/dpids/strategy/AdaptiveForwardingStrategy.o \
+    $O/src/ids/collection/TrustNetCollector.o \
     $O/src/ids/detection/IDSModule.o \
     $O/src/ids/features/FeatureExtractor.o \
     $O/src/ids/logging/DataCollector.o \
@@ -63,6 +94,9 @@ OBJS = \
     $O/src/ndn/tables/FIB.o \
     $O/src/ndn/tables/PIT.o \
     $O/src/security/ids/IDS.o \
+    $O/src/trident/ResilienceMonitor.o \
+    $O/src/trident/TridentController.o \
+    $O/src/trident/TrustRegistry.o \
     $O/src/vndn/node/RSUController.o \
     $O/src/vndn/node/VehicleController.o \
     $O/src/ndn/core/NdnControlMessages_m.o \
@@ -79,6 +113,7 @@ SMFILES =
 # Other makefile variables (-K)
 INET4_5_PROJ=../inet4.5
 VEINS_PROJ=../veins
+VEINS_INET_PROJ=../veins_inet
 SIMU5G_PROJ=../simu5g
 
 #------------------------------------------------------------------------------
@@ -100,10 +135,10 @@ include $(CONFIGFILE)
 # Simulation kernel and user interface libraries
 OMNETPP_LIBS = $(OPPMAIN_LIB) $(USERIF_LIBS) $(KERNEL_LIBS) $(SYS_LIBS)
 ifneq ($(PLATFORM),win32)
-LIBS += -Wl,-rpath,$(abspath $(INET4_5_PROJ)/src) -Wl,-rpath,$(abspath $(VEINS_PROJ)/src)
+LIBS += -Wl,-rpath,$(abspath $(INET4_5_PROJ)/src) -Wl,-rpath,$(abspath $(VEINS_PROJ)/src) -Wl,-rpath,$(abspath $(VEINS_INET_PROJ)/src) -Wl,-rpath,$(abspath $(SIMU5G_PROJ)/src)
 endif
 
-COPTS = $(CFLAGS) $(IMPORT_DEFINES) -DINET_IMPORT -DVEINS_IMPORT $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
+COPTS = $(CFLAGS) $(IMPORT_DEFINES) -DINET_IMPORT -DVEINS_IMPORT -DVEINS_INET_IMPORT $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
 MSGCOPTS = $(INCLUDE_PATH)
 SMCOPTS =
 

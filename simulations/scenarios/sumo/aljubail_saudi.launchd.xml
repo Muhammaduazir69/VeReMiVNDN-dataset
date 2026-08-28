@@ -4,6 +4,7 @@
     <copy file="aljubail_saudi.net.xml"/>
     <copy file="aljubail_saudi.rou.xml"/>
     <copy file="aljubail_saudi.poly.xml"/>
+    <copy file="vTypes.add.xml"/>
     <copy file="aljubail_saudi.gui.xml"/>
     <copy file="aljubail_saudi.sumo.cfg" type="config"/>
     <commands>

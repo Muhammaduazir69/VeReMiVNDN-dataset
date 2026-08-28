@@ -20,6 +20,12 @@ simple NDNProcessor
         double signatureVerificationDelay @unit(ms) = default(1ms);
         string forwardingStrategy = default("BestRoute");
 
+        // TRIDENT prong 2: poisoning-resilient cache admission. When true, the
+        // Content Store refuses to admit Data that is unsigned, carries a blank
+        // signature, or reports a sub-threshold trust score, so poisoned content
+        // cannot be served from cache on subsequent requests.
+        bool enableTridentAdmission = default(false);
+
         // Signals for metrics
         @signal[interestSent](type=long);
         @signal[interestReceived](type=long);

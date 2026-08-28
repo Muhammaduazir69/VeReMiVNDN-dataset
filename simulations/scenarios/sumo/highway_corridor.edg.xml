@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Main highway: 3 lanes per direction @ 33.33 m/s (120 km/h), divided (center
+     spread). Cross roads: 2 lanes @ 13.89 m/s (50 km/h). -->
+<edges>
+    <!-- main highway, eastbound -->
+    <edge id="HW_E0" from="H0" to="H1" numLanes="3" speed="33.33" priority="13" spreadType="center"/>
+    <edge id="HW_E1" from="H1" to="H2" numLanes="3" speed="33.33" priority="13" spreadType="center"/>
+    <edge id="HW_E2" from="H2" to="H3" numLanes="3" speed="33.33" priority="13" spreadType="center"/>
+    <edge id="HW_E3" from="H3" to="H4" numLanes="3" speed="33.33" priority="13" spreadType="center"/>
+    <!-- main highway, westbound -->
+    <edge id="HW_W0" from="H1" to="H0" numLanes="3" speed="33.33" priority="13" spreadType="center"/>
+    <edge id="HW_W1" from="H2" to="H1" numLanes="3" speed="33.33" priority="13" spreadType="center"/>
+    <edge id="HW_W2" from="H3" to="H2" numLanes="3" speed="33.33" priority="13" spreadType="center"/>
+    <edge id="HW_W3" from="H4" to="H3" numLanes="3" speed="33.33" priority="13" spreadType="center"/>
+
+    <!-- cross road 1 (through H1) -->
+    <edge id="CR1_s" from="C1n" to="H1"  numLanes="2" speed="13.89" priority="5"/>
+    <edge id="CR1_s2" from="H1"  to="C1s" numLanes="2" speed="13.89" priority="5"/>
+    <edge id="CR1_n2" from="C1s" to="H1"  numLanes="2" speed="13.89" priority="5"/>
+    <edge id="CR1_n" from="H1"  to="C1n" numLanes="2" speed="13.89" priority="5"/>
+    <!-- cross road 2 (through H2, signalized interchange) -->
+    <edge id="CR2_s" from="C2n" to="H2"  numLanes="2" speed="13.89" priority="5"/>
+    <edge id="CR2_s2" from="H2"  to="C2s" numLanes="2" speed="13.89" priority="5"/>
+    <edge id="CR2_n2" from="C2s" to="H2"  numLanes="2" speed="13.89" priority="5"/>
+    <edge id="CR2_n" from="H2"  to="C2n" numLanes="2" speed="13.89" priority="5"/>
+    <!-- cross road 3 (through H3) -->
+    <edge id="CR3_s" from="C3n" to="H3"  numLanes="2" speed="13.89" priority="5"/>
+    <edge id="CR3_s2" from="H3"  to="C3s" numLanes="2" speed="13.89" priority="5"/>
+    <edge id="CR3_n2" from="C3s" to="H3"  numLanes="2" speed="13.89" priority="5"/>
+    <edge id="CR3_n" from="H3"  to="C3n" numLanes="2" speed="13.89" priority="5"/>
+</edges>

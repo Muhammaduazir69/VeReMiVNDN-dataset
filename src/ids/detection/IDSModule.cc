@@ -3,6 +3,9 @@
 //
 
 #include "IDSModule.h"
+#include "../../ndn/core/NDNProcessor.h"
+#include "../../ndn/tables/PIT.h"
+#include "../../ndn/tables/CS.h"
 #include <fstream>
 #include <ctime>
 
@@ -195,6 +198,7 @@ void IDSModule::finish() {
 void IDSModule::monitorTraffic() {
     updateStatistics(nullptr);
 
+    bool detectedThisTick = false;
     if (realtimeDetection) {
         DetectionResult result;
         switch (detectionMethod) {
@@ -216,19 +220,87 @@ void IDSModule::monitorTraffic() {
             detectionCount++;
             emit(attackDetectedSignal, 1L);
             emit(confidenceSignal, result.confidenceScore);
+            detectedThisTick = true;
+        }
+    }
+
+    // Ground-truth confusion-matrix tick: each monitoring interval is
+    // one observation per vehicle.  If the host is an attacker and we
+    // failed to flag it this tick -> false negative.  If the host is
+    // benign and we did not flag it -> true negative.  Detections were
+    // already counted as TP/FP in reportAttack().
+    cModule *parent = getParentModule();
+    bool selfIsAttacker = false;
+    if (parent && parent->hasPar("hasAttackModule"))
+        selfIsAttacker = parent->par("hasAttackModule").boolValue();
+
+    if (!detectedThisTick) {
+        if (selfIsAttacker) {
+            confusionMatrix.falseNegative++;
+            emit(falseNegativeSignal, 1L);
+        } else {
+            confusionMatrix.trueNegative++;
         }
     }
 }
 
 void IDSModule::updateStatistics(cMessage *packet) {
-    currentStats.lastUpdate = simTime();
+    // Pull real counters from the NDN stack instead of writing constants.
+    // Layout: parent (vehicle/rsu) -> ndnNode (compound) -> processor (NDNProcessor)
+    //                                                    -> pit / cs / fib
+    cModule *parent  = getParentModule();
+    cModule *ndnNode = parent ? parent->getSubmodule("ndnNode") : nullptr;
+    cModule *proc    = ndnNode ? ndnNode->getSubmodule("processor") : nullptr;
+    cModule *pit     = ndnNode ? ndnNode->getSubmodule("pit") : nullptr;
+    cModule *cs      = ndnNode ? ndnNode->getSubmodule("cs") : nullptr;
 
-    currentStats.pitSize = 100;  // Would get from actual PIT
-    currentStats.pitOccupancy = 0.5;
-    currentStats.cacheHitRatio = 0.7;
-    currentStats.avgTrustScore = 0.9;
-    currentStats.interestRate = 50.0;
-    currentStats.dataRate = 40.0;
+    simtime_t now    = simTime();
+    simtime_t prev   = currentStats.lastUpdate;
+    double dt = (prev == SIMTIME_ZERO) ? monitoringInterval.dbl()
+                                       : (now - prev).dbl();
+    if (dt <= 0) dt = 1.0;
+
+    // Interest / Data rates from processor counters via typed cast.
+    uint64_t curInterests = 0, curData = 0;
+    NDNProcessor *ndnProc = dynamic_cast<NDNProcessor*>(proc);
+    if (ndnProc) {
+        curInterests = (uint64_t)ndnProc->getInterestsSent();
+        curData      = (uint64_t)ndnProc->getDataSent();
+    }
+    if (curInterests < currentStats.totalInterests) curInterests = currentStats.totalInterests;
+    if (curData      < currentStats.totalData)      curData      = currentStats.totalData;
+
+    uint64_t dInt = curInterests - currentStats.totalInterests;
+    uint64_t dDat = curData      - currentStats.totalData;
+    currentStats.interestRate = dt > 0 ? (double)dInt / dt : 0.0;
+    currentStats.dataRate     = dt > 0 ? (double)dDat / dt : 0.0;
+    currentStats.totalInterests = curInterests;
+    currentStats.totalData      = curData;
+
+    // PIT occupancy + size via typed cast
+    if (PIT *pitMod = dynamic_cast<PIT*>(pit)) {
+        currentStats.pitSize      = (uint32_t)pitMod->getSize();
+        currentStats.pitOccupancy = pitMod->getOccupancy();
+    }
+
+    // CS occupancy + size via typed cast
+    if (CS *csMod = dynamic_cast<CS*>(cs)) {
+        int csCur = csMod->getCurrentSizeEntries();
+        int csMax = csMod->getMaxSizeValue();
+        currentStats.cacheSize      = (uint32_t)csCur;
+        currentStats.cacheOccupancy = csMax > 0 ? (double)csCur / (double)csMax : 0.0;
+    }
+    if (ndnProc) {
+        long ch = ndnProc->getCacheHits();
+        long cm = ndnProc->getCacheMisses();
+        long total = ch + cm;
+        currentStats.cacheHitRatio = total > 0 ? (double)ch / (double)total : 0.0;
+    }
+
+    // Trust score average (kept at module default unless trust manager wires it).
+    if (currentStats.avgTrustScore == 0.0) currentStats.avgTrustScore = 1.0;
+
+    currentStats.lastUpdate = now;
 }
 
 void IDSModule::updateBaseline() {
@@ -467,6 +539,16 @@ void IDSModule::writeCSVHeader() {
 void IDSModule::writeCSVRow(const std::map<std::string, double> &features, const std::string &label) {
     if (!csvLog.is_open()) return;
 
+    // Skip rows that have no real traffic data yet.  Without this guard the
+    // first few logging ticks dump uninitialised currentStats / feature
+    // values which surfaces as denormal-double garbage in the unified CSV.
+    if (currentStats.lastUpdate == SIMTIME_ZERO) return;
+
+    auto safeGet = [&](const char *k) -> double {
+        auto it = features.find(k);
+        return (it == features.end()) ? 0.0 : it->second;
+    };
+
     csvLog << simTime().dbl() << ","
            << nodeId << ","
            << nodeIdentifier << ","
@@ -476,8 +558,8 @@ void IDSModule::writeCSVRow(const std::map<std::string, double> &features, const
            << currentStats.interestRate << ","
            << currentStats.dataRate << ","
            << currentStats.avgTrustScore << ","
-           << features.at("rssi") << ","
-           << features.at("delay") << ","
+           << safeGet("rssi") << ","
+           << safeGet("delay") << ","
            << label << std::endl;
 
     csvLog.flush();  // Flush immediately for shared file
@@ -504,21 +586,30 @@ void IDSModule::updateConfusionMatrix(bool actualAttack, bool detectedAttack) {
 }
 
 double IDSModule::calculateAccuracy() const {
-    return detectionCount > 0 ? 0.85 : 0.0;  // Placeholder
+    long total = (long)confusionMatrix.truePositive + confusionMatrix.trueNegative
+               + confusionMatrix.falsePositive + confusionMatrix.falseNegative;
+    if (total == 0) return 0.0;
+    return (double)(confusionMatrix.truePositive + confusionMatrix.trueNegative)
+           / (double)total;
 }
 
 double IDSModule::calculatePrecision() const {
-    return 0.80;  // Placeholder
+    long denom = (long)confusionMatrix.truePositive + confusionMatrix.falsePositive;
+    if (denom == 0) return 0.0;
+    return (double)confusionMatrix.truePositive / (double)denom;
 }
 
 double IDSModule::calculateRecall() const {
-    return 0.75;  // Placeholder
+    long denom = (long)confusionMatrix.truePositive + confusionMatrix.falseNegative;
+    if (denom == 0) return 0.0;
+    return (double)confusionMatrix.truePositive / (double)denom;
 }
 
 double IDSModule::calculateF1Score() const {
     double precision = calculatePrecision();
     double recall = calculateRecall();
-    return 2 * (precision * recall) / (precision + recall);
+    if (precision + recall == 0.0) return 0.0;
+    return 2.0 * precision * recall / (precision + recall);
 }
 
 bool IDSModule::checkPacket(cMessage *packet) {
@@ -531,8 +622,27 @@ void IDSModule::reportAttack(const std::string &attackType, double confidence) {
     emit(attackDetectedSignal, 1L);
     emit(confidenceSignal, confidence);
 
+    // Ground-truth labelling: each IDS instance has a hosting node
+    // (vehicle or RSU).  The parent's hasAttackModule parameter is the
+    // ground truth.  Detections on a benign host are false positives;
+    // detections on an attacker host are true positives.  Without this
+    // branch every detection used to be counted as TP, giving spurious
+    // precision = 1.0 across the board.
+    bool selfIsAttacker = false;
+    cModule *parent = getParentModule();
+    if (parent && parent->hasPar("hasAttackModule"))
+        selfIsAttacker = parent->par("hasAttackModule").boolValue();
+
+    if (selfIsAttacker) {
+        confusionMatrix.truePositive++;
+    } else {
+        confusionMatrix.falsePositive++;
+        emit(falsePositiveSignal, 1L);
+    }
+
     EV_WARN << "[IDS REPORT] Attack reported: " << attackType
-            << " confidence=" << confidence << endl;
+            << " confidence=" << confidence
+            << " truth=" << (selfIsAttacker ? "attacker" : "benign") << endl;
 }
 
 // ============================================================================

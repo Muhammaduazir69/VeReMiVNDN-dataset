@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    TRIDENT-VNDN - HIGHWAY scenario GUI settings (realistic 2D).
+
+    Built on SUMO's "real world" scheme. Unlike the urban view this pulls back
+    to show the full 13.4 x 14.8 km map, where the high-speed arterials
+    (>= 70 km/h) carry the long cross-map round trips. Vehicles are exaggerated
+    more strongly so they stay visible at the wider zoom.
+
+    vehicleQuality 5 = full polygon vehicle bodies (pseudo-3D), coloured by type.
+-->
+<viewsettings>
+    <!-- realistic built-in scheme: grey asphalt, lane markings, buildings -->
+    <scheme name="real world"/>
+
+    <!-- smooth playback for screen capture -->
+    <delay value="50"/>
+
+    <!-- CORRIDOR view: whole 13 km map so the fast arterials and the long
+         cross-map round trips are all visible at once -->
+    <viewport x="6722.0" y="7380.0" zoom="400.0" angle="0.0"/>
+
+    <!-- highest-detail polygon vehicle bodies; strong exaggeration at wide zoom -->
+    <vehicleQuality value="5"/>
+    <vehicleSize value="1.0"/>
+    <vehicleSize.exaggeration value="14.0"/>
+    <vehicleSize.minSize value="4.0"/>
+
+    <!-- turn signals + crisp anti-aliased rendering for PDF screenshots -->
+    <showBlinker value="true"/>
+    <drawMinGap value="false"/>
+    <antialiase value="true"/>
+    <dither value="true"/>
+
+    <showSizeLegend value="false"/>
+    <showColorLegend value="false"/>
+</viewsettings>

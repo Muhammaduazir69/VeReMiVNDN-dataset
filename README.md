@@ -1,241 +1,289 @@
-# VeReMiVNDN: Vehicular Named Data Network IDS Dataset
+# VeReMiVNDN
 
-[![OMNeT++](https://img.shields.io/badge/OMNeT++-6.0.3-blue)](https://omnetpp.org/)
-[![VEINS](https://img.shields.io/badge/VEINS-5.3-green)](https://veins.car2x.org/)
-[![INET](https://img.shields.io/badge/INET-4.5-orange)](https://inet.omnetpp.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+A labeled dataset and simulation framework for misbehavior detection in
+Vehicular Named Data Networking (VNDN), built on the JubST (Al-Jubail) SUMO
+scenario.
 
-## Simulation Screenshots
+This repository accompanies the IEEE Access article:
 
-| Enhanced Aljubail Scenario | Urban Attack Scenario |
-|:--------------------------:|:---------------------:|
-| ![Enhanced Aljubail](images/Enhanced-Aljubail-scenario.png) | ![Urban Attack](images/UrbanAttack-scenario.png) |
+> B. G. Aldahlan and M. Uzair, "VeReMiVNDN: A Dataset for Misbehavior Detection
+> in Vehicular Named Data Networking Using the JubST SUMO Scenario,"
+> *IEEE Access*, 2026. doi:[10.1109/ACCESS.2026.3681896](https://doi.org/10.1109/ACCESS.2026.3681896)
 
-## Overview
+---
 
-**VeReMiVNDN** is a comprehensive simulation framework and dataset generator for Intrusion Detection Systems (IDS) in Vehicular Named Data Networks (VNDN). This project implements 20 different multi-layer attacks and provides rich feature extraction for machine learning-based security research.
+## Download the dataset
 
-> Dataset and simulation results are available in the [GitHub Releases](https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/releases) section.
-
-## Key Features
-
-- **Complete NDN Protocol Stack** for vehicular networks
-- **20 Attack Types** across all network layers
-- **Rich Feature Set**: Trust, Privacy, Temporal, Mobility, Cache, Network metrics
-- **ML-Ready Datasets**: CSV, JSON formats with ground truth labels
-- **Multi-Layer Detection**: Network, Data, Caching, Privacy, Trust, Cross-layer
-- **Realistic Scenarios**: Integration with SUMO, VEINS, INET 4.5, Simu5G
-
-## Attack Types Implemented
-
-### Network Layer (PIT/FIB)
-1. **Interest Flooding** - PIT exhaustion attack
-2. **Name Prefix Hijacking** - Route hijacking
-3. **Interest Aggregation Attack** - Resource imbalance
-4. **Routing Information Flood** - FIB/PIT spoofing
-
-### Data/Content Layer
-5. **Content Poisoning** - Fake data injection
-6. **Interest/Content Replay** - Stale content attacks
-7. **Cache Invalidation** - Malicious cache churn
-8. **Producer Impersonation** - Fake producer attacks
-
-### Caching Layer
-9. **Cache Pollution** - Unpopular content flooding
-10. **Cache Partitioning** - Availability manipulation
-11. **Content Privacy Leakage** - Cache sharing attacks
-
-### Privacy Layer
-12. **Cache Timing Attacks** - Timing-based inference
-13. **Privacy De-anonymization** - Name semantics exploitation
-14. **Name Enumeration** - Privacy crawling
-
-### Trust/Identity Layer
-15. **Sybil Content Amplification** - Multiple fake identities
-16. **Collusion** - Coordinated misbehavior
-17. **Signature Forgery** - Key compromise attacks
-
-### Cross-Layer Attacks
-18. **Selective Forwarding** - Gray hole attacks
-19. **Radio Jamming** - PHY layer interference
-20. **Machine Learning Evasion** - Adversarial examples
-
-## System Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     SUMO Traffic Simulator                  │
-│                  (Realistic Vehicle Mobility)               │
-└────────────────┬────────────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────────────┐
-│              VEINS (Vehicle Communication)                  │
-│           INET 4.5 + Simu5G (Network Stack)                 │
-└────────────────┬────────────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   VNDN Protocol Layer                       │
-│  ┌──────────────┬──────────────┬────────────────────────┐  │
-│  │   Interest   │    Data      │        NACK            │  │
-│  └──────────────┴──────────────┴────────────────────────┘  │
-│  ┌──────────────┬──────────────┬────────────────────────┐  │
-│  │     PIT      │     FIB      │    Content Store (CS)  │  │
-│  └──────────────┴──────────────┴────────────────────────┘  │
-└────────────────┬────────────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────────────┐
-│              Attack Modules (20 Types)                      │
-│   Network │ Data │ Cache │ Privacy │ Trust │ Cross-Layer   │
-└────────────────┬────────────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────────────┐
-│           IDS Detection & Data Collection                   │
-│  ┌────────────────────────────────────────────────────┐    │
-│  │  Feature Extraction: Network, Temporal, Trust,     │    │
-│  │  Cache, Mobility, Privacy Metrics                  │    │
-│  └────────────────────────────────────────────────────┘    │
-│  ┌────────────────────────────────────────────────────┐    │
-│  │  Logging: CSV, JSON + Ground Truth Labels          │    │
-│  └────────────────────────────────────────────────────┘    │
-└────────────────┬────────────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────────────┐
-│              VeReMiVNDN Dataset                             │
-│     Train / Test / Validation Sets with Labels             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## Installation
-
-### Prerequisites
-
-- OMNeT++ 6.0.3
-- VEINS 5.3
-- INET 4.5
-- Simu5G
-- SUMO (latest version)
-- Python 3.8+ (for data processing)
-
-### Build Instructions
+The data is published as **[GitHub Releases](https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/releases/latest)**, not as files in
+this repository. Git is a poor fit for a few GB of compressed CSV, so the
+release assets carry the data and this repository carries the code that
+produced it.
 
 ```bash
-git clone https://github.com/Muhammaduazir69/VeReMiVNDN-dataset.git
-cd VNDN-Security
-
-# Build the project
-make makefiles
-make -j$(nproc)
+# the labeled machine-learning dataset, one gzipped CSV per run
+curl -LO https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/releases/download/v1.0.0/veremivndn_ml.tar.gz
+tar xzf veremivndn_ml.tar.gz
 ```
 
-## Quick Start
-
-### 1. Run a Basic Simulation
+Verify what you downloaded:
 
 ```bash
-cd simulations
-opp_run -u Cmdenv -c BasicVNDN -n ..:../src omnetpp.ini
+sha256sum -c CHECKSUMS.sha256
 ```
 
-### 2. Run Attack Scenario (Interest Flooding)
+## Load it
+
+Every file is a gzipped CSV with a header, so pandas reads it directly.
+
+```python
+import glob
+import pandas as pd
+
+df = pd.concat(
+    [pd.read_csv(f) for f in glob.glob("data/ml/*.csv.gz")],
+    ignore_index=True,
+)
+
+print(len(df), "rows")
+print(df.attack.value_counts())
+```
+
+Each row already carries the columns that identify which run it came from, so
+the experimental grid can be rebuilt from the released files alone without
+consulting any side-car index.
+
+---
+
+## The label schema
+
+This is the part most people ask about, so it is stated explicitly.
+
+| Column | Meaning |
+|---|---|
+| `attack` | The attack configured for the run: `None`, `InterestFlooding`, `NamePrefixHijacking`, `InterestAggregation` or `RoutingInfoFlood`. Constant within a run. |
+| `attackType` | **The ground truth for the row.** The attack the recording node was executing at that instant, or `Benign`. |
+| `isAttack` | `1` when `attackType` is not `Benign`, `0` otherwise. This is the binary training target. |
+| `attackIntensity` | Configured intensity of the active attack, `0.0` when benign. |
+| `severity`, `attackLayer` | Severity class and protocol layer of the active attack. |
+| `nodeId`, `timestamp` | Recording node and simulation time. |
+
+Two distinctions matter and are easy to get wrong:
+
+**`attack` is not `attackType`.** `attack` describes the run; `attackType`
+describes the row. In an attack run, a malicious vehicle is labeled `Benign`
+before its attack window opens and again after it closes, and every benign
+vehicle in that run is labeled `Benign` throughout. Training on `attack` rather
+than `attackType` labels the majority of an attack run's rows as malicious and
+will produce misleadingly high scores.
+
+**Ground truth is not an input feature.** The 69 feature columns are traffic
+and table statistics observed at the recording node. The label columns are
+resolved from the simulator's own configuration and are supervision only. Drop
+them before fitting:
+
+```python
+LABELS = ["timestamp", "nodeId", "attackType", "isAttack",
+          "attackIntensity", "severity", "attackLayer"]
+IDS = ["run", "config", "attack", "density", "vehicles",
+       "attacker_ratio_pct", "seed"]
+
+X = df.drop(columns=LABELS + IDS)
+y = df.isAttack
+```
+
+---
+
+## What is in a release
+
+| Asset | Contents |
+|---|---|
+| `veremivndn_ml.tar.gz` | The main dataset. One gzipped CSV per run, 69 features plus labels. |
+| `veremivndn_plane.tar.gz` | A second view: 23 per-neighbor features, one row per monitor and observed neighbor. |
+| `veremivndn_scalars.tar.gz` | The OMNeT++ scalar file for every run, holding the network-level measurements. |
+| `CHECKSUMS.sha256` | SHA-256 of every released file. |
+
+Documentation lives in [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md),
+which defines every column, and [`docs/INSTRUCTIONS.md`](docs/INSTRUCTIONS.md),
+which covers loading, splitting and the limitations to read first.
+
+## The four attacks
+
+The paper evaluates four forwarding-layer attacks, each with its own run
+configuration.
+
+| Configuration | Attack | What the attacker does |
+|---|---|---|
+| `Attack01_InterestFlooding` | Interest Flooding | Emits Interests for names that cannot be satisfied, so PIT entries accumulate and expire. |
+| `Attack05_NamePrefixHijacking` | Name Prefix Hijacking | Advertises prefixes it does not serve, drawing Interests away from legitimate producers. |
+| `Attack12_InterestAggregation` | Interest Aggregation Exploitation | Abuses PIT aggregation so that one Interest suppresses the forwarding of others. |
+| `Attack18_RoutingInfoFlood` | Routing Information Flood | Floods routing updates to destabilize the FIB. |
+| `BenignTraffic` | None | Attacker-free control. |
+
+The simulator in `src/attacks/` implements a wider set of attacks across the
+caching, privacy, trust and cross-layer planes. Those are **not** part of this
+dataset and are not evaluated in the paper. Only the five configurations above
+were run.
+
+## The experimental grid
+
+225 runs of 300 simulated seconds each:
+
+```
+5 configurations x 3 densities x 3 attacker ratios x 5 seeds = 225
+```
+
+| Axis | Levels |
+|---|---|
+| Density | `low` ~77 vehicles, `med` ~151, `high` ~356 |
+| Attacker ratio | 5 %, 10 %, 20 % of the fleet |
+| Seed | 1 to 5, varying both mobility and application traffic |
+
+Density is set through SUMO demand scaling, calibrated against the JubST route
+file over a 300 s horizon. Attackers occupy the low vehicle indices. The attack
+window opens at t = 60 s and runs for 180 s, so every run contains benign
+traffic before, during and after the attack.
+
+`BenignTraffic` has no attackers, so its three ratio levels are replicates
+rather than distinct conditions. The axis is kept so the design stays balanced
+and the run count matches the published figure; the released rows record an
+attacker ratio of 0 for all of them.
+
+## Dataset at a glance
+
+| Property | Value |
+|---|---|
+| Runs | 225 |
+| Rows, machine-learning view | 5,989,800 |
+| Rows, per-neighbor view | 924,567 |
+| Feature columns | 69 |
+| Attack rows (`isAttack = 1`) | 653,140 (10.9 %) |
+| Simulated time | 67,500 s |
+| Compressed size | 549M |
+
+## Which attacks are observable, and through what
+
+An attack that runs in the simulator is not automatically visible in the
+features. Each attack below executes and is labeled, and this table is measured
+from the released files rather than asserted: Cohen's d is the standardized mean
+difference between attacker and benign rows for the single most separating
+feature, pooled over all forty-five runs of that attack.
+
+| Attack | Attacker rows | Best Cohen's d | Feature | Verdict |
+|---|---|---|---|---|
+| `InterestAggregation` | 163,285 | 3.09 | `pitSize` | clearly separable |
+| `InterestFlooding` | 163,285 | 12.57 | `burstiness` | clearly separable |
+| `NamePrefixHijacking` | 163,285 | 1.72 | `longTermInterestRate` | clearly separable |
+| `RoutingInfoFlood` | 163,285 | 1.73 | `longTermInterestRate` | clearly separable |
+
+
+All four are separable, but not in the same way, and the difference matters for
+how you model them.
+
+Interest Flooding and Interest Aggregation change the short-term picture: the
+attacker's burstiness and PIT occupancy move sharply, so a detector reading a
+single observation window can find them.
+
+The two routing-plane attacks do not. Name Prefix Hijacking and Routing
+Information Flood leave every short-window statistic untouched, to three decimal
+places: `interestRate`, `burstiness` and `windowInterestCount` are the same for
+attacker and benign rows. They show up only in `longTermInterestRate`, which
+accumulates over a longer horizon, where the hijacker sits at about 0.46 against
+0.22 for a benign node. The forged advertisements and routing updates are real,
+and the scalar files record them in the tens of thousands, but they register as
+a slow rise in accumulated volume rather than as a burst.
+
+The practical consequence is that a model given only single-window features will
+find the first two attacks and miss the last two. If you care about the routing
+attacks, keep the long-horizon features, or build sequences over consecutive
+windows.
+
+There is no purpose-built routing feature: the set has no advertisement or FIB
+churn column, and `hijackingScore` is an unimplemented stub. Adding one is the
+most useful extension available here, and the ground truth for that work is
+already in `data/scalars/` as `forgedAdvertisements`, `hijackedPrefixCount` and
+`interceptedInterests`.
+
+---
+
+## Build and run it yourself
+
+See [INSTALL.md](INSTALL.md) for the full toolchain. In short:
 
 ```bash
-opp_run -u Cmdenv -c AttackScenario_IF -n ..:../src omnetpp.ini
+make                                     # build the simulator
+scripts/veremivndn_paper1_campaign.sh    # regenerate all 225 runs
+scripts/consolidate_paper1.py --root datasets/paper1_veremivndn --out release/data
 ```
 
-### 3. Generate Dataset
+A single run:
 
 ```bash
-python3 utils/parsers/parse_omnet_results.py --input simulations/results --output datasets/processed
+scripts/miids/run_one.sh Attack01_InterestFlooding 300s "" 0 \
+  --seed-set=1 \
+  --'*.manager.launchConfig=xmldoc("../scenarios/sumo/jubst_low_s1.launchd.xml")'
 ```
 
-## Dataset
+## Notes on the data
 
-The full simulation dataset (results, frames, and OMNeT++ logs) is available in the **[Releases](https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/releases)** section:
+Read these before drawing conclusions.
 
-| File | Description |
-|------|-------------|
-| `VeReMiVNDN-OmNetpp-Dataset.zip` | Raw OMNeT++ simulation dataset |
-| `VeReMiVNDN-Dataset-Results.zip` | Processed simulation results |
-| `VeReMiVNDN-Frames.zip` | Simulation frame captures |
+- **The dataset was regenerated after publication.** Five defects in the
+  export path were repaired first, so the released files are not a
+  byte-for-byte reproduction of the tables in the article. Two of them were
+  severe enough that the original pipeline could not have produced a usable
+  dataset at all: the routine that fills the feature window had no caller, so
+  every one of the 69 features held its default value, and no attack module
+  ever reported itself, so every row was labeled benign whatever the
+  configuration. The others were that all recording nodes wrote to one filename
+  and truncated it, that the collector read the window after the extractor had
+  cleared it, and that the mobility features were hard-coded placeholders.
+  `RELEASE_NOTES.md` lists each one. Numbers computed from this release will
+  differ from the published tables, and the release is the version to trust.
+- **Some columns are still constant**, either because the quantity is not
+  instrumented in this build or because the feature is an unimplemented stub.
+  The data dictionary lists exactly which, measured from the released files
+  rather than assumed.
+- **One map, one vehicle class.** All runs use the JubST road network. Results
+  should not be assumed to transfer to another topology without re-measuring.
+- **Attackers are static.** Each attacker holds a fixed rate and strategy for
+  its whole window and does not react to detection. A detector scored only on
+  this data will look better than it would against an adaptive adversary.
+- **Class imbalance is real and intended.** Attack rows are a minority. Use
+  stratified splits and report precision and recall, not accuracy.
 
-### Features Collected
+## Repository layout
 
-- **Network**: RSSI, delay, throughput, packet loss, jitter
-- **NDN**: PIT size, cache hit ratio, interest satisfaction rate, hop count
-- **Trust & Security**: node trust score, content trust score, anomaly score
-- **Temporal**: inter-packet arrival time, burst patterns, attack duration
-- **Mobility**: speed, acceleration, position, direction, RSU distance
-- **Privacy**: name entropy, cache access patterns, timing variance
-
-### Label Format
-
-```csv
-timestamp,node_id,attack_type,attack_active,severity,layer
-1.234,vehicle[5],InterestFlooding,1,0.85,Network
-2.456,vehicle[12],Benign,0,0.0,None
 ```
-
-## Configuration
-
-Main config: `simulations/configs/omnetpp.ini`
-
-```ini
-[General]
-network = VndnNetwork
-sim-time-limit = 300s
-*.numVehicles = 100
-*.numRSU = 5
-*.numMalicious = 10
-*.vehicle[*].attackType = "InterestFlooding"
-*.**.ids.enabled = true
-```
-
-## Comparison with Existing Datasets
-
-| Feature | VeReMi | F2MD | MisbehaviorX | **VeReMiVNDN** |
-|---------|--------|------|--------------|------------|
-| Protocol | VANET | VANET | V2X | **VNDN** |
-| Attack Types | 5 | 8 | 68 | **20 (VNDN-specific)** |
-| Trust Scores | ✗ | ✗ | ✗ | **✓** |
-| Privacy Features | ✗ | ✗ | ✗ | **✓** |
-| Cache Metrics | ✗ | ✗ | ✗ | **✓** |
-| Multi-Layer | ✗ | ✗ | Limited | **✓** |
-| NDN Support | ✗ | ✗ | ✗ | **✓** |
-
-## Citation
-
-If you use this framework or dataset in your research, please cite:
-
-```bibtex
-@misc{veremivndn2025,
-  title={VeReMiVNDN: A Comprehensive Dataset for Intrusion Detection in Vehicular Named Data Networks},
-  author={Muhammad Uzair},
-  year={2025},
-  publisher={GitHub},
-  howpublished={\url{https://github.com/Muhammaduazir69/VeReMiVNDN-dataset}}
-}
+src/           simulator sources (NDN forwarding, attacks, IDS, logging)
+simulations/   OMNeT++ configurations and the JubST SUMO scenario
+scripts/       campaign, consolidation and release tooling
+docs/          data dictionary, instructions and the project page
 ```
 
 ## License
 
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
+The dataset and documentation are released under
+[CC BY 4.0](LICENSE). The simulator source is released under the
+[MIT license](LICENSE-CODE).
 
-## Acknowledgments
+## Citation
 
-- VeReMi Dataset project
-- F2MD Framework
-- OMNeT++ Community
-- VEINS and INET Development Teams
+See [CITATION.cff](CITATION.cff), or cite the article directly:
+
+```bibtex
+@article{aldahlan2026veremivndn,
+  author  = {Aldahlan, Bassma G. and Uzair, Muhammad},
+  title   = {{VeReMiVNDN}: A Dataset for Misbehavior Detection in Vehicular
+             Named Data Networking Using the {JubST} {SUMO} Scenario},
+  journal = {IEEE Access},
+  year    = {2026},
+  doi     = {10.1109/ACCESS.2026.3681896}
+}
+```
 
 ## Contact
 
-- GitHub Issues: [https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/issues](https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/issues)
+Questions about the data are best raised as a
+[GitHub issue](https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/issues).
 
----
-
-**Version:** 1.0.0 | **Status:** Active
+Muhammad Uzair, COMSATS University Islamabad, muhammaduzairr69@gmail.com

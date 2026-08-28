@@ -24,6 +24,13 @@ simple PIT
         @statistic[pitExpired](record=count,sum);
         @statistic[pitSatisfied](record=count,sum);
 
+        // DP-IDS monitoring signals
+        @signal[pitInsertionEvent](type=long);
+        @signal[pitExpirationEvent](type=long);
+
+        @statistic[pitInsertionEvent](record=count,vector);
+        @statistic[pitExpirationEvent](record=count,vector);
+
         @display("i=block/table");
 
     gates:

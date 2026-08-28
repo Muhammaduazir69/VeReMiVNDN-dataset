@@ -4,6 +4,7 @@
 //
 
 #include "NDNProcessor.h"
+#include "../../ids/features/FeatureExtractor.h"
 #include "NdnControlMessages_m.h"
 
 namespace veremivndn {
@@ -29,6 +30,8 @@ void NDNProcessor::initialize() {
     enableSignatureVerification = par("enableSignatureVerification");
     signatureVerificationDelay = par("signatureVerificationDelay");
     forwardingStrategy = par("forwardingStrategy").stdstringValue();
+    if (hasPar("enableTridentAdmission"))
+        enableTridentAdmission = par("enableTridentAdmission");
 
     // Register signals
     interestSentSignal = registerSignal("interestSent");
@@ -45,9 +48,22 @@ void NDNProcessor::initialize() {
     nextFaceId = 0;
     nextTransactionId = 1;
 
+    // WATCH for Qtenv inspector
+    WATCH(interestsSent);
+    WATCH(interestsReceived);
+    WATCH(dataSent);
+    WATCH(dataReceived);
+    WATCH(cacheHits);
+    WATCH(cacheMisses);
+
     EV_INFO << "NDNProcessor initialized: " << nodeIdentifier << endl;
 
-    // DEBUG: Log all gate connections to understand face mapping
+    // Pre-register one face per connected ndnOut gate.  Without this the
+    // FIB-installed default routes (which point at face 0) can never be
+    // resolved by getGateForFace() because faces were only registered
+    // lazily on the first arriving packet.  That left interestSent at 0
+    // for the entire run.  We now build the gate->face mapping up front
+    // so forwardInterest() / forwardData() can dispatch from t=0.
     EV_WARN << "=== NDNProcessor Gate Configuration ===" << endl;
     EV_WARN << "Node: " << nodeIdentifier << endl;
     EV_WARN << "Total ndnOut gates: " << gateSize("ndnOut") << endl;
@@ -56,8 +72,11 @@ void NDNProcessor::initialize() {
         if (gate->isConnected()) {
             cGate *nextGate = gate->getNextGate();
             cModule *dest = nextGate->getOwnerModule();
+            int fid = nextFaceId++;
+            faceToGate[fid] = i;
+            gateToFace[i]   = fid;
             EV_WARN << "  ndnOut[" << i << "] --> " << dest->getFullPath()
-                    << " (gate: " << nextGate->getName() << ")" << endl;
+                    << " (gate: " << nextGate->getName() << ") face=" << fid << endl;
         } else {
             EV_WARN << "  ndnOut[" << i << "] --> NOT CONNECTED" << endl;
         }
@@ -113,13 +132,75 @@ void NDNProcessor::handleNetworkPacket(cMessage *msg) {
     }
 }
 
+void NDNProcessor::refreshDisplay() const {
+    // Show live NDN table stats on the NdnNode compound module
+    cModule *ndnNode = getParentModule();
+    if (!ndnNode) return;
+
+    // Get table sizes
+    int pitSize = 0, csSize = 0, fibSize = 0;
+    cModule *pitMod = ndnNode->getSubmodule("pit");
+    cModule *csMod = ndnNode->getSubmodule("cs");
+    cModule *fibMod = ndnNode->getSubmodule("fib");
+
+    if (pitMod && pitMod->hasPar("currentSize"))
+        pitSize = pitMod->par("currentSize");
+    if (csMod && csMod->hasPar("currentSize"))
+        csSize = csMod->par("currentSize");
+
+    char label[128];
+    snprintf(label, sizeof(label), "PIT:%d CS:%d I:%d D:%d",
+             pitSize, csSize, interestsReceived, dataReceived);
+    ndnNode->getDisplayString().setTagArg("t", 0, label);
+    ndnNode->getDisplayString().setTagArg("t", 2, "blue");
+
+    // Tooltip with detailed NDN state
+    char tt[512];
+    snprintf(tt, sizeof(tt),
+             "NDN Processor: %s\n"
+             "Interests Sent: %d | Received: %d\n"
+             "Data Sent: %d | Received: %d\n"
+             "Cache Hits: %d | Misses: %d\n"
+             "Pending Transactions: %d",
+             nodeIdentifier.c_str(),
+             interestsSent, interestsReceived,
+             dataSent, dataReceived,
+             cacheHits, cacheMisses,
+             (int)pendingTransactions.size());
+    ndnNode->getDisplayString().setTagArg("tt", 0, tt);
+}
+
 void NDNProcessor::finish() {
     EV_INFO << "NDNProcessor " << nodeIdentifier << " finishing" << endl;
     recordScalar("pendingTransactions", (long)pendingTransactions.size());
 }
 
+FeatureExtractor *NDNProcessor::getExeObserver() {
+    if (exeObserverResolved) return exeObserver;
+    exeObserverResolved = true;
+    // ndnNode -> host (vehicle / RSU) -> featureExtractor
+    cModule *ndnNode = getParentModule();
+    cModule *host    = ndnNode ? ndnNode->getParentModule() : nullptr;
+    if (host) {
+        if (cModule *fe = host->getSubmodule("featureExtractor"))
+            exeObserver = dynamic_cast<FeatureExtractor *>(fe);
+    }
+    return exeObserver;
+}
+
 void NDNProcessor::processInterest(InterestPacket *interest, int inFace) {
     emit(interestReceivedSignal, 1L);
+    interestsReceived++;
+
+    if (FeatureExtractor *obs = getExeObserver()) {
+        obs->observeInterest(interest);
+        // The per-neighbor observation above feeds the plane features only, and
+        // is gated behind exePlaneFeaturesEnabled. The 69-feature sliding
+        // window that the exported dataset is built from is filled by
+        // notifyPacket(), which had no caller anywhere in the tree, so every
+        // one of those features stayed at its default for the whole run.
+        obs->notifyPacket(interest);
+    }
 
     std::string name = interest->getName();
     EV_INFO << "Processing Interest: " << name << " from face " << inFace << endl;
@@ -160,9 +241,22 @@ void NDNProcessor::handleCSResponse(cMessage *msg) {
     PendingTransaction &trans = it->second;
     InterestPacket *interest = dynamic_cast<InterestPacket*>(trans.packet);
 
+    // Cache-plane observation: which neighbour's Interest this was, whether it
+    // hit, and how long the lookup took. The hit/miss timing gap is what a
+    // cache-privacy prober exploits, so it is measured here rather than assumed.
+    if (FeatureExtractor *obs = getExeObserver()) {
+        std::string requester = interest ? interest->getSenderId() : "";
+        if (!requester.empty()) {
+            obs->observeCsOutcome(requester, response->getFound(),
+                                  (simTime() - trans.timestamp).dbl());
+        }
+    }
+
     if (response->getFound()) {
         // Cache hit!
         emit(cacheHitSignal, 1L);
+        cacheHits++;
+        bubble("Cache HIT");
         EV_INFO << "Cache HIT for " << response->getName() << endl;
 
         DataPacket *cachedData = const_cast<DataPacket*>(dynamic_cast<const DataPacket*>(response->getData()));
@@ -179,6 +273,7 @@ void NDNProcessor::handleCSResponse(cMessage *msg) {
     else {
         // Cache miss - proceed to PIT
         emit(cacheMissSignal, 1L);
+        cacheMisses++;
         EV_INFO << "Cache MISS for " << response->getName() << endl;
 
         delete response;
@@ -228,6 +323,8 @@ void NDNProcessor::handlePITInsertResponse(PITInsertResponse *response) {
     if (!response->getSuccess()) {
         EV_WARN << "PIT insert failed for " << response->getName() << endl;
         emit(packetDroppedSignal, 1L);
+        if (FeatureExtractor *obs = getExeObserver())
+            if (interest) obs->observeDrop(interest->getSenderId());
         delete interest;
         delete response;
         pendingTransactions.erase(it);
@@ -293,6 +390,13 @@ void NDNProcessor::handleFIBResponse(cMessage *msg) {
     simtime_t forwardDelay = simTime() - trans.timestamp;
     emit(forwardingDelaySignal, forwardDelay);
 
+    // Forwarding-behaviour observation: per-neighbour service delay. A gray
+    // hole that delays rather than drops shows up as delay-variance growth.
+    if (FeatureExtractor *obs = getExeObserver()) {
+        std::string requester = interest ? interest->getSenderId() : "";
+        if (!requester.empty()) obs->observeForwardDelay(requester, forwardDelay.dbl());
+    }
+
     for (unsigned int i = 0; i < response->getNextHopsArraySize(); i++) {
         int nextHop = response->getNextHops(i);
         if (nextHop != trans.inFace) {  // Don't send back to incoming face
@@ -307,15 +411,31 @@ void NDNProcessor::handleFIBResponse(cMessage *msg) {
 
 void NDNProcessor::processData(DataPacket *data, int inFace) {
     emit(dataReceivedSignal, 1L);
+    dataReceived++;
 
     std::string name = data->getName();
     EV_INFO << "Processing Data: " << name << " from face " << inFace << endl;
 
-    // Verify signature if enabled
-    if (enableSignatureVerification && data->isSigned()) {
+    // Observe before any admission check, so that Data which fails
+    // verification still contributes signature evidence to the data plane.
+    if (FeatureExtractor *obs = getExeObserver()) {
+        obs->observeData(data);
+        obs->notifyPacket(data);
+    }
+
+    // Verify signature if enabled. Verification applies to Data arriving from
+    // the network, not to Data the local producer application has just handed
+    // down for transmission: a node does not validate its own outgoing content.
+    // Verifying on the application face meant an attacker's poisoned Data was
+    // dropped by its own forwarder and never reached the wire, so content
+    // poisoning had no effect on anybody.
+    const int APP_FACE = 0;
+    if (enableSignatureVerification && data->isSigned() && inFace != APP_FACE) {
         if (!verifySignature(data)) {
             EV_WARN << "Signature verification failed for: " << name << endl;
             emit(packetDroppedSignal, 1L);
+            if (FeatureExtractor *obs = getExeObserver())
+                obs->observeDrop(data->getSenderId());
             delete data;
             return;
         }
@@ -364,6 +484,8 @@ void NDNProcessor::handlePITSatisfyResponse(PITSatisfyResponse *response) {
         // No matching PIT entry - unsolicited data
         EV_WARN << "Unsolicited data: " << response->getName() << endl;
         emit(packetDroppedSignal, 1L);
+        if (FeatureExtractor *obs = getExeObserver())
+            if (data) obs->observeDrop(data->getSenderId());
         delete data;
         delete response;
         pendingTransactions.erase(it);
@@ -384,6 +506,11 @@ void NDNProcessor::handlePITSatisfyResponse(PITSatisfyResponse *response) {
 void NDNProcessor::processNack(NackPacket *nack, int inFace) {
     emit(nackReceivedSignal, 1L);
 
+    if (FeatureExtractor *obs = getExeObserver()) {
+        obs->observeNack(nack);
+        obs->notifyPacket(nack);
+    }
+
     std::string name = nack->getName();
     EV_INFO << "Processing NACK: " << name << " reason=" << nack->getReason() << endl;
 
@@ -394,6 +521,7 @@ void NDNProcessor::processNack(NackPacket *nack, int inFace) {
 
 void NDNProcessor::forwardInterest(InterestPacket *interest, int outFace) {
     emit(interestSentSignal, 1L);
+    interestsSent++;
 
     int gateIndex = getGateForFace(outFace);
     if (gateIndex == -1 || gateIndex >= gateSize("ndnOut")) {
@@ -408,6 +536,7 @@ void NDNProcessor::forwardInterest(InterestPacket *interest, int outFace) {
 
 void NDNProcessor::forwardData(DataPacket *data, int outFace) {
     emit(dataSentSignal, 1L);
+    dataSent++;
 
     int gateIndex = getGateForFace(outFace);
     if (gateIndex == -1 || gateIndex >= gateSize("ndnOut")) {
@@ -475,7 +604,18 @@ int NDNProcessor::getGateForFace(int faceId) {
 }
 
 bool NDNProcessor::shouldCacheData(DataPacket *data) {
-    return enableCaching && data->isCacheable();
+    if (!enableCaching || !data->isCacheable())
+        return false;
+    // TRIDENT prong 2: poisoning-resilient cache admission. Reject Data that is
+    // unsigned, has a blanked signature (the signature of poisoned/forged
+    // content), or carries a sub-threshold trust score, so it can never be
+    // served from the Content Store on a later cache hit.
+    if (enableTridentAdmission) {
+        if (!data->isSigned()) return false;
+        if (std::string(data->getSignature()).empty()) return false;
+        if (data->getTrustScore() < 0.5) return false;
+    }
+    return true;
 }
 
 bool NDNProcessor::verifySignature(DataPacket *data) {

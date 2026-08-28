@@ -63,8 +63,11 @@
                 <color r="0.9" g="0.9" b="0.1"/>
             </vehicleName>
 
-            <!-- Vehicle shapes and sizes -->
+            <!-- Vehicle shapes and sizes (exaggeration 1.5 = vibrant for screenshots) -->
             <vehicleSize value="1.0"/>
+            <vehicleSize.exaggeration value="1.5"/>
+            <vehicleSize.constantSize value="false"/>
+            <vehicleSize.minSize value="1.0"/>
             <vehicleScaler value="1.0"/>
 
             <!-- Color by speed (for speed visualization) -->
@@ -110,12 +113,13 @@
                 <color name="highway.footway" r="0.6" g="0.9" b="0.6"/>
             </edgeColorer>
 
-            <!-- Edge width and appearance -->
+            <!-- Edge width and appearance (exaggerated for screenshot legibility) -->
             <edgeWidth value="1.0"/>
-            <edgeWidthExaggeration value="1.0"/>
+            <edgeWidthExaggeration value="1.2"/>
             <laneWidth value="1.0"/>
-            <laneWidthExaggeration value="1.0"/>
-            <laneMinSize value="0.0"/>
+            <laneWidthExaggeration value="1.2"/>
+            <streetsLaneWidthExaggeration value="1.2"/>
+            <laneMinSize value="1.5"/>
 
             <!-- Edge name display -->
             <edgeName>

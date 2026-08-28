@@ -161,6 +161,10 @@ public:
     // Public interface
     void addRecord(const FeatureVector &features, const GroundTruthLabel &label);
     void setGroundTruth(int nodeId, const std::string &attackType, double intensity);
+
+    // Reads the host's own attack module and updates this node's label to
+    // match whether its attack window is currently open.
+    void refreshGroundTruthFromHost(int nodeId);
     void exportDataset();
     uint64_t getRecordCount() const { return recordsCollected; }
 };

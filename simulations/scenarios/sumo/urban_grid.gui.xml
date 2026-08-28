@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Clean realistic GUI for the urban grid. Light background (no green ground),
+     wide asphalt-grey roads, given building colours, bold vehicles, RSU coverage
+     drawn as outline rings (no overlapping discs). No <viewport> -> auto-fit. -->
+<viewsettings>
+    <scheme name="trident_clean">
+        <backgroundColor r="0.96" g="0.96" b="0.94"/>
+        <edges>
+            <edgeMode value="0"/>
+            <laneEdgeMode value="0"/>
+            <laneWidthExaggeration value="2.0"/>
+            <edgeColorer><colorMode value="0"/></edgeColorer>
+            <edgeName><show value="false"/></edgeName>
+            <streetName><show value="false"/></streetName>
+        </edges>
+        <vehicles>
+            <colorMode value="given"/>
+            <vehicleQuality value="5"/>
+            <vehicleSize value="1.0"/>
+            <vehicleSize.exaggeration value="10.0"/>
+            <vehicleSize.minSize value="1.0"/>
+            <showBlinker value="true"/>
+            <vehicleName><show value="false"/></vehicleName>
+        </vehicles>
+        <polys><colorMode value="given"/></polys>
+        <junctions><junctionMode value="1"/></junctions>
+    </scheme>
+    <delay value="50"/>
+    <vehicleQuality value="5"/>
+    <vehicleSize value="1.0"/>
+    <vehicleSize.exaggeration value="5.0"/>
+    <vehicleSize.minSize value="5.0"/>
+    <showBlinker value="true"/>
+    <drawMinGap value="false"/>
+    <antialiase value="true"/>
+    <dither value="true"/>
+    <poiSize value="1.0"/>
+    <poiName value="false"/>
+    <showSizeLegend value="false"/>
+    <showColorLegend value="false"/>
+</viewsettings>

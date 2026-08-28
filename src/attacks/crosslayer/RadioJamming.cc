@@ -3,6 +3,7 @@
 //
 
 #include "RadioJamming.h"
+#include "JammingMedium.h"
 #include <cmath>
 
 namespace veremivndn {
@@ -149,6 +150,7 @@ void RadioJamming::executeAttack() {
 void RadioJamming::enableJamming() {
     jammingActive = true;
     lastJammingToggle = simTime();
+    publishJammingState();
 
     emit(jammingPowerSignal, jammingPower);
     emit(channelOccupancySignal, 1L);
@@ -163,6 +165,7 @@ void RadioJamming::disableJamming() {
     }
 
     jammingActive = false;
+    publishJammingState();      // withdraw this jammer's footprint
 
     emit(jammingPowerSignal, 0.0);
     emit(channelOccupancySignal, 0L);
@@ -171,6 +174,10 @@ void RadioJamming::disableJamming() {
 }
 
 void RadioJamming::toggleJamming() {
+    if (jammingType == JammingType::REACTIVE) {
+        disableJamming();     // end of a reactive burst
+        return;
+    }
     if (jammingActive) {
         disableJamming();
         // Schedule next enable based on duty cycle
@@ -212,8 +219,13 @@ void RadioJamming::performReactiveJamming() {
 
         EV_WARN << "Reactive jamming triggered: blocked transmission" << endl;
 
-        // Disable after short burst
-        disableJamming();
+        // Hold the jam for a burst rather than dropping it in the same event.
+        // Enabling and disabling within one call left the jammer active for
+        // zero simulated time, so no frame in flight was ever affected and the
+        // physical plane carried no signal at all.
+        if (!jammingToggleMsg) jammingToggleMsg = new cMessage("jammingBurstEnd");
+        if (!jammingToggleMsg->isScheduled())
+            scheduleAt(simTime() + uniform(0.02, 0.06), jammingToggleMsg);
     }
 }
 
@@ -331,6 +343,20 @@ double RadioJamming::calculateInterferencePower(double distance) {
     double receivedPower = jammingPower - pathLoss;
 
     return receivedPower;
+}
+
+// Publish this jammer's current position, power and radius so that frame
+// delivery can knock out receivers inside its footprint. Without this the
+// module only emitted statistics and had no effect on any other node.
+void RadioJamming::publishJammingState() {
+    JammerState st;
+    st.range     = jammingRange;
+    st.powerDbm  = jammingPower;
+    st.active    = jammingActive;
+
+    jammingNodePosition(getParentModule(), st.x, st.y);
+
+    JammingMedium::instance().update(nodeIdentifier, st);
 }
 
 } // namespace veremivndn

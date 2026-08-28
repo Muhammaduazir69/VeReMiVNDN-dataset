@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    TRIDENT-VNDN - URBAN scenario GUI settings (realistic 2D).
+
+    Built on SUMO's "real world" scheme (realistic asphalt + rendered building
+    polygons from aljubail_zones.poly.xml). Tuned for the dense downtown box
+    (net centre ~8222,7380): zoomed in so individual streets, junctions and the
+    vehicle fleet are clearly legible for paper figures / screencasts.
+
+    vehicleQuality 5 = full polygon vehicle bodies (pseudo-3D), coloured by type.
+-->
+<viewsettings>
+    <!-- realistic built-in scheme: grey asphalt, lane markings, buildings -->
+    <scheme name="real world"/>
+
+    <!-- smooth playback for screen capture -->
+    <delay value="50"/>
+
+    <!-- DOWNTOWN view: centred on the dense low-speed grid (~3 km window) so
+         streets render with asphalt width and the fleet is clearly visible -->
+    <viewport x="8222.0" y="7380.0" zoom="1500.0" angle="0.0"/>
+
+    <!-- highest-detail polygon vehicle bodies; exaggerated so cars read at 3 km -->
+    <vehicleQuality value="5"/>
+    <vehicleSize value="1.0"/>
+    <vehicleSize.exaggeration value="6.0"/>
+    <vehicleSize.minSize value="3.0"/>
+
+    <!-- turn signals + crisp anti-aliased rendering for PDF screenshots -->
+    <showBlinker value="true"/>
+    <drawMinGap value="false"/>
+    <antialiase value="true"/>
+    <dither value="true"/>
+
+    <!-- legends help readers decode the figure -->
+    <showSizeLegend value="false"/>
+    <showColorLegend value="false"/>
+    <snapshot file="urban_preview.png" time="90.00"/>
+</viewsettings>

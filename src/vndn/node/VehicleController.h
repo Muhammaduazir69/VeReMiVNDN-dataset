@@ -41,6 +41,38 @@ protected:
     // Configuration
     std::string vehicleId;
     bool isContentProducer;
+
+    // ---- VeReMiVNDN-EXE content model / forwarding role ----
+    bool   isForwarder = false;
+    int    catalogSize = 200;
+    double catalogZipfAlpha = 0.9;
+    double uniqueNameFraction = 0.25;
+    int    maxRelayHops = 3;
+    std::vector<double> zipfCdf;      // cached popularity CDF over the catalogue
+    void   buildZipfCdf();
+    int    drawCatalogItem();
+    long   relayedInterests = 0;
+    // Duplicate suppression for relayed Interests. Without it, every forwarder
+    // rebroadcasts every Interest it overhears to every other forwarder, and
+    // the fan-out compounds into a broadcast storm within a few simulated
+    // seconds. Standard NDN suppresses on the (name, nonce) pair.
+    std::map<std::string, simtime_t> relaySeen;
+    long   relaySuppressed = 0;
+
+    // Deferred rebroadcast with overhear-and-cancel. Flooding an Interest to
+    // every in-range forwarder makes the number of copies grow with the
+    // neighbourhood size at every hop. The standard mitigation is to wait a
+    // short random interval before relaying and to abandon the relay if the
+    // same Interest is heard from somebody else meanwhile, so that only the
+    // nodes that actually extend coverage retransmit.
+    struct DeferredRelay { cMessage *timer; InterestPacket *pkt; };
+    std::map<std::string, DeferredRelay> pendingRelays;
+    double relayDeferMin = 0.005;
+    double relayDeferMax = 0.030;
+    long   relayCancelled = 0;
+    void scheduleRelay(InterestPacket *oi, const std::string &key);
+    void cancelRelay(const std::string &key);
+    void fireRelay(cMessage *timer);
     std::vector<std::string> producedPrefixes;
 
     // Timers
@@ -57,10 +89,13 @@ protected:
     // Gate IDs
     int ndnInGate;
     int ndnOutGate;
+    int wireInGate;
+    int wireOutGate;
     int lowerLayerInGate;
     int lowerLayerOutGate;
     int lowerControlInGate;
     int lowerControlOutGate;
+    int directInGate;
 
     // VEINS/TraCI Integration (Enhanced)
     TraCIMobility *mobility;
@@ -78,6 +113,49 @@ protected:
     // Neighbor management
     std::map<std::string, NeighborInfo> neighbors;
     double communicationRange;
+
+    // ========================================
+    // TRIDENT-VNDN data-plane state
+    // ========================================
+    std::string myNodeName;          // this vehicle's module full name (= senderId)
+    class TrustRegistry *trustReg;    // global blackboard (resolved lazily)
+    bool tridentIsolation;           // honour quarantine drops if true
+    class AttackBase *selfAttack;     // own attack module (nullptr if benign)
+    std::string attackTargetPrefix;   // prefix this attacker poisons (default /safety)
+    bool   nodeIsAttacker;           // this node carries an attack module
+    double attackWinStart;           // s; adversary injects only within [start,end]
+    double attackWinEnd;
+    long   producerAnswers = 0;      // diagnostic: producer-app Data replies built
+
+    // Consumer-side Interest-satisfaction accounting (honest ISR):
+    // an Interest counts as satisfied only when a VALID Data (signed, trusted,
+    // from a non-quarantined sender) for its name arrives within its lifetime.
+    struct PendingInterest { simtime_t issued; simtime_t expiry; };
+    std::map<std::string, PendingInterest> pendingInterests;
+    std::set<std::string> validCache;  // names this node holds a valid copy of (V2V caching)
+    long interestsIssued;            // total Interests this consumer launched
+    long interestsSatisfied;         // satisfied by valid Data
+    long interestsExpired;           // timed out (unsatisfied)
+    long framesDroppedQuarantine;    // frames discarded due to quarantined sender
+    cMessage *pendingSweepTimer;
+
+    // ========================================
+    // TrustNet position-falsification state (VeReMi taxonomy)
+    // ========================================
+    int posAttackType;               // 0 benign else 1/2/4/8/16
+    double posAttackerDensity;       // fraction of vehicles selected as attackers
+    bool isPosAttacker;              // this vehicle falsifies its beacon position
+    double posStealth;               // 1.0 full-strength, 0.5 stealthy (boundary)
+    // last position this vehicle REPORTED in its beacon (true+noise if benign,
+    // falsified if attacker). Read by the TrustNetCollector from the wire-equivalent.
+    double lastReportedX, lastReportedY, lastReportedSpeed;
+    bool   hasReported;
+    // per-type falsification memory
+    double fixedReportX, fixedReportY;   // type 1 (constant position)
+    double offsetReportX, offsetReportY; // type 2 (constant offset bias)
+    double stopReportTime;               // type 16 (eventual stop instant)
+    bool   stopFrozen;                   // type 16 latched
+    double stopFrozenX, stopFrozenY;
 
 protected:
     virtual void initialize() override;
@@ -99,6 +177,7 @@ protected:
     // Network operations
     virtual void sendToLowerLayer(cPacket *pkt);
     virtual void processWirelessPacket(cPacket *pkt);
+    virtual void deliverToNeighbors(cPacket *pkt, double delaySec = 0.0);
 
     // ========================================
     // ENHANCED VEINS MOBILITY FUNCTIONS
@@ -185,9 +264,26 @@ public:
     const Coord& getCurrentPosition() const { return currentPosition; }
     double getCurrentSpeed() const { return currentSpeed; }
     const std::map<std::string, NeighborInfo>& getNeighbors() const { return neighbors; }
-};
 
-Define_Module(VehicleController);
+    // TrustNet: read by TrustNetCollector to build the per-vehicle feature set.
+    int  getEffectivePosAttackType() const { return isPosAttacker ? posAttackType : 0; }
+    bool getIsPosAttacker() const { return isPosAttacker; }
+    bool hasReportedPos() const { return hasReported; }
+    double getLastReportedX() const { return lastReportedX; }
+    double getLastReportedY() const { return lastReportedY; }
+    double getLastReportedSpeed() const { return lastReportedSpeed; }
+
+    // TRIDENT: consumer-side resilience counters read by ResilienceMonitor.
+    long getInterestsIssued() const { return interestsIssued; }
+    long getInterestsSatisfied() const { return interestsSatisfied; }
+    long getInterestsExpired() const { return interestsExpired; }
+    long getFramesDroppedQuarantine() const { return framesDroppedQuarantine; }
+
+protected:
+    // TRIDENT helpers
+    void sweepPendingInterests();    // expire timed-out pending Interests
+    bool isValidData(class DataPacket *d) const;  // signed + trusted + sender ok
+};
 
 } // namespace veremivndn
 

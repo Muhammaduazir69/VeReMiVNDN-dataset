@@ -87,6 +87,12 @@ private:
     simsignal_t pitOccupancySignal;
     simsignal_t pitExpiredSignal;
     simsignal_t pitSatisfiedSignal;
+    simsignal_t pitInsertionEventSignal;
+    simsignal_t pitExpirationEventSignal;
+
+    // DP-IDS monitoring state
+    int previousSize;
+    simtime_t lastGrowthCheck;
 
 protected:
     virtual void initialize() override;
@@ -127,6 +133,12 @@ public:
     int getTotalInsertions() const { return totalInsertions; }
     int getTotalSatisfied() const { return totalSatisfied; }
     int getTotalAggregated() const { return totalAggregated; }
+    int getMaxSize() const { return maxSize; }
+    simtime_t getDefaultLifetimeValue() const { return defaultLifetime; }
+    int getPreviousSize() const { return previousSize; }
+
+    // DP-IDS Penalisation API (Section 4.5)
+    void accelerateTimeout(const std::string &name, double factor);
 
     // Advanced operations
     void updateFace(const std::string &name, int face, bool isOutgoing);

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    VeReMiVNDN - Enhanced Highway Routes
+
+    This file generates realistic highway traffic with:
+    - High-speed vehicles (cars, SUVs, sports cars)
+    - Long-haul trucks and trailers
+    - Intercity buses
+    - Motorcycles
+    - Emergency vehicles
+    - Realistic lane usage and overtaking
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+
+    <!-- =============================================== -->
+    <!-- VEHICLE TYPE DISTRIBUTIONS -->
+    <!-- =============================================== -->
+
+    <!-- Highway passenger mix -->
+    <vTypeDistribution id="highway_passenger_mix" vTypes="passenger_sedan passenger_suv passenger_sport" probabilities="0.55 0.30 0.15"/>
+
+    <!-- Highway truck mix -->
+    <vTypeDistribution id="highway_truck_mix" vTypes="truck_medium truck_trailer truck_container" probabilities="0.45 0.35 0.20"/>
+
+    <!-- =============================================== -->
+    <!-- ROUTES (using highway/primary roads from aljubail) -->
+    <!-- =============================================== -->
+
+    <!-- Highway route 1: Major highway corridor -->
+    <route id="highway_route1" edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11 171196237#7 171196237#8 171196237#9"/>
+
+    <!-- Highway route 2: Secondary highway -->
+    <route id="highway_route2" edges="1136880673#0 1136880673#1 1136880673#2 1136880673#2-AddedOffRampEdge 1136880673#3 1136880673#6 1136880674-AddedOnRampEdge 1136880674 225030378#0 225030378#1 225030378#2 225030378#5"/>
+
+    <!-- Highway route 3: Long-haul truck route -->
+    <route id="highway_route3" edges="132970988#13 132970988#14 132970988#15 132970988#16-AddedOnRampEdge 132970988#16 665671743#5 665671751#0 665671751#0-AddedOffRampEdge 665671751#1 665671765 123243892#0 123243892#1 123243892#2-AddedOnRampEdge 123243892#2 123243892#4"/>
+
+    <!-- Highway route 4: Express route -->
+    <route id="highway_route4" edges="225030248#5-AddedOnRampEdge 225030248#5 225030248#7 225030248#9 225030248#11 225030248#11-AddedOffRampEdge 257413467"/>
+
+    <!-- Highway route 5: Major arterial -->
+    <route id="highway_route5" edges="165300985#1 165300985#2 165300985#3 165300988#5 165303756#0 165303756#1 165303756#2 164929309#7 164929309#8 164929309#9 164929309#10 164929309#11 164929309#12"/>
+
+    <!-- =============================================== -->
+    <!-- HIGHWAY FLOWS -->
+    <!-- =============================================== -->
+
+    <!-- Main passenger car flow (mixed types) -->
+    <flow id="highway_passenger_main" type="highway_passenger_mix" begin="0" end="600" period="3.5" departLane="free" departSpeed="max">
+        <routeDistribution>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11 171196237#7 171196237#8 171196237#9" probability="0.30"/>
+            <route edges="1136880673#0 1136880673#1 1136880673#2 1136880673#2-AddedOffRampEdge 1136880673#3 1136880673#6 1136880674-AddedOnRampEdge 1136880674 225030378#0 225030378#1 225030378#2 225030378#5" probability="0.25"/>
+            <route edges="132970988#13 132970988#14 132970988#15 132970988#16-AddedOnRampEdge 132970988#16 665671743#5 665671751#0 665671751#0-AddedOffRampEdge 665671751#1 665671765 123243892#0 123243892#1 123243892#2-AddedOnRampEdge 123243892#2 123243892#4" probability="0.25"/>
+            <route edges="225030248#5-AddedOnRampEdge 225030248#5 225030248#7 225030248#9 225030248#11 225030248#11-AddedOffRampEdge 257413467" probability="0.20"/>
+        </routeDistribution>
+    </flow>
+
+    <!-- Truck flows (prefer rightmost lane) -->
+    <flow id="highway_trucks" type="highway_truck_mix" begin="0" end="600" period="12.0" departLane="best" departSpeed="avg">
+        <routeDistribution>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11 171196237#7 171196237#8 171196237#9" probability="0.40"/>
+            <route edges="132970988#13 132970988#14 132970988#15 132970988#16-AddedOnRampEdge 132970988#16 665671743#5 665671751#0 665671751#0-AddedOffRampEdge 665671751#1 665671765 123243892#0 123243892#1 123243892#2-AddedOnRampEdge 123243892#2 123243892#4" probability="0.40"/>
+            <route edges="165300985#1 165300985#2 165300985#3 165300988#5 165303756#0 165303756#1 165303756#2 164929309#7 164929309#8 164929309#9 164929309#10 164929309#11 164929309#12" probability="0.20"/>
+        </routeDistribution>
+    </flow>
+
+    <!-- Intercity buses -->
+    <flow id="highway_bus_intercity" type="bus_coach" route="highway_route5" begin="0" end="600" period="45.0"
+          color="0.0,0.4,0.8" departLane="free" departSpeed="max"/>
+
+    <!-- Motorcycle flow (fast, weaving) -->
+    <flow id="highway_motorcycle" type="motorcycle" begin="0" end="600" period="25.0"
+          color="0.0,0.0,0.0" departLane="free" departSpeed="max">
+        <routeDistribution>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11 171196237#7 171196237#8 171196237#9" probability="0.50"/>
+            <route edges="1136880673#0 1136880673#1 1136880673#2 1136880673#2-AddedOffRampEdge 1136880673#3 1136880673#6 1136880674-AddedOnRampEdge 1136880674 225030378#0 225030378#1 225030378#2 225030378#5" probability="0.50"/>
+        </routeDistribution>
+    </flow>
+
+    <!-- Emergency vehicles (rare) -->
+    <flow id="highway_emergency" type="emergency" begin="90" end="600" period="180.0"
+          color="1.0,0.0,0.0" departLane="free" departSpeed="max">
+        <routeDistribution>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11 171196237#7 171196237#8 171196237#9" probability="0.60"/>
+            <route edges="1136880673#0 1136880673#1 1136880673#2 1136880673#2-AddedOffRampEdge 1136880673#3 1136880673#6 1136880674-AddedOnRampEdge 1136880674 225030378#0 225030378#1 225030378#2 225030378#5" probability="0.40"/>
+        </routeDistribution>
+        <param key="has.bluelight.device" value="true"/>
+    </flow>
+
+    <!-- =============================================== -->
+    <!-- RUSH HOUR TRAFFIC (Peak periods) -->
+    <!-- =============================================== -->
+
+    <!-- Morning rush (0-120s) - higher frequency -->
+    <flow id="highway_rush_morning" type="passenger_sedan" begin="0" end="120" period="2.0"
+          departLane="free" departSpeed="max">
+        <routeDistribution>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11 171196237#7 171196237#8 171196237#9" probability="0.50"/>
+            <route edges="165300985#1 165300985#2 165300985#3 165300988#5 165303756#0 165303756#1 165303756#2 164929309#7 164929309#8 164929309#9 164929309#10 164929309#11 164929309#12" probability="0.50"/>
+        </routeDistribution>
+    </flow>
+
+    <!-- Evening rush (420-600s) - higher frequency -->
+    <flow id="highway_rush_evening" type="passenger_suv" begin="420" end="600" period="2.5"
+          departLane="free" departSpeed="max">
+        <routeDistribution>
+            <route edges="164926629#0 164926629#1 164926629#2 164926629#3 164926629#4 164926629#5 164926629#6 164926629#7 164926629#8 164926629#9 164926629#10 164926629#11 171196237#7 171196237#8 171196237#9" probability="0.50"/>
+            <route edges="1136880673#0 1136880673#1 1136880673#2 1136880673#2-AddedOffRampEdge 1136880673#3 1136880673#6 1136880674-AddedOnRampEdge 1136880674 225030378#0 225030378#1 225030378#2 225030378#5" probability="0.50"/>
+        </routeDistribution>
+    </flow>
+
+    <!-- =============================================== -->
+    <!-- INDIVIDUAL SPECIAL VEHICLES -->
+    <!-- =============================================== -->
+
+    <!-- Highway patrol vehicle -->
+    <vehicle id="highway_patrol_1" type="emergency" route="highway_route1" depart="30" color="0.0,0.0,1.0"
+             departLane="free" departSpeed="max">
+        <param key="has.bluelight.device" value="false"/>
+    </vehicle>
+
+    <!-- High-speed sports cars -->
+    <vehicle id="sport_car_1" type="passenger_sport" route="highway_route1" depart="15" color="1.0,0.0,0.0"
+             departLane="0" departSpeed="max"/>
+    <vehicle id="sport_car_2" type="passenger_sport" route="highway_route2" depart="25" color="0.0,0.0,1.0"
+             departLane="0" departSpeed="max"/>
+
+    <!-- Heavy container trucks -->
+    <vehicle id="container_1" type="truck_container" route="highway_route3" depart="50" color="0.4,0.4,0.4"
+             departLane="best" departSpeed="avg"/>
+    <vehicle id="container_2" type="truck_container" route="highway_route3" depart="120" color="0.4,0.4,0.4"
+             departLane="best" departSpeed="avg"/>
+
+</routes>

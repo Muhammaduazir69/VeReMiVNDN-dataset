@@ -39,6 +39,8 @@ void CS::initialize() {
     csHitSignal = registerSignal("csHit");
     csMissSignal = registerSignal("csMiss");
     csHitRatioSignal = registerSignal("csHitRatio");
+    csInsertionEventSignal = registerSignal("csInsertionEvent");
+    csEvictionEventSignal = registerSignal("csEvictionEvent");
 
     // Schedule cleanup
     cleanupTimer = new cMessage("csCleanup");
@@ -108,6 +110,7 @@ bool CS::insert(DataPacket *data) {
 
     totalInsertions++;
     emit(csSizeSignal, currentSize);
+    emit(csInsertionEventSignal, 1L);
 
     EV_INFO << "Cached: " << name << " (size=" << currentSize << ")" << endl;
     return true;
@@ -208,6 +211,7 @@ void CS::evictLRU() {
     EV_INFO << "Evicting (LRU): " << name << endl;
     removeEntry(name);
     totalEvictions++;
+    emit(csEvictionEventSignal, 1L);
 }
 
 void CS::evictLFU() {
@@ -226,6 +230,7 @@ void CS::evictLFU() {
     EV_INFO << "Evicting (LFU): " << lfu->first << endl;
     removeEntry(lfu->first);
     totalEvictions++;
+    emit(csEvictionEventSignal, 1L);
 }
 
 void CS::evictFIFO() {
@@ -244,6 +249,7 @@ void CS::evictFIFO() {
     EV_INFO << "Evicting (FIFO): " << oldest->first << endl;
     removeEntry(oldest->first);
     totalEvictions++;
+    emit(csEvictionEventSignal, 1L);
 }
 
 void CS::updateLRU(const std::string &name) {
@@ -391,6 +397,7 @@ void CS::handleInsertRequest(CSInsertRequest *request) {
 
     totalInsertions++;
     emit(csSizeSignal, currentSize);
+    emit(csInsertionEventSignal, 1L);
 
     response->setSuccess(true);
 
@@ -402,6 +409,40 @@ void CS::handleInsertRequest(CSInsertRequest *request) {
 
     send(response, "processorOut");
     delete request;
+}
+
+void CS::reduceFreshness(const std::string &name, double factor) {
+    factor = std::max(0.0, std::min(1.0, factor));  // Clamp to [0, 1]
+    CSEntry *entry = findEntry(name);
+    if (entry && entry->data) {
+        double origFreshness = entry->data->getFreshnessPeriod().dbl();
+        double newFreshness = origFreshness * factor;
+        entry->data->setFreshnessPeriod(SimTime(newFreshness));
+        // Recalculate expiry based on reduced freshness
+        if (newFreshness > 0) {
+            entry->expiryTime = entry->insertionTime + SimTime(newFreshness);
+        } else {
+            entry->expiryTime = simTime(); // Expire immediately
+        }
+        EV_INFO << "DP-IDS: Reduced freshness for " << name
+                << " by factor " << factor << endl;
+    }
+}
+
+void CS::bypassVehicleEntries(const std::string &vehicleId) {
+    std::vector<std::string> toRemove;
+    for (const auto &entry : entries) {
+        // Check if this entry was signed by the suspicious vehicle
+        if (entry.second->data &&
+            std::string(entry.second->data->getSignerId()) == vehicleId) {
+            toRemove.push_back(entry.first);
+        }
+    }
+    for (const std::string &name : toRemove) {
+        EV_INFO << "DP-IDS: Bypassing CS entry " << name
+                << " from vehicle " << vehicleId << endl;
+        removeEntry(name);
+    }
 }
 
 } // namespace veremivndn

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VeReMiVNDN Dataset</title>
+<meta name="description" content="A labeled dataset for misbehavior detection in Vehicular Named Data Networking, built on the JubST SUMO scenario.">
+<style>
+  :root{
+    --bg:#fbfbfa; --panel:#fff; --ink:#1a1a18; --muted:#5c5c56;
+    --line:#e3e3de; --accent:#7a4a12; --accent-soft:#f5ede2; --code:#f4f4f1;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#16161a; --panel:#1d1d22; --ink:#ececea; --muted:#a3a39c;
+      --line:#2e2e35; --accent:#e0a86a; --accent-soft:#2a2118; --code:#232329;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#16161a; --panel:#1d1d22; --ink:#ececea; --muted:#a3a39c;
+    --line:#2e2e35; --accent:#e0a86a; --accent-soft:#2a2118; --code:#232329;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 22px}
+  header{border-bottom:1px solid var(--line);padding:60px 0 42px;margin-bottom:44px}
+  h1{margin:0 0 6px;font-size:2.5rem;line-height:1.12;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:1.12rem;margin:0 0 22px;max-width:62ch}
+  .cite{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:6px;padding:14px 18px;font-size:.93rem;color:var(--muted);max-width:70ch}
+  .cite a{color:var(--accent)}
+  h2{margin:46px 0 14px;font-size:1.42rem;letter-spacing:-.01em;
+    padding-bottom:8px;border-bottom:1px solid var(--line)}
+  h3{margin:28px 0 8px;font-size:1.06rem}
+  p{max-width:70ch}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .btns{display:flex;flex-wrap:wrap;gap:11px;margin:24px 0 4px}
+  .btn{display:inline-block;padding:11px 20px;border-radius:7px;font-weight:600;font-size:.94rem;
+    background:var(--accent);color:var(--bg);border:1px solid var(--accent)}
+  .btn:hover{text-decoration:none;opacity:.9}
+  .btn.alt{background:transparent;color:var(--accent)}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:7px;
+    padding:14px 16px;overflow-x:auto;font-size:.88rem;line-height:1.55}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  p code,li code,td code{background:var(--code);border:1px solid var(--line);
+    border-radius:4px;padding:1px 5px;font-size:.88em}
+  .tw{overflow-x:auto;margin:16px 0}
+  table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:460px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-weight:650;color:var(--muted);font-size:.83rem;text-transform:uppercase;letter-spacing:.04em}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:15px 17px}
+  .stat .n{font-size:1.5rem;font-weight:680;letter-spacing:-.02em}
+  .stat .l{color:var(--muted);font-size:.79rem;text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+  .note{background:var(--accent-soft);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:6px;padding:14px 18px;margin:20px 0}
+  .note strong{color:var(--accent)}
+  footer{margin:64px 0 40px;padding-top:22px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:.89rem}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>VeReMiVNDN</h1>
+    <p class="sub">A labeled dataset and simulation framework for misbehavior
+      detection in Vehicular Named Data Networking, built on the JubST
+      (Al-Jubail) SUMO scenario.</p>
+    <div class="cite">
+      B. G. Aldahlan and M. Uzair, &ldquo;VeReMiVNDN: A Dataset for Misbehavior
+      Detection in Vehicular Named Data Networking Using the JubST SUMO
+      Scenario,&rdquo; <em>IEEE Access</em>, 2026.
+      <a href="https://doi.org/10.1109/ACCESS.2026.3681896">doi:10.1109/ACCESS.2026.3681896</a>
+    </div>
+    <div class="btns">
+      <a class="btn" href="{{RELEASE_URL}}">Download the dataset</a>
+      <a class="btn alt" href="https://github.com/Muhammaduazir69/VeReMiVNDN-dataset">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="grid">
+    <div class="stat"><div class="n">{{N_RUNS}}</div><div class="l">Simulation runs</div></div>
+    <div class="stat"><div class="n">{{ML_ROWS_SHORT}}</div><div class="l">Labeled rows</div></div>
+    <div class="stat"><div class="n">69</div><div class="l">Features</div></div>
+    <div class="stat"><div class="n">4</div><div class="l">Attacks</div></div>
+  </div>
+
+  <h2>Get the data</h2>
+  <p>The data ships as GitHub release assets rather than as files in the
+     repository, because git handles a few GB of compressed CSV badly.</p>
+<pre><code>curl -LO {{RELEASE_URL_DL}}/veremivndn_ml.tar.gz
+tar xzf veremivndn_ml.tar.gz
+sha256sum -c CHECKSUMS.sha256</code></pre>
+
+  <p>Each file is a gzipped CSV with a header, so pandas reads it directly.</p>
+<pre><code>import glob, pandas as pd
+
+df = pd.concat([pd.read_csv(f) for f in glob.glob("data/ml/*.csv.gz")],
+               ignore_index=True)
+print(df.attack.value_counts())</code></pre>
+
+  <h2>The label schema</h2>
+  <p>This is the question that comes up most, so it is worth stating plainly.</p>
+  <div class="tw">
+  <table>
+    <tr><th>Column</th><th>Meaning</th></tr>
+    <tr><td><code>attack</code></td>
+        <td>The attack configured for the <em>run</em>. Constant within a run.</td></tr>
+    <tr><td><code>attackType</code></td>
+        <td><strong>Ground truth for the row.</strong> What the recording node was
+            doing at that instant, or <code>Benign</code>.</td></tr>
+    <tr><td><code>isAttack</code></td>
+        <td>1 when <code>attackType</code> is not <code>Benign</code>. The binary target.</td></tr>
+  </table>
+  </div>
+
+  <div class="note">
+    <strong>Do not train on <code>attack</code>.</strong> It describes the run,
+    not the row. A malicious vehicle is benign before its attack window opens at
+    t&nbsp;=&nbsp;60&nbsp;s and again after it closes at t&nbsp;=&nbsp;240&nbsp;s,
+    and every benign vehicle in an attack run is benign throughout. Using
+    <code>attack</code> as the target labels most of an attack run as malicious
+    and produces scores that look far better than they are.
+  </div>
+
+  <h2>The four attacks</h2>
+  <div class="tw">
+  <table>
+    <tr><th>Configuration</th><th>Attack</th><th>Mechanism</th></tr>
+    <tr><td><code>Attack01_InterestFlooding</code></td><td>Interest Flooding</td>
+        <td>Interests for names that cannot be satisfied, so PIT entries pile up and expire.</td></tr>
+    <tr><td><code>Attack05_NamePrefixHijacking</code></td><td>Name Prefix Hijacking</td>
+        <td>Advertises prefixes it does not serve, pulling Interests from real producers.</td></tr>
+    <tr><td><code>Attack12_InterestAggregation</code></td><td>Interest Aggregation</td>
+        <td>Abuses PIT aggregation so one Interest suppresses forwarding of others.</td></tr>
+    <tr><td><code>Attack18_RoutingInfoFlood</code></td><td>Routing Info Flood</td>
+        <td>Floods routing updates to destabilize the FIB.</td></tr>
+    <tr><td><code>BenignTraffic</code></td><td>None</td><td>Attacker-free control.</td></tr>
+  </table>
+  </div>
+  <p>The simulator implements more attacks than these across other planes. They
+     are not part of this dataset and were not run.</p>
+
+  <h2>The grid</h2>
+  <p>225 runs of 300 simulated seconds:
+     5 configurations &times; 3 densities &times; 3 attacker ratios &times; 5 seeds.</p>
+  <div class="tw">
+  <table>
+    <tr><th>Axis</th><th>Levels</th></tr>
+    <tr><td>Density</td><td><code>low</code> 77 vehicles, <code>med</code> 151, <code>high</code> 356</td></tr>
+    <tr><td>Attacker ratio</td><td>5 %, 10 %, 20 % of the fleet</td></tr>
+    <tr><td>Seed</td><td>1 to 5, varying mobility and application traffic</td></tr>
+  </table>
+  </div>
+
+  <h2>Before you draw conclusions</h2>
+  <div class="note">
+    <strong>This release was regenerated after publication.</strong> Five
+    defects in the export path were repaired first. Two were severe enough that
+    the original pipeline could not have produced a usable dataset: the routine
+    that fills the feature window had no caller anywhere in the source, so all
+    69 features held their default values, and no attack module ever reported
+    itself, so every row was labeled benign whatever the configuration. Numbers
+    computed from this release will not match the published tables. The release
+    is the version to trust.
+  </div>
+  <p>All runs use one road network and one vehicle class, attackers hold a fixed
+     rate and strategy for their whole window, and four of the ten heuristic
+     score columns are unimplemented stubs that return a constant. The
+     <a href="DATA_DICTIONARY.md">data dictionary</a> and
+     <a href="INSTRUCTIONS.md">instructions</a> cover all of this.</p>
+
+  <h2>Documentation</h2>
+  <div class="tw">
+  <table>
+    <tr><td><a href="DATA_DICTIONARY.md">Data dictionary</a></td>
+        <td>Every column, its range and its meaning.</td></tr>
+    <tr><td><a href="INSTRUCTIONS.md">Instructions</a></td>
+        <td>Loading, splitting protocols, a baseline, and the limitations.</td></tr>
+    <tr><td><a href="https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/blob/main/INSTALL.md">Install</a></td>
+        <td>Toolchain and how to regenerate all 225 runs.</td></tr>
+  </table>
+  </div>
+
+  <h2>Citation</h2>
+<pre><code>@article{aldahlan2026veremivndn,
+  author  = {Aldahlan, Bassma G. and Uzair, Muhammad},
+  title   = {{VeReMiVNDN}: A Dataset for Misbehavior Detection in Vehicular
+             Named Data Networking Using the {JubST} {SUMO} Scenario},
+  journal = {IEEE Access},
+  year    = {2026},
+  doi     = {10.1109/ACCESS.2026.3681896}
+}</code></pre>
+
+  <footer>
+    Dataset and documentation released under
+    <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>;
+    simulator source under the MIT license.<br>
+    Questions are best raised as a
+    <a href="https://github.com/Muhammaduazir69/VeReMiVNDN-dataset/issues">GitHub issue</a>.
+  </footer>
+
+</div>
+</body>
+</html>

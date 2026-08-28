@@ -47,35 +47,35 @@ struct DetectionResult {
  */
 struct TrafficStatistics {
     // Interest statistics
-    double interestRate;
-    double avgInterestSize;
-    uint64_t totalInterests;
+    double interestRate = 0.0;
+    double avgInterestSize = 0.0;
+    uint64_t totalInterests = 0;
 
     // Data statistics
-    double dataRate;
-    double avgDataSize;
-    uint64_t totalData;
+    double dataRate = 0.0;
+    double avgDataSize = 0.0;
+    uint64_t totalData = 0;
 
     // PIT statistics
-    uint32_t pitSize;
-    double pitOccupancy;
-    double avgPitLifetime;
+    uint32_t pitSize = 0;
+    double pitOccupancy = 0.0;
+    double avgPitLifetime = 0.0;
 
     // Cache statistics
-    double cacheHitRatio;
-    uint32_t cacheSize;
-    double cacheOccupancy;
+    double cacheHitRatio = 0.0;
+    uint32_t cacheSize = 0;
+    double cacheOccupancy = 0.0;
 
     // Trust metrics
-    double avgTrustScore;
-    uint32_t lowTrustCount;
+    double avgTrustScore = 1.0;
+    uint32_t lowTrustCount = 0;
 
     // Timing metrics
-    double avgResponseTime;
-    double maxResponseTime;
+    double avgResponseTime = 0.0;
+    double maxResponseTime = 0.0;
 
     // Update timestamp
-    simtime_t lastUpdate;
+    simtime_t lastUpdate = SIMTIME_ZERO;
 };
 
 /**

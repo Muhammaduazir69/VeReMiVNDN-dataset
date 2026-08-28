@@ -22,6 +22,13 @@ simple FIB
         @statistic[fibLookup](record=count,sum);
         @statistic[fibUpdate](record=count,sum);
 
+        // DP-IDS monitoring signals
+        @signal[fibRouteAddEvent](type=long);
+        @signal[fibRouteRemoveEvent](type=long);
+
+        @statistic[fibRouteAddEvent](record=count,vector);
+        @statistic[fibRouteRemoveEvent](record=count,vector);
+
         @display("i=block/table2");
 
     gates:

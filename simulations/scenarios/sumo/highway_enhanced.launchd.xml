@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
 <!--
-    VeReMiVNDN - Enhanced Highway Scenario Launch Configuration
+    TRIDENT-VNDN - Highway scenario launch (purpose-built realistic corridor).
+    Loads highway_corridor.* : 4.5 km divided 3-lane highway with interchanges,
+    frontage buildings, a linear RSU coverage chain, and fast traffic.
 -->
 <launch>
     <basedir path="/home/uzair/Desktop/omnet++/omnetpp-6.0.3/VNDN/VeReMiVNDN/simulations/scenarios/sumo/"/>
-    <copy file="aljubail_saudi.net.xml"/>
-    <copy file="highway_enhanced.rou.xml"/>
+    <copy file="highway_corridor.net.xml"/>
+    <copy file="highway_corridor.rou.xml"/>
     <copy file="vTypes.add.xml"/>
-    <copy file="aljubail_zones.poly.xml"/>
-    <copy file="highway_enhanced.sumo.cfg" type="config"/>
+    <copy file="highway_corridor.poly.xml"/>
+    <copy file="highway_corridor.gui.xml"/>
+    <copy file="highway_corridor.sumo.cfg" type="config"/>
     <commands>
         <sumo-gui>sumo-gui --start --quit-on-end</sumo-gui>
         <sumo>sumo</sumo>

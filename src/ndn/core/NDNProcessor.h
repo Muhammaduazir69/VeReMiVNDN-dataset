@@ -44,6 +44,7 @@ protected:
     // Configuration
     bool enableCaching;
     bool enableSignatureVerification;
+    bool enableTridentAdmission = false;   // TRIDENT prong 2: cache admission
     simtime_t signatureVerificationDelay;
     std::string forwardingStrategy;
 
@@ -71,7 +72,13 @@ protected:
 protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
+    virtual void refreshDisplay() const override;
     virtual void finish() override;
+
+    // Counters for visualization
+    int interestsSent = 0, interestsReceived = 0;
+    int dataSent = 0, dataReceived = 0;
+    int cacheHits = 0, cacheMisses = 0;
 
     // Message handlers
     virtual void handleNetworkPacket(cMessage *msg);
@@ -104,6 +111,14 @@ protected:
     virtual bool shouldCacheData(DataPacket *data);
     virtual bool verifySignature(DataPacket *data);
 
+    // VeReMiVNDN-EXE: hand every observed packet / CS outcome to the host's
+    // FeatureExtractor so the MI-IDS plane vectors are built from traffic the
+    // node actually saw. Resolved lazily and cached; null when the host has no
+    // IDS instance, in which case observation is a no-op.
+    class FeatureExtractor *exeObserver = nullptr;
+    bool exeObserverResolved = false;
+    class FeatureExtractor *getExeObserver();
+
 public:
     NDNProcessor();
     virtual ~NDNProcessor();
@@ -111,6 +126,15 @@ public:
     // Helper functions for creating packets
     InterestPacket* createInterest(const std::string &name);
     DataPacket* createData(const std::string &name, const std::string &content);
+
+    // Read-only counter accessors so the IDS module can sample live
+    // traffic statistics without going through cParameter.
+    int getInterestsSent()    const { return interestsSent; }
+    int getInterestsReceived()const { return interestsReceived; }
+    int getDataSent()         const { return dataSent; }
+    int getDataReceived()     const { return dataReceived; }
+    int getCacheHits()        const { return cacheHits; }
+    int getCacheMisses()      const { return cacheMisses; }
 };
 
 Define_Module(NDNProcessor);

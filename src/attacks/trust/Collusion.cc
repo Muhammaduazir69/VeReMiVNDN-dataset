@@ -90,12 +90,13 @@ void Collusion::handleMessage(cMessage *msg)
             executeAttack();
         }
     }
-    else if (msg->isSelfMessage()) {
-        delete msg;
-    }
     else {
-        // Handle coordination messages from other colluding nodes
-        delete msg;
+        // Everything else - the attack lifecycle timers (start/stop/tick) and any
+        // packets on ndnIn - is owned and handled by the base class. Deleting them
+        // here (as the previous code did for every self-message) left dangling
+        // pointers in AttackBase, whose destructor then double-freed them; that
+        // corrupted an unrelated PHY message and crashed the run at attack-stop.
+        AttackBase::handleMessage(msg);
     }
 }
 
@@ -167,8 +168,10 @@ void Collusion::executeAttack()
         boostGroupTrust();
     }
 
-    // Schedule next action
-    if (synchronize && attackActive) {
+    // Schedule next sync action. executeAttack() is now driven both by the base
+    // 100 ms tick and by syncTimer, so guard against re-scheduling a timer that
+    // is already pending (which would be a runtime error).
+    if (synchronize && attackActive && !syncTimer->isScheduled()) {
         scheduleAt(simTime() + 2.0, syncTimer);
     }
 }
@@ -339,7 +342,7 @@ void Collusion::calculateAmplification()
     // Calculate how much more effective attack is with collusion
     amplificationFactor = groupMembers.size() * 2;  // Simplified calculation
 
-    emit(amplificationSignal, amplificationFactor);
+    emit(amplificationSignal, (long)amplificationFactor);  // intval: avoid unsupported uintval_t
 
     EV_INFO << "Amplification factor: " << amplificationFactor << "x" << endl;
 }

@@ -37,14 +37,18 @@ protected:
     // Gate IDs
     int ndnInGate;
     int ndnOutGate;
+    int wireInGate;
+    int wireOutGate;
     int lowerLayerInGate;
     int lowerLayerOutGate;
     int lowerControlInGate;
     int lowerControlOutGate;
+    int directInGate;
 
 protected:
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
+    virtual void refreshDisplay() const override;
     virtual void finish() override;
 
     // Message handlers
@@ -62,6 +66,7 @@ protected:
     // Network operations
     virtual void sendToLowerLayer(cPacket *pkt);
     virtual void processWirelessPacket(cPacket *pkt);
+    virtual void deliverToNeighbors(cPacket *pkt, double delaySec = 0.0);
 
 public:
     RSUController();

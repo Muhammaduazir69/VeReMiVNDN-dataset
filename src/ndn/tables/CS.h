@@ -87,6 +87,8 @@ private:
     simsignal_t csHitSignal;
     simsignal_t csMissSignal;
     simsignal_t csHitRatioSignal;
+    simsignal_t csInsertionEventSignal;
+    simsignal_t csEvictionEventSignal;
 
 protected:
     virtual void initialize() override;
@@ -126,10 +128,22 @@ public:
 
     // Statistics
     int getSize() const { return currentSize; }
+    int getCurrentSizeEntries() const { return currentSize; }
+    int getTotalHits() const { return totalHits; }
+    int getTotalMisses() const { return totalMisses; }
+    int getTotalInsertions() const { return totalInsertions; }
+    int getMaxSizeValue() const { return maxSize; }
     double getHitRatio() const {
         int total = totalHits + totalMisses;
         return total > 0 ? (double)totalHits / total : 0.0;
     }
+
+    // DP-IDS Penalisation API (Section 4.5)
+    void reduceFreshness(const std::string &name, double factor);
+    void bypassVehicleEntries(const std::string &vehicleId);
+
+    // Access to entries for divergence analysis
+    const std::map<std::string, CSEntry*>& getEntries() const { return entries; }
 };
 
 } // namespace veremivndn

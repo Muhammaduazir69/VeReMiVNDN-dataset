@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-06-10 20:19:46 by Eclipse SUMO GUI Version 1.18.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="aljubail_saudi.net.xml"/>
+        <route-files value="vTypes.add.xml,urban_enhanced.rou.xml"/>
+    </input>
+
+    <output>
+        <emission-output value="urban_emissions.xml"/>
+        <summary-output value="urban_summary.xml"/>
+        <tripinfo-output value="urban_tripinfo.xml"/>
+        <tripinfo-output.write-unfinished value="true"/>
+        <vehroute-output value="urban_vehroutes.xml"/>
+        <vehroute-output.write-unfinished value="true"/>
+        <lanechange-output value="urban_lanechanges.xml"/>
+        <statistic-output value="urban_statistics.xml"/>
+    </output>
+
+    <time>
+        <begin value="0"/>
+        <end value="2000"/>
+        <step-length value="0.1"/>
+    </time>
+
+    <processing>
+        <extrapolate-departpos value="true"/>
+        <collision.action value="warn"/>
+        <collision.check-junctions value="true"/>
+        <collision.mingap-factor value="1.0"/>
+        <time-to-teleport value="-1"/>
+        <time-to-teleport.highways value="120"/>
+        <max-depart-delay value="900"/>
+        <eager-insert value="true"/>
+        <pedestrian.model value="striping"/>
+        <pedestrian.striping.stripe-width value="0.65"/>
+        <pedestrian.striping.dawdling value="0.3"/>
+        <pedestrian.striping.jamtime value="10"/>
+    </processing>
+
+    <routing>
+        <routing-algorithm value="dijkstra"/>
+        <device.rerouting.probability value="0.6"/>
+        <device.rerouting.period value="30"/>
+        <device.rerouting.adaptation-steps value="90"/>
+        <device.rerouting.adaptation-interval value="5"/>
+    </routing>
+
+    <report>
+        <verbose value="true"/>
+        <xml-validation value="never"/>
+        <no-warnings value="false"/>
+        <duration-log.disable value="false"/>
+        <duration-log.statistics value="true"/>
+        <no-step-log value="true"/>
+    </report>
+
+    <emissions>
+        <device.emissions.probability value="1.0"/>
+    </emissions>
+
+    <traci_server>
+        <remote-port value="36093"/>
+    </traci_server>
+
+    <random_number>
+        <random value="false"/>
+        <seed value="23"/>
+    </random_number>
+
+    <gui_only>
+        <gui-settings-file value="urban_enhanced.gui.xml"/>
+        <quit-on-end value="true"/>
+        <start value="true"/>
+        <delay value="40"/>
+        <window-size value="1920,1080"/>
+    </gui_only>
+
+</configuration>
+-->
+
+<lanechanges>
+    <change id="1" type="passenger_sedan" time="40.40" from="132976495#3-AddedOnRampEdge_0" to="132976495#3-AddedOnRampEdge_1" dir="1" speed="14.12" pos="1.01" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="6" type="passenger_sedan" time="48.00" from="171196237#14-AddedOnRampEdge_0" to="171196237#14-AddedOnRampEdge_1" dir="1" speed="13.14" pos="1.14" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="37" type="passenger_sport" time="55.70" from="132976494#16_1" to="132976494#16_0" dir="-1" speed="9.01" pos="0.02" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="25" type="passenger_suv" time="57.50" from="884069762#9-AddedOnRampEdge_0" to="884069762#9-AddedOnRampEdge_1" dir="1" speed="14.62" pos="0.13" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="25" type="passenger_suv" time="57.60" from="884069762#9-AddedOnRampEdge_1" to="884069762#9-AddedOnRampEdge_2" dir="1" speed="14.81" pos="1.61" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="bus_line_1" type="bus_city" time="57.90" from="266653533#11_0" to="266653533#11_1" dir="1" speed="12.10" pos="63.16" reason="cooperative" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="7" type="passenger_suv" time="60.20" from="132976506#7_0" to="132976506#7_1" dir="1" speed="13.81" pos="1.12" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="29" type="passenger_suv" time="60.20" from="132976494#4_0" to="132976494#4_1" dir="1" speed="7.34" pos="0.60" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="8" type="passenger_sedan" time="63.90" from="132970986#2-AddedOnRampEdge_0" to="132970986#2-AddedOnRampEdge_1" dir="1" speed="11.28" pos="0.54" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="8" type="passenger_sedan" time="64.00" from="132970986#2-AddedOnRampEdge_1" to="132970986#2-AddedOnRampEdge_2" dir="1" speed="11.45" pos="1.68" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="7" type="passenger_suv" time="66.60" from="129212165#3_0" to="129212165#3_1" dir="1" speed="10.31" pos="0.10" reason="cooperative" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="148.72" followerSecureGap="56.20" followerSpeed="19.18" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="7" type="passenger_suv" time="71.30" from="129212165#5_1" to="129212165#5_0" dir="-1" speed="5.22" pos="0.16" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="bus_line_1" type="bus_city" time="76.10" from="129212165#1_1" to="129212165#1_0" dir="-1" speed="12.49" pos="0.35" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="bus_line_1" type="bus_city" time="76.20" from="129212165#1_0" to="129212165#1_1" dir="1" speed="12.56" pos="1.60" reason="cooperative" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="bus_line_1" type="bus_city" time="77.50" from="129212165#2_1" to="129212165#2_0" dir="-1" speed="13.73" pos="0.02" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="7" type="passenger_suv" time="80.70" from="132976495#2_0" to="132976495#2_1" dir="1" speed="19.80" pos="22.80" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="3" type="passenger_suv" time="82.00" from="132970988#8-AddedOnRampEdge_0" to="132970988#8-AddedOnRampEdge_1" dir="1" speed="14.34" pos="0.60" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="3" type="passenger_suv" time="82.70" from="132970988#8-AddedOnRampEdge_1" to="132970988#8-AddedOnRampEdge_2" dir="1" speed="15.69" pos="11.18" reason="strategic|urgent" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="None" followerSecureGap="None" followerSpeed="None" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+    <change id="29" type="passenger_suv" time="84.60" from="132976495#13_1" to="132976495#13_0" dir="-1" speed="12.88" pos="50.00" reason="keepRight" leaderGap="None" leaderSecureGap="None" leaderSpeed="None" followerGap="449.09" followerSecureGap="103.52" followerSpeed="29.04" origLeaderGap="None" origLeaderSecureGap="None" origLeaderSpeed="None"/>
+</lanechanges>

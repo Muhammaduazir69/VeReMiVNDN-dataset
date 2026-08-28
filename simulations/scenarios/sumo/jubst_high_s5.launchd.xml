@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <basedir path="../scenarios/sumo/"/>
+    <copy file="aljubail_saudi.net.xml"/>
+    <copy file="aljubail_saudi.rou.xml"/>
+    <copy file="aljubail_saudi.poly.xml"/>
+    <copy file="vTypes.add.xml"/>
+    <copy file="jubst_high_s5.sumo.cfg" type="config"/>
+    <commands>
+        <sumo-gui>sumo-gui --start</sumo-gui>
+        <sumo>sumo</sumo>
+    </commands>
+</launch>

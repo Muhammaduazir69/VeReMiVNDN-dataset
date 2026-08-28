@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+    JubST-Dense launch configuration for VeReMiVNDN-EXE.
+    Reuses the JubST road network and polygons but applies a denser route
+    distribution that concentrates trips in the central business district.
+    Trip bias toward the central node clusters is achieved via randomTrips.py
+    using a weights prefix; the .net.xml itself is unchanged so any IDS
+    trained against the JubST map remains directly comparable.
+-->
+<launch>
+    <basedir path="/home/uzair/Desktop/omnet++/omnetpp-6.0.3/VNDN/VeReMiVNDN/simulations/scenarios/sumo/"/>
+    <copy file="aljubail_saudi.net.xml"/>
+    <copy file="aljubail_dense.rou.xml"/>
+    <copy file="aljubail_saudi.poly.xml"/>
+    <copy file="vTypes.add.xml"/>
+    <copy file="aljubail_saudi.gui.xml"/>
+    <copy file="aljubail_dense.sumo.cfg" type="config"/>
+    <commands>
+        <sumo-gui>sumo-gui --start</sumo-gui>
+        <sumo>sumo</sumo>
+    </commands>
+</launch>

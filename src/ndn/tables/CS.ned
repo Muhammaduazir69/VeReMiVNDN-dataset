@@ -23,6 +23,13 @@ simple CS
         @statistic[csMiss](record=count,sum);
         @statistic[csHitRatio](record=vector,stats);
 
+        // DP-IDS monitoring signals
+        @signal[csInsertionEvent](type=long);
+        @signal[csEvictionEvent](type=long);
+
+        @statistic[csInsertionEvent](record=count,vector);
+        @statistic[csEvictionEvent](record=count,vector);
+
         @display("i=block/cache");
 
     gates:

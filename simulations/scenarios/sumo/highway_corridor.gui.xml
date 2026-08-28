@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Clean realistic GUI for the highway corridor. Light background, wide roads,
+     given building colours, large vehicles (visible at the 4.5 km width), RSU
+     coverage as outline rings. No <viewport> -> auto-fit to the whole corridor. -->
+<viewsettings>
+    <scheme name="trident_clean">
+        <backgroundColor r="0.96" g="0.96" b="0.94"/>
+        <edges>
+            <edgeMode value="0"/>
+            <laneEdgeMode value="0"/>
+            <laneWidthExaggeration value="4.0"/>
+            <edgeColorer><colorMode value="0"/></edgeColorer>
+            <edgeName><show value="false"/></edgeName>
+            <streetName><show value="false"/></streetName>
+        </edges>
+        <vehicles>
+            <colorMode value="given"/>
+            <vehicleQuality value="5"/>
+            <vehicleSize value="1.0"/>
+            <vehicleSize.exaggeration value="20.0"/>
+            <vehicleSize.minSize value="1.0"/>
+            <showBlinker value="true"/>
+            <vehicleName><show value="false"/></vehicleName>
+        </vehicles>
+        <polys><colorMode value="given"/></polys>
+        <junctions><junctionMode value="1"/></junctions>
+    </scheme>
+    <delay value="50"/>
+    <vehicleQuality value="5"/>
+    <vehicleSize value="1.0"/>
+    <vehicleSize.exaggeration value="14.0"/>
+    <vehicleSize.minSize value="8.0"/>
+    <showBlinker value="true"/>
+    <drawMinGap value="false"/>
+    <antialiase value="true"/>
+    <dither value="true"/>
+    <poiSize value="1.0"/>
+    <poiName value="false"/>
+    <showSizeLegend value="false"/>
+    <showColorLegend value="false"/>
+</viewsettings>

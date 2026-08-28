@@ -9,6 +9,7 @@ import veremivndn.ndn.core.NdnNode;
 import veremivndn.ids.detection.IDSModule;
 import veremivndn.ids.features.FeatureExtractor;
 import veremivndn.ids.logging.DataCollector;
+import veremivndn.dpids.miids.MIIDSModule;
 import veremivndn.attacks.IAttackModule;
 import org.car2x.veins.modules.nic.Nic80211p;
 import org.car2x.veins.modules.mobility.traci.TraCIMobility;
@@ -23,6 +24,15 @@ module VndnVehicle
         // VNDN specific
         bool isContentProducer = default(false);
         string producedPrefixes = default("");
+
+        // VeReMiVNDN-EXE: relay role and shared content catalogue (see
+        // VehicleController.ned for why these are needed to make the caching
+        // and forwarding planes observable at all).
+        bool isForwarder = default(false);
+        int    catalogSize        = default(200);
+        double catalogZipfAlpha   = default(0.9);
+        double uniqueNameFraction = default(0.25);
+        int    maxRelayHops       = default(3);
 
         // Communication parameters
         double beaconInterval @unit(s) = default(0.1s);
@@ -41,6 +51,9 @@ module VndnVehicle
         string idsDetectionMethod = default("Hybrid");
         double idsDetectionThreshold = default(0.7);
         bool idsLogging = default(true);
+
+        // MI-IDS (VeReMiVNDN-EXE) parameters
+        bool hasMIIDSModule = default(false);
 
         // Attack parameters
         bool hasAttackModule = default(false);
@@ -73,6 +86,11 @@ module VndnVehicle
             vehicleId = parent.vehicleId;
             isContentProducer = parent.isContentProducer;
             producedPrefixes = parent.producedPrefixes;
+            isForwarder = parent.isForwarder;
+            catalogSize = parent.catalogSize;
+            catalogZipfAlpha = parent.catalogZipfAlpha;
+            uniqueNameFraction = parent.uniqueNameFraction;
+            maxRelayHops = parent.maxRelayHops;
             beaconInterval = parent.beaconInterval;
             @display("p=150,100");
         }
@@ -106,6 +124,12 @@ module VndnVehicle
             @display("p=600,300;i=block/table2");
         }
 
+        // MI-IDS module (VeReMiVNDN-EXE Section V): per-vehicle MI-IDS instance
+        // for distributed plane-decomposed detection.
+        miids: MIIDSModule if hasMIIDSModule {
+            @display("p=600,400;i=block/control,blue");
+        }
+
         // Attack Module (conditional instantiation with dynamic type)
         attackModule: <attackModuleType> like IAttackModule if hasAttackModule {
             attackType = parent.attackType;
@@ -126,13 +150,22 @@ module VndnVehicle
         nic.upperControlOut --> controller.lowerControlIn;
         nic.upperControlIn <-- controller.lowerControlOut;
 
-        // Controller to NDN Node with Attack Module if enabled
-        // IDS monitors via signals and timers, not by intercepting packets
+        // ---- NDN application face (face 0) ----
+        // Egress (controller -> stack) traverses the attackModule so a
+        // producer/attacker's emitted Data is transformed at packet level.
+        // The first ndnIn++/ndnOut++ pair => ndnNode gate index 0 = app face.
         controller.ndnOut --> attackModule.ndnIn if hasAttackModule;
         attackModule.ndnOut --> ndnNode.ndnIn++ if hasAttackModule;
         ndnNode.ndnOut++ --> controller.ndnIn if hasAttackModule;
 
-        // Direct connection when no attack module
         controller.ndnOut --> ndnNode.ndnIn++ if !hasAttackModule;
         ndnNode.ndnOut++ --> controller.ndnIn if !hasAttackModule;
+
+        // ---- NDN wire face (face 1) ----
+        // The broadcast-medium side. Received frames are lifted in via wireOut;
+        // frames the forwarder dispatches toward the medium leave via wireIn and
+        // are broadcast by the controller. The second ndnIn++/ndnOut++ pair =>
+        // ndnNode gate index 1 = wire face. Never traverses the attackModule.
+        controller.wireOut --> ndnNode.ndnIn++;
+        ndnNode.ndnOut++ --> controller.wireIn;
 }

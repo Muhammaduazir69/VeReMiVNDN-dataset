@@ -100,6 +100,8 @@ private:
     simsignal_t fibSizeSignal;
     simsignal_t fibLookupSignal;
     simsignal_t fibUpdateSignal;
+    simsignal_t fibRouteAddEventSignal;
+    simsignal_t fibRouteRemoveEventSignal;
 
 protected:
     virtual void initialize() override;
@@ -145,6 +147,14 @@ public:
 
     // Statistics
     int getTotalLookups() const { return totalLookups; }
+    int getMaxSizeValue() const { return maxSize; }
+    const std::map<std::string, FIBEntry*>& getEntries() const { return entries; }
+
+    // DP-IDS Penalisation API (Section 4.5)
+    void penalizeRoute(const std::string &prefix, int face, double costMultiplier);
+
+    // TRIDENT reinstatement: reset all face costs to base (reversible quarantine).
+    void restoreRoutes();
 
     // Advanced operations
     void updateTrust(const std::string &prefix, double trust);

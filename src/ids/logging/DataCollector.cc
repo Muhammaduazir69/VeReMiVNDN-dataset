@@ -3,6 +3,7 @@
 //
 
 #include "DataCollector.h"
+#include "../../attacks/AttackBase.h"
 #include <sstream>
 #include <iomanip>
 #include <ctime>
@@ -65,9 +66,23 @@ void DataCollector::initialize(int stage)
         dataCollectedSignal = registerSignal("dataCollected");
         dataExportedSignal = registerSignal("dataExported");
 
-        // Open output files
+        // Open output files.
+        //
+        // The name has to identify the writing node. Every vehicle in the run
+        // instantiates its own DataCollector, and all of them previously built
+        // the same path and opened it with ios::out, which truncates. Each new
+        // node therefore erased what the previous ones had written and the
+        // exported dataset was whatever the last collector happened to flush,
+        // a few hundred rows out of the whole campaign. Qualifying the file
+        // with the host module's name gives one file per node, which is also
+        // how the per-plane feature export already behaves.
+        std::string hostTag = getParentModule() ? getParentModule()->getFullName()
+                                                : "node";
+        for (char &c : hostTag)
+            if (c == '[' || c == ']' || c == '.' || c == '/') c = '_';
+
         std::stringstream filename;
-        filename << outputDirectory << "/" << datasetName;
+        filename << outputDirectory << "/" << datasetName << "_" << hostTag;
 
         if (outputFormat == DatasetFormat::CSV) {
             filename << ".csv";
@@ -92,7 +107,8 @@ void DataCollector::initialize(int stage)
         }
 
         // Open metadata file
-        std::string metaFilename = outputDirectory + "/" + datasetName + "_metadata.txt";
+        std::string metaFilename =
+            outputDirectory + "/" + datasetName + "_" + hostTag + "_metadata.txt";
         metadataFile.open(metaFilename, std::ios::out);
 
         // Schedule collection
@@ -186,10 +202,45 @@ DatasetRecord DataCollector::createRecord()
     // Get feature vector
     record.features = featureExtractor->getCurrentFeatures();
 
+    // Resolve ground truth from this host's own attack module before reading
+    // the label. Nothing else ever called setGroundTruth(), so every record
+    // fell through to the "Benign" default and the exported dataset could not
+    // represent a single attack, whatever configuration produced it.
+    refreshGroundTruthFromHost(record.features.nodeId);
+
     // Get ground truth label
     record.label = getCurrentLabel(record.features.nodeId);
 
     return record;
+}
+
+//
+// The attacker is the node hosting an active attack module, so the label is
+// available locally and needs no cross-module plumbing. It is re-read on every
+// sample rather than latched once, so a row counts as an attack only while the
+// attack window is open; before startTime and after startTime + duration the
+// same vehicle is recorded as benign, which is what makes the phase
+// distinction in the released data meaningful.
+//
+void DataCollector::refreshGroundTruthFromHost(int nodeId)
+{
+    cModule *host = getParentModule();
+    if (!host) return;
+
+    cModule *am = host->getSubmodule("attackModule");
+    AttackBase *attack = dynamic_cast<AttackBase *>(am);
+
+    if (attack && attack->isAttackActive()) {
+        std::string type = attack->getAttackType();
+        if (type.empty() && am->hasPar("attackType"))
+            type = am->par("attackType").stringValue();
+        if (type.empty()) type = "Unknown";
+        setGroundTruth(nodeId, type, attack->getIntensity());
+    }
+    else {
+        // Clear any label left over from an earlier, now-closed window.
+        currentLabels.erase(nodeId);
+    }
 }
 
 GroundTruthLabel DataCollector::getCurrentLabel(int nodeId)
